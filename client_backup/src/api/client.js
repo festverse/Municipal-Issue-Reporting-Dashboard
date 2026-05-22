@@ -19,17 +19,3 @@ export const updateTicketStatus = async (id, new_status, user_id) => {
   if (!response.ok) throw new Error('Failed to update status');
   return response.json();
 };
-
-export const createTicket = async (ticketData) => {
-  const response = await fetch(`${BASE_URL}/tickets`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(ticketData)
-  });
-  
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.error || 'Failed to create ticket');
-  }
-  return response.json();
-};

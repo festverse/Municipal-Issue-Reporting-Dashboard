@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+/* A tiny bit of custom CSS to make sure the map renders properly */
+.leaflet-container {
+  z-index: 10;
+}

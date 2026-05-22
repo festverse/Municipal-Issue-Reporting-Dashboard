@@ -1,7 +1,10 @@
 const express = require('express');
+const cors = require('cors');
+require('dotenv').config();
 const { Pool } = require('pg');
 
 const app = express();
+app.use(cors());
 app.use(express.json()); // Middleware to parse JSON request bodies
 
 // Configure your PostgreSQL connection

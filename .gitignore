@@ -1,13 +1,10 @@
 # Dependencies
 node_modules/
-client/node_modules/
-server/node_modules/
 
-# Environment Variables
+# Environment Variables (Keep these secret!)
 .env
 client/.env
 server/.env
 
 # Build outputs
 dist/
-client/dist/
