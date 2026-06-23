@@ -1,9 +1,9 @@
-services:
+databases:
   # 1. PostgreSQL Database
-  - type: pgo
-    name: municipal-db
+  - name: municipal-db
     plan: free
 
+services:
   # 2. Express Backend Server
   - type: web
     name: municipal-server
