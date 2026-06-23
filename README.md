@@ -51,7 +51,7 @@ A production-grade, full-stack web application that enables citizens to report m
 │  │  Auth   │ │  Ticket   │ │Dashboard │ │ Analytics  │   │
 │  │ Context │ │   Form    │ │  + Table │ │   Panel    │   │
 │  └────┬────┘ └─────┬─────┘ └────┬─────┘ └─────┬──────┘   │
-│       └──────────┬──┴───────────┴─────────────┘          │
+│       └──────────┬─┴────────────┴─────────────┘          │
 │            API Client (JWT Bearer Token)                 │
 └──────────────────┬───────────────────────────────────────┘
                    │ HTTP/REST
@@ -59,7 +59,7 @@ A production-grade, full-stack web application that enables citizens to report m
 │              Express.js Backend (Node.js)                │
 │  ┌─────────────────────────────────────────────────────┐ │
 │  │ Middleware: Helmet │ CORS │ Morgan │ Auth │ Validate│ │
-│  └───────────────────────────┬─────────────────────────┘ │
+│  └──────────────────────────┬──────────────────────────┘ │
 │  ┌─────────┐ ┌──────────────▼──┐ ┌───────────────────┐   │
 │  │ Routes  │→│  Controllers    │→│    Services       │   │
 │  │ /auth   │ │ auth.controller │ │ auth.service (JWT)│   │
@@ -74,10 +74,10 @@ A production-grade, full-stack web application that enables citizens to report m
                    │ node-postgres (pg)
 ┌──────────────────▼───────────────────────────────────────┐
 │                PostgreSQL Database                       │
-│  ┌────────┐ ┌─────────┐ ┌───────────────────┐           v│
-│  │ users  │ │ tickets │ │ ticket_activities  │           │
-│  │ zones  │ │ (ENUM   │ │ (Audit Trail)      │           │
-│  │ cats   │ │ status) │ │                    │           │
+│  ┌────────┐ ┌─────────┐ ┌───────────────────┐            │
+│  │ users  │ │ tickets │ │ ticket_activities │            │
+│  │ zones  │ │ (ENUM   │ │ (Audit Trail)     │            │
+│  │ cats   │ │ status) │ │                   │            │
 │  └────────┘ └─────────┘ └───────────────────┘            │
 │  Triggers: auto-update timestamps, resolved_at           │
 │  Indexes: composite + GIN full-text search               │
