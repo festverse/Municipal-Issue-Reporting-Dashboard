@@ -1,35 +1,84 @@
+// ── API Client ──────────────────────────────────────────────
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
-export const fetchTickets = async (zone_id = '', status = '') => {
-  const query = new URLSearchParams();
-  if (zone_id) query.append('zone_id', zone_id);
-  if (status) query.append('status', status);
+// Helpers
+const getToken = () => localStorage.getItem('token');
 
-  const response = await fetch(`${BASE_URL}/tickets?${query.toString()}`);
-  if (!response.ok) throw new Error('Failed to fetch tickets');
-  return response.json();
+const getHeaders = () => {
+  const token = getToken();
+  return {
+    'Content-Type': 'application/json',
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
 };
 
-export const updateTicketStatus = async (id, new_status, user_id) => {
-  const response = await fetch(`${BASE_URL}/tickets/${id}/status`, {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ new_status, user_id })
-  });
-  if (!response.ok) throw new Error('Failed to update status');
-  return response.json();
-};
-
-export const createTicket = async (ticketData) => {
-  const response = await fetch(`${BASE_URL}/tickets`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(ticketData)
-  });
-  
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.error || 'Failed to create ticket');
+async function request(url, options = {}) {
+  const res = await fetch(url, { ...options, headers: { ...getHeaders(), ...options.headers } });
+  const data = await res.json().catch(() => null);
+  if (!res.ok) {
+    const msg = data?.error || data?.message || `Request failed (${res.status})`;
+    throw new Error(msg);
   }
-  return response.json();
+  return data;
+}
+
+// ── Auth ──
+export const registerUser = (body) =>
+  request(`${BASE_URL}/auth/register`, { method: 'POST', body: JSON.stringify(body) });
+
+export const loginUser = (body) =>
+  request(`${BASE_URL}/auth/login`, { method: 'POST', body: JSON.stringify(body) });
+
+export const getProfile = () =>
+  request(`${BASE_URL}/auth/me`);
+
+// ── Tickets ──
+export const createTicket = (body) =>
+  request(`${BASE_URL}/tickets`, { method: 'POST', body: JSON.stringify(body) });
+
+export const fetchTickets = (filters = {}) => {
+  const query = new URLSearchParams();
+  Object.entries(filters).forEach(([k, v]) => {
+    if (v !== undefined && v !== null && v !== '') query.append(k, v);
+  });
+  return request(`${BASE_URL}/tickets?${query.toString()}`);
 };
+
+export const fetchTicketById = (id) =>
+  request(`${BASE_URL}/tickets/${id}`);
+
+export const updateTicketStatus = (id, new_status, note = '') =>
+  request(`${BASE_URL}/tickets/${id}/status`, {
+    method: 'PATCH',
+    body: JSON.stringify({ new_status, note }),
+  });
+
+// ── Reference Data ──
+export const fetchZones = () => request(`${BASE_URL}/zones`);
+export const fetchCategories = () => request(`${BASE_URL}/categories`);
+
+// ── Analytics ──
+export const fetchAnalyticsSummary = () => request(`${BASE_URL}/analytics/summary`);
+export const fetchAnalyticsByZone = () => request(`${BASE_URL}/analytics/by-zone`);
+export const fetchAnalyticsByStatus = () => request(`${BASE_URL}/analytics/by-status`);
+export const fetchRecentActivity = () => request(`${BASE_URL}/analytics/recent-activity`);
+
+// ── Utilities ──
+export function timeAgo(dateString) {
+  if (!dateString) return '';
+  const seconds = Math.floor((Date.now() - new Date(dateString).getTime()) / 1000);
+  if (seconds < 0) return 'just now';
+  const intervals = [
+    { label: 'y', seconds: 31536000 },
+    { label: 'mo', seconds: 2592000 },
+    { label: 'w', seconds: 604800 },
+    { label: 'd', seconds: 86400 },
+    { label: 'h', seconds: 3600 },
+    { label: 'm', seconds: 60 },
+  ];
+  for (const i of intervals) {
+    const count = Math.floor(seconds / i.seconds);
+    if (count >= 1) return `${count}${i.label} ago`;
+  }
+  return 'just now';
+}

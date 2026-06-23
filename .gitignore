@@ -1,10 +1,29 @@
 # Dependencies
 node_modules/
 
-# Environment Variables (Keep these secret!)
+# Environment variables
 .env
-client/.env
-server/.env
+.env.local
+.env.*.local
 
-# Build outputs
+# Build output
 dist/
+build/
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Docker volumes
+postgres_data/
