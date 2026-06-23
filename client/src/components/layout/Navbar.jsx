@@ -25,7 +25,7 @@ export default function Navbar() {
   return (
     <nav className="fixed top-0 inset-x-0 z-50 backdrop-blur-xl bg-white/80 border-b border-slate-200 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
+        <div className="flex h-16 items-center justify-between relative">
 
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 group">
@@ -35,8 +35,8 @@ export default function Navbar() {
             </span>
           </Link>
 
-          {/* Desktop Links */}
-          <div className="hidden md:flex items-center gap-1">
+          {/* Desktop Links (Perfectly Centered) */}
+          <div className="hidden md:flex items-center gap-1 absolute left-1/2 -translate-x-1/2">
             <NavLink to="/" end className={linkClass}>Report Issue</NavLink>
             {isEngineerOrAdmin && (
               <NavLink to="/dashboard" className={linkClass}>Dashboard</NavLink>

@@ -40,7 +40,7 @@ INSERT INTO users (id, email, password_hash, full_name, phone, role) VALUES
 (
   'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
   'citizen@demo.com',
-  '$2b$12$LJ3m4ys5RZ0GHkF5VqjO4eQfHmC8XJhQpKD0jN2L7wPkR9zXbWdXe',
+  '$2b$12$RQ2DXRtg/3P3n.rLS8L9a.YGHNA97WxD7LeJY934tGLrtgQ4KCI2q',
   'Rahul Sharma',
   '+91-9876543210',
   'CITIZEN'
@@ -48,7 +48,7 @@ INSERT INTO users (id, email, password_hash, full_name, phone, role) VALUES
 (
   'b2c3d4e5-f6a7-8901-bcde-f12345678901',
   'engineer@demo.com',
-  '$2b$12$wN5R8vJqF2hK7mL4xP9sOuTcE3aG6dB1yI0zH5kM8nQ2rV4wX7jYi',
+  '$2b$12$HMyyv/XCZvmg4ULP4eG1Je4NwiFCDgf.WOgg5enzrv5kFcK2kWpSi',
   'Priya Patel',
   '+91-9876543211',
   'ENGINEER'
@@ -56,7 +56,7 @@ INSERT INTO users (id, email, password_hash, full_name, phone, role) VALUES
 (
   'c3d4e5f6-a7b8-9012-cdef-123456789012',
   'admin@demo.com',
-  '$2b$12$kP7mN2qR5sT8vW1xY4zA3bC6dE9fG0hI3jK6lM9nO2pQ5rS8tU1vX',
+  '$2b$12$RICgcHczUmBZDsuKwIS8huHvTPKDecF.4f4x2Lpqc6YqUqA/9M3qS',
   'Municipal Admin',
   '+91-9876543212',
   'ADMIN'
