@@ -14,6 +14,16 @@ A production-grade, full-stack web application that enables citizens to report m
 ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
 ![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Cloudflare](https://img.shields.io/badge/Cloudflare-F38020?style=for-the-badge&logo=Cloudflare&logoColor=white)
+![Render](https://img.shields.io/badge/Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)
+
+---
+
+## 🔴 Live Demo
+**Frontend:** [https://civic-portal.pages.dev](https://civic-portal.pages.dev)  
+**Backend API:** [https://municipal-server.onrender.com/api](https://municipal-server.onrender.com/api)
+
+> **Note for Recruiters:** The login page features convenient "Demo Accounts" buttons that will automatically fill in valid credentials for an Engineer or Citizen.
 
 ---
 
@@ -191,20 +201,20 @@ npm run dev
 ```
 
 ### Access Points
-| Service | URL |
-|---|---|
-| Frontend | http://localhost:5173 |
-| Backend API | http://localhost:3000/api |
-| pgAdmin (Docker) | http://localhost:5050 |
+| Service | Local URL | Production URL |
+|---|---|---|
+| Frontend | `http://localhost:5173` | `https://civic-portal.pages.dev` |
+| Backend API | `http://localhost:3000/api` | `https://municipal-server.onrender.com/api` |
+| pgAdmin (Docker) | `http://localhost:5050` | — |
 
 ### Demo Credentials
 | Role | Email | Password |
 |---|---|---|
-| Citizen | citizen@demo.com | citizen123 |
-| Engineer | engineer@demo.com | engineer123 |
-| Admin | admin@demo.com | admin123 |
+| Citizen | `citizen@demo.com` | `citizen123` |
+| Engineer | `engineer@demo.com` | `engineer123` |
+| Admin | `admin@demo.com` | `admin123` |
 
-> **Note:** Demo passwords in seed.sql are pre-hashed. To use them, you must register fresh accounts through the UI or rehash with the same bcrypt salt rounds configured in the backend.
+> **Note:** These demo credentials are pre-loaded in the live production database and local seed file. You can simply click the quick-fill buttons on the login page!
 
 ---
 
@@ -328,6 +338,7 @@ This ensures that **either both** the status update and audit log succeed, **or 
 | **Validation** | express-validator | Request input validation |
 | **Security** | Helmet, CORS, Rate Limiting | HTTP security headers & protection |
 | **DevOps** | Docker Compose | Local development environment |
+| **Hosting** | Cloudflare Pages, Render | Production deployment |
 
 ---
 
