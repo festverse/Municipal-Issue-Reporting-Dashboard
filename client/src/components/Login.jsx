@@ -37,6 +37,27 @@ export default function Login() {
           <p className="text-slate-500 text-sm mt-1">Sign in to the Civic Portal</p>
         </div>
 
+        {/* Demo Credentials */}
+        <div className="mb-6 p-4 bg-slate-50 border border-slate-200 rounded-xl">
+          <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 text-center">Demo Accounts for Recruiters</h3>
+          <div className="flex flex-col sm:flex-row gap-2">
+            <button 
+              type="button" 
+              onClick={() => { setEmail('engineer@demo.com'); setPassword('engineer123'); }}
+              className="flex-1 py-2 text-xs font-medium bg-white border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors shadow-sm"
+            >
+              Fill Engineer Data
+            </button>
+            <button 
+              type="button" 
+              onClick={() => { setEmail('citizen@demo.com'); setPassword('citizen123'); }}
+              className="flex-1 py-2 text-xs font-medium bg-white border border-slate-300 text-slate-700 rounded-lg hover:bg-slate-50 transition-colors shadow-sm"
+            >
+              Fill Citizen Data
+            </button>
+          </div>
+        </div>
+
         {/* Error */}
         {error && (
           <div className="mb-6 p-3 bg-rose-50 border border-rose-200 rounded-xl animate-fade-in">

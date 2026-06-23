@@ -79,7 +79,10 @@ export default function TicketForm() {
         <div className="ui-card bg-white p-10">
           <span className="text-5xl block mb-4">🔐</span>
           <h2 className="text-xl font-bold text-slate-900 mb-2">Authentication Required</h2>
-          <p className="text-slate-500 text-sm mb-6">Please log in as a Citizen to report an issue.</p>
+          <p className="text-slate-500 text-sm mb-6">
+            Please log in as a Citizen to report an issue.<br/>
+            <span className="text-blue-600 font-medium mt-2 block">Recruiters: Use the Demo Credentials on the login page to access the portal.</span>
+          </p>
           <Link to="/login" className="inline-block px-6 py-3 text-sm font-semibold text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition-all hover:scale-[1.02]">
             Sign In
           </Link>
