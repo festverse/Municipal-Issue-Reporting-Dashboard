@@ -1,6 +1,6 @@
 # 🏛️ Municipal Issue Reporting Dashboard
 
-A production-grade, full-stack web application that enables citizens to report municipal infrastructure issues via an interactive geolocation map, and provides engineers with a real-time dashboard to track, manage, and resolve tickets — complete with transactional data integrity and comprehensive audit logging.
+A production-grade, full-stack web application that enables citizens to report municipal infrastructure issues via an interactive geolocation map, and provides engineers with a real-time dashboard to track, manage, and resolve tickets - complete with transactional data integrity and comprehensive audit logging.
 
 **Built to demonstrate professional full-stack engineering practices** including layered backend architecture, ACID-compliant transactions, role-based access control, and premium UI/UX design.
 
