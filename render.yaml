@@ -1,0 +1,27 @@
+services:
+  # 1. PostgreSQL Database
+  - type: pgo
+    name: municipal-db
+    plan: free
+
+  # 2. Express Backend Server
+  - type: web
+    name: municipal-server
+    env: node
+    plan: free
+    region: oregon # or frankfurt, ohio
+    rootDir: server # Points Render to the correct folder
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      # Connects the Web Service to the PostgreSQL Database using Render's internal network
+      - key: DATABASE_URL
+        fromDatabase:
+          name: municipal-db
+          property: connectionString
+      # Signals to the code that we are in production
+      - key: NODE_ENV
+        value: production
+      # We need a secret for JWT generation
+      - key: JWT_SECRET
+        generateValue: true

@@ -13,11 +13,16 @@
 
 const { Pool } = require('pg');
 
-const pool = new Pool({
+const poolConfig = {
   connectionString: process.env.DATABASE_URL,
-  // Uncomment the line below when connecting to cloud-hosted Postgres (Supabase, Neon, etc.)
-  // ssl: { rejectUnauthorized: false },
-});
+};
+
+// Enable SSL for external cloud databases (Render, Neon, Supabase) in production
+if (process.env.NODE_ENV === 'production') {
+  poolConfig.ssl = { rejectUnauthorized: false };
+}
+
+const pool = new Pool(poolConfig);
 
 // Log unexpected errors on idle clients so they don't crash the process
 pool.on('error', (err) => {
