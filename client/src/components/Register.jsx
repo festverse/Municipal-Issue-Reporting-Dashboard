@@ -22,9 +22,13 @@ export default function Register() {
 
     setIsLoading(true);
     try {
-      await register({ full_name: form.full_name, email: form.email, password: form.password, role: form.role });
+      const data = await register({ full_name: form.full_name, email: form.email, password: form.password, role: form.role });
       showToast('Account created successfully!', 'success');
-      navigate('/');
+      if (data.user?.role === 'CITIZEN') {
+        navigate('/');
+      } else {
+        navigate('/dashboard');
+      }
     } catch (err) {
       setError(err.message);
     } finally {

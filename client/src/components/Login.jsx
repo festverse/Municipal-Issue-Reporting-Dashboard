@@ -17,9 +17,13 @@ export default function Login() {
     setIsLoading(true);
     setError(null);
     try {
-      await login(email, password);
+      const data = await login(email, password);
       showToast('Welcome back!', 'success');
-      navigate('/dashboard');
+      if (data.user?.role === 'CITIZEN') {
+        navigate('/');
+      } else {
+        navigate('/dashboard');
+      }
     } catch (err) {
       setError(err.message);
     } finally {
