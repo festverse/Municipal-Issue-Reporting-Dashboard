@@ -58,10 +58,41 @@ export const fetchZones = () => request(`${BASE_URL}/zones`);
 export const fetchCategories = () => request(`${BASE_URL}/categories`);
 
 // ── Analytics ──
-export const fetchAnalyticsSummary = () => request(`${BASE_URL}/analytics/summary`);
+export const fetchAnalyticsSummary = () => request(`${BASE_URL}/analytics/summary`).then(res => {
+  if (res && res.data) {
+    const data = res.data;
+    const stats = {
+      total: data.totalTickets || 0,
+      open: 0,
+      in_progress: 0,
+      resolved: 0,
+      avgResolutionHours: data.avgResolutionHours || null
+    };
+    if (Array.isArray(data.byStatus)) {
+      data.byStatus.forEach(item => {
+        if (item.status === 'OPEN') stats.open = parseInt(item.count, 10);
+        if (item.status === 'IN_PROGRESS') stats.in_progress = parseInt(item.count, 10);
+        if (item.status === 'RESOLVED') stats.resolved = parseInt(item.count, 10);
+      });
+    }
+    return stats;
+  }
+  return { total: 0, open: 0, in_progress: 0, resolved: 0, avgResolutionHours: null };
+});
+
 export const fetchAnalyticsByZone = () => request(`${BASE_URL}/analytics/by-zone`);
 export const fetchAnalyticsByStatus = () => request(`${BASE_URL}/analytics/by-status`);
-export const fetchRecentActivity = () => request(`${BASE_URL}/analytics/recent-activity`);
+export const fetchRecentActivity = () => request(`${BASE_URL}/analytics/recent-activity`).then(res => {
+  if (res && res.data) {
+    return {
+      activities: res.data.map(a => ({
+        ...a,
+        user_name: a.performed_by
+      }))
+    };
+  }
+  return { activities: [] };
+});
 
 // ── Utilities ──
 export function timeAgo(dateString) {
