@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { fetchAnalyticsSummary, fetchAnalyticsByZone, fetchAnalyticsByStatus, fetchRecentActivity, timeAgo } from '../api/client';
+import { fetchAnalyticsSummary, fetchAnalyticsByZone, fetchAnalyticsByStatus, fetchRecentActivity, fetchTickets, timeAgo } from '../api/client';
 import StatCard from './ui/StatCard';
 import LoadingSpinner from './ui/LoadingSpinner';
 
@@ -11,11 +11,19 @@ const statusColors = {
   REJECTED: '#f43f5e',
 };
 
+const priorityColors = {
+  LOW: '#3b82f6',
+  MEDIUM: '#f59e0b',
+  HIGH: '#f97316',
+  CRITICAL: '#e11d48',
+};
+
 export default function AnalyticsPanel() {
   const [summary, setSummary] = useState(null);
   const [byZone, setByZone] = useState([]);
   const [byStatus, setByStatus] = useState([]);
   const [activity, setActivity] = useState([]);
+  const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -24,12 +32,14 @@ export default function AnalyticsPanel() {
       fetchAnalyticsByZone(),
       fetchAnalyticsByStatus(),
       fetchRecentActivity(),
+      fetchTickets(),
     ])
-      .then(([s, z, st, a]) => {
+      .then(([s, z, st, a, tRes]) => {
         setSummary(s);
         setByZone(z.data || []);
         setByStatus(st.data || []);
         setActivity(a.activities || []);
+        setTickets(tRes?.tickets || []);
       })
       .catch(() => {})
       .finally(() => setLoading(false));
@@ -55,6 +65,14 @@ export default function AnalyticsPanel() {
   const conicStops = donutSegments
     .map((s) => `${s.color} ${s.start}% ${s.start + s.pct}%`)
     .join(', ');
+
+  // Priority data
+  const priorities = ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'];
+  const priorityData = priorities.map(p => {
+    const count = tickets.filter(t => t.priority === p).length;
+    return { priority: p, count, color: priorityColors[p] || '#cbd5e1' };
+  });
+  const slaBreachedCount = tickets.filter(t => t.sla_breached).length;
 
   return (
     <div className="max-w-7xl mx-auto py-8 px-4 animate-fade-in">
@@ -131,23 +149,27 @@ export default function AnalyticsPanel() {
           </div>
         </div>
 
-        {/* Vertical Bar Chart — Priority (or another breakdown) */}
+        {/* Vertical Bar Chart — Priority Breakdown */}
         <div className="ui-card p-6 animate-fade-in-up bg-white" style={{ animationDelay: '300ms', animationFillMode: 'both' }}>
-          <h3 className="text-sm font-semibold text-slate-900 mb-6">Status Counts</h3>
+          <div className="flex justify-between items-center mb-6">
+            <h3 className="text-sm font-semibold text-slate-900">Priority Distribution</h3>
+            <span className={`text-xs px-2.5 py-1 rounded-full font-semibold ${slaBreachedCount > 0 ? 'bg-rose-100 text-rose-700' : 'bg-slate-100 text-slate-700'}`}>
+              {slaBreachedCount} SLA Breach{slaBreachedCount === 1 ? '' : 'es'}
+            </span>
+          </div>
           <div className="flex items-end gap-3 h-48">
-            {byStatus.map((d, i) => {
-              const heightPct = (d.count / Math.max(...byStatus.map((x) => x.count), 1)) * 100;
-              const color = statusColors[d.status] || '#cbd5e1';
+            {priorityData.map((d, i) => {
+              const heightPct = (d.count / Math.max(...priorityData.map((x) => x.count), 1)) * 100;
               return (
-                <div key={d.status || i} className="flex-1 flex flex-col items-center gap-2">
+                <div key={d.priority || i} className="flex-1 flex flex-col items-center gap-2">
                   <span className="text-xs text-slate-500 font-mono">{d.count}</span>
                   <div className="w-full bg-slate-100 rounded-t-lg overflow-hidden flex-1 flex items-end">
                     <div
                       className="w-full rounded-t-lg bar-animate-v"
-                      style={{ height: `${heightPct}%`, backgroundColor: color, animationDelay: `${i * 100}ms` }}
+                      style={{ height: `${heightPct}%`, backgroundColor: d.color, animationDelay: `${i * 100}ms` }}
                     />
                   </div>
-                  <span className="text-[10px] text-slate-500 truncate w-full text-center">{(d.status || '').replace('_', ' ')}</span>
+                  <span className="text-[10px] text-slate-500 font-semibold truncate w-full text-center">{d.priority}</span>
                 </div>
               );
             })}
