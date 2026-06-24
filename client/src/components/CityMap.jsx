@@ -65,18 +65,18 @@ export default function CityMap() {
   });
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] bg-slate-900 text-slate-100 animate-fade-in">
+    <div className="flex flex-col h-[calc(100vh-4rem)] bg-slate-50 text-slate-900 animate-fade-in">
       {/* Top Controls Overlay Bar */}
-      <div className="bg-slate-900/90 backdrop-blur-md border-b border-slate-800 p-4 flex flex-wrap items-center justify-between gap-4 z-20 shadow-lg">
+      <div className="bg-white/90 backdrop-blur-md border-b border-slate-200 p-4 flex flex-wrap items-center justify-between gap-4 z-20 shadow-sm">
         <div>
-          <h1 className="text-xl font-bold text-white flex items-center gap-2">
+          <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">
             <span>🗺️</span> City Live Issue Map
           </h1>
-          <p className="text-xs text-slate-400 mt-0.5">Real-time geospatial visualization of civic infrastructure repairs & reports.</p>
+          <p className="text-xs text-slate-500 mt-0.5">Real-time geospatial visualization of civic infrastructure repairs & reports.</p>
         </div>
 
         {/* Filter Tabs */}
-        <div className="flex flex-wrap gap-1.5 p-1 bg-slate-800/80 rounded-xl border border-slate-700/50">
+        <div className="flex flex-wrap gap-1.5 p-1 bg-slate-100/80 rounded-xl border border-slate-200/60">
           {[
             { label: 'All Issues', value: 'ALL' },
             { label: '🔴 Critical', value: 'CRITICAL' },
@@ -89,8 +89,8 @@ export default function CityMap() {
               onClick={() => setFilter(tab.value)}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 filter === tab.value
-                  ? 'bg-blue-600 text-white shadow-md scale-105'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-700/50'
+                  ? 'bg-blue-600 text-white shadow-sm scale-105'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
               }`}
             >
               {tab.label}
@@ -102,15 +102,15 @@ export default function CityMap() {
       {/* Main Map Container */}
       <div className="flex-1 w-full relative z-0">
         {loading ? (
-          <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm flex flex-col items-center justify-center gap-3 z-30">
+          <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center gap-3 z-30">
             <span className="w-8 h-8 border-4 border-blue-500/30 border-t-blue-500 rounded-full" style={{ animation: 'spin-ring 0.6s linear infinite' }} />
-            <span className="text-xs font-semibold text-slate-400 tracking-wider uppercase">Loading Geospatial Data...</span>
+            <span className="text-xs font-semibold text-slate-600 tracking-wider uppercase">Loading Geospatial Data...</span>
           </div>
         ) : null}
 
         <MapContainer center={cityCenter} zoom={13} className="h-full w-full">
           <TileLayer
-            url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+            url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
             attribution='&copy; <a href="https://carto.com/">CartoDB</a>'
           />
           {filteredTickets.map((ticket) => (
