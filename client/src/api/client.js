@@ -53,6 +53,22 @@ export const updateTicketStatus = (id, new_status, note = '') =>
     body: JSON.stringify({ new_status, note }),
   });
 
+// ── AI & Community ──
+export const analyzeIssueAI = (title, description) =>
+  request(`${BASE_URL}/tickets/analyze`, { method: 'POST', body: JSON.stringify({ title, description }) });
+
+export const generateAINote = (ticket_title, old_status, new_status) =>
+  request(`${BASE_URL}/tickets/ai-note`, { method: 'POST', body: JSON.stringify({ ticket_title, old_status, new_status }) });
+
+export const toggleUpvoteTicket = (id) =>
+  request(`${BASE_URL}/tickets/${id}/upvote`, { method: 'POST' });
+
+export const addTicketComment = (id, comment) =>
+  request(`${BASE_URL}/tickets/${id}/comments`, { method: 'POST', body: JSON.stringify({ comment }) });
+
+export const fetchTicketComments = (id) =>
+  request(`${BASE_URL}/tickets/${id}/comments`);
+
 // ── Reference Data ──
 export const fetchZones = () => request(`${BASE_URL}/zones`);
 export const fetchCategories = () => request(`${BASE_URL}/categories`);

@@ -13,6 +13,7 @@
 
 const { pool } = require('../config/db');
 const auditService = require('../services/audit.service');
+const aiService = require('../services/ai.service');
 const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
 
@@ -35,12 +36,18 @@ const createTicket = catchAsync(async (req, res, _next) => {
   try {
     await client.query('BEGIN');
 
+    let slaInterval = '7 days';
+    if (priority === 'CRITICAL') slaInterval = '24 hours';
+    else if (priority === 'HIGH') slaInterval = '3 days';
+    else if (priority === 'MEDIUM') slaInterval = '7 days';
+    else if (priority === 'LOW') slaInterval = '14 days';
+
     const insertQuery = `
       INSERT INTO tickets (
         citizen_id, category_id, zone_id, title, description,
-        latitude, longitude, priority, media_url
+        latitude, longitude, priority, media_url, sla_due_at
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, NOW() + INTERVAL '${slaInterval}')
       RETURNING *;
     `;
 
@@ -137,6 +144,9 @@ const getTickets = catchAsync(async (req, res, _next) => {
   const countResult = await pool.query(countQuery, params);
   const totalCount = parseInt(countResult.rows[0].count, 10);
 
+  // Automatic background SLA breach check
+  await pool.query(`UPDATE tickets SET sla_breached = TRUE WHERE sla_due_at < NOW() AND status != 'RESOLVED' AND status != 'REJECTED' AND sla_breached = FALSE`);
+
   // ── Data query with JOINs ──
   params.push(limit);
   const limitPlaceholder = `$${params.length}`;
@@ -147,7 +157,7 @@ const getTickets = catchAsync(async (req, res, _next) => {
   const dataQuery = `
     SELECT
       t.id, t.title, t.description, t.status, t.priority,
-      t.latitude, t.longitude, t.media_url,
+      t.latitude, t.longitude, t.media_url, t.upvotes_count, t.sla_due_at, t.sla_breached,
       t.created_at, t.updated_at,
       z.zone_name,
       c.name        AS category_name,
@@ -217,10 +227,23 @@ const getTicketById = catchAsync(async (req, res, _next) => {
     [id]
   );
 
+  // All comments for this ticket
+  const commentsResult = await pool.query(
+    `SELECT
+       tc.*,
+       u.full_name AS user_name
+     FROM ticket_comments tc
+     LEFT JOIN users u ON tc.user_id = u.id
+     WHERE tc.ticket_id = $1
+     ORDER BY tc.created_at ASC`,
+    [id]
+  );
+
   res.status(200).json({
     status: 'success',
     ticket: ticketResult.rows[0],
     activities: activitiesResult.rows,
+    comments: commentsResult.rows,
   });
 });
 
@@ -309,9 +332,99 @@ const updateTicketStatus = catchAsync(async (req, res, _next) => {
   }
 });
 
+/* ------------------------------------------------------------------ */
+/*  AI, Upvoting & Comments Controllers                                */
+/* ------------------------------------------------------------------ */
+
+const analyzeIssueAI = catchAsync(async (req, res, _next) => {
+  const { title, description } = req.body;
+  const analysis = await aiService.analyzeIssue(title || '', description || '');
+  res.status(200).json({
+    status: 'success',
+    data: analysis
+  });
+});
+
+const generateAINote = catchAsync(async (req, res, _next) => {
+  const { ticket_title, old_status, new_status } = req.body;
+  const note = await aiService.generateEngineerNote(ticket_title, old_status, new_status);
+  res.status(200).json({
+    status: 'success',
+    data: { note }
+  });
+});
+
+const toggleUpvote = catchAsync(async (req, res, _next) => {
+  const { id: ticket_id } = req.params;
+  const user_id = req.user.id;
+
+  // Check if upvote exists
+  const check = await pool.query('SELECT 1 FROM ticket_upvotes WHERE ticket_id = $1 AND user_id = $2', [ticket_id, user_id]);
+  
+  if (check.rowCount > 0) {
+    // Remove upvote
+    await pool.query('DELETE FROM ticket_upvotes WHERE ticket_id = $1 AND user_id = $2', [ticket_id, user_id]);
+    await pool.query('UPDATE tickets SET upvotes_count = upvotes_count - 1 WHERE id = $1', [ticket_id]);
+    res.status(200).json({ status: 'success', message: 'Upvote removed', upvoted: false });
+  } else {
+    // Add upvote
+    await pool.query('INSERT INTO ticket_upvotes (ticket_id, user_id) VALUES ($1, $2)', [ticket_id, user_id]);
+    await pool.query('UPDATE tickets SET upvotes_count = upvotes_count + 1 WHERE id = $1', [ticket_id]);
+    res.status(200).json({ status: 'success', message: 'Upvote added', upvoted: true });
+  }
+});
+
+const addComment = catchAsync(async (req, res, _next) => {
+  const { id: ticket_id } = req.params;
+  const user_id = req.user.id;
+  const { comment } = req.body;
+
+  if (!comment || !comment.trim()) {
+    throw new AppError('Comment cannot be empty.', 400);
+  }
+
+  const result = await pool.query(
+    `INSERT INTO ticket_comments (ticket_id, user_id, comment) VALUES ($1, $2, $3) RETURNING *;`,
+    [ticket_id, user_id, comment.trim()]
+  );
+
+  const newComment = result.rows[0];
+  const userRes = await pool.query('SELECT full_name FROM users WHERE id = $1', [user_id]);
+  newComment.user_name = userRes.rows[0].full_name;
+
+  res.status(201).json({
+    status: 'success',
+    comment: newComment
+  });
+});
+
+const getComments = catchAsync(async (req, res, _next) => {
+  const { id: ticket_id } = req.params;
+  const commentsResult = await pool.query(
+    `SELECT
+       tc.*,
+       u.full_name AS user_name
+     FROM ticket_comments tc
+     LEFT JOIN users u ON tc.user_id = u.id
+     WHERE tc.ticket_id = $1
+     ORDER BY tc.created_at ASC`,
+    [ticket_id]
+  );
+
+  res.status(200).json({
+    status: 'success',
+    comments: commentsResult.rows
+  });
+});
+
 module.exports = {
   createTicket,
   getTickets,
   getTicketById,
   updateTicketStatus,
+  analyzeIssueAI,
+  generateAINote,
+  toggleUpvote,
+  addComment,
+  getComments
 };

@@ -9,6 +9,7 @@ import TicketForm from './components/TicketForm';
 import Dashboard from './components/Dashboard';
 import TicketDetail from './components/TicketDetail';
 import AnalyticsPanel from './components/AnalyticsPanel';
+import CityMap from './components/CityMap';
 
 function NotFound() {
   return (
@@ -34,6 +35,7 @@ function App() {
             <div className="pt-16">
               <Routes>
                 <Route path="/" element={<TicketForm />} />
+                <Route path="/map" element={<CityMap />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route

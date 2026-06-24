@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { fetchTicketById, updateTicketStatus, timeAgo } from '../api/client';
+import { fetchTicketById, updateTicketStatus, toggleUpvoteTicket, addTicketComment, timeAgo } from '../api/client';
 import { useAuth } from '../hooks/useAuth';
 import { useToast } from './ui/Toast';
 import StatusBadge from './ui/StatusBadge';
@@ -43,12 +43,14 @@ export default function TicketDetail() {
   const [newStatus, setNewStatus] = useState('');
   const [note, setNote] = useState('');
   const [updating, setUpdating] = useState(false);
+  const [newComment, setNewComment] = useState('');
+  const [submittingComment, setSubmittingComment] = useState(false);
 
   const loadTicket = async () => {
     try {
       const data = await fetchTicketById(id);
       const t = data.ticket || data;
-      setTicket(t);
+      setTicket({ ...t, activities: data.activities || t.activities || [], comments: data.comments || t.comments || [] });
       const transitions = statusTransitions[t.status] || [];
       if (transitions.length > 0) setNewStatus(transitions[0]);
     } catch (err) {
@@ -76,6 +78,48 @@ export default function TicketDetail() {
     }
   };
 
+  const handleUpvote = async () => {
+    if (!user) {
+      showToast('Please log in to upvote issues.', 'warning');
+      return;
+    }
+    try {
+      const res = await toggleUpvoteTicket(id);
+      setTicket({
+        ...ticket,
+        upvotes_count: res.upvoted ? (ticket.upvotes_count || 0) + 1 : Math.max(0, (ticket.upvotes_count || 0) - 1)
+      });
+      showToast(res.message, 'success');
+    } catch (err) {
+      showToast(err.message, 'error');
+    }
+  };
+
+  const handleAddComment = async (e) => {
+    e.preventDefault();
+    if (!user) {
+      showToast('Please log in to post a comment.', 'warning');
+      return;
+    }
+    if (!newComment.trim()) return;
+    setSubmittingComment(true);
+    try {
+      const res = await addTicketComment(id, newComment);
+      if (res && res.comment) {
+        setTicket({
+          ...ticket,
+          comments: [...(ticket.comments || []), res.comment]
+        });
+        setNewComment('');
+        showToast('Comment posted successfully!', 'success');
+      }
+    } catch (err) {
+      showToast(err.message, 'error');
+    } finally {
+      setSubmittingComment(false);
+    }
+  };
+
   if (loading) return <LoadingSpinner text="Loading ticket details..." />;
   if (!ticket) return null;
 
@@ -100,7 +144,16 @@ export default function TicketDetail() {
         <div className="lg:col-span-2 space-y-6">
           {/* Main Info */}
           <div className="ui-card bg-white p-6">
-            <h1 className="text-2xl font-bold text-slate-900 mb-4">{ticket.title}</h1>
+            <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
+              <h1 className="text-2xl font-bold text-slate-900 flex-1">{ticket.title}</h1>
+              <button
+                onClick={handleUpvote}
+                className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 active:scale-95 transition-all rounded-xl text-xs font-bold text-slate-700 shadow-sm"
+              >
+                <span>👍</span>
+                <span>Affects me ({ticket.upvotes_count || 0})</span>
+              </button>
+            </div>
             <p className="text-slate-600 text-sm leading-relaxed mb-6 whitespace-pre-wrap">{ticket.description}</p>
 
             {/* Metadata Grid */}
@@ -154,6 +207,56 @@ export default function TicketDetail() {
               </div>
             </div>
           )}
+
+          {/* Community Comments Feed */}
+          <div className="ui-card bg-white p-6">
+            <h2 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+              <span>💬</span> Community Comments ({ticket.comments?.length || 0})
+            </h2>
+
+            {/* Comments List */}
+            <div className="space-y-4 mb-6">
+              {(ticket.comments || []).length === 0 ? (
+                <p className="text-slate-500 text-sm italic py-4 text-center bg-slate-50 rounded-xl border border-slate-100">
+                  No comments yet. Start the conversation below!
+                </p>
+              ) : (
+                (ticket.comments || []).map((c, idx) => (
+                  <div key={c.id || idx} className="p-4 bg-slate-50 rounded-xl border border-slate-200/60 flex gap-3 animate-fade-in">
+                    <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-700 font-bold flex items-center justify-center text-xs flex-shrink-0">
+                      {c.user_name ? c.user_name.charAt(0).toUpperCase() : 'U'}
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between gap-2 mb-1">
+                        <span className="text-xs font-bold text-slate-900">{c.user_name || 'Citizen'}</span>
+                        <span className="text-[10px] text-slate-400 font-medium">{timeAgo(c.created_at)}</span>
+                      </div>
+                      <p className="text-xs text-slate-700 leading-relaxed whitespace-pre-wrap">{c.comment}</p>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+
+            {/* Add Comment Form */}
+            <form onSubmit={handleAddComment} className="flex gap-2">
+              <input
+                type="text"
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                placeholder={user ? "Add a public comment..." : "Log in to post a comment..."}
+                disabled={!user || submittingComment}
+                className="flex-1 px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-slate-900 placeholder-slate-400 text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all disabled:opacity-60"
+              />
+              <button
+                type="submit"
+                disabled={!user || submittingComment || !newComment.trim()}
+                className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm rounded-xl shadow-sm transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {submittingComment ? 'Posting...' : 'Post'}
+              </button>
+            </form>
+          </div>
         </div>
 
         {/* Right Column — 1/3 */}

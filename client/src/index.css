@@ -108,3 +108,25 @@ body {
   outline: none;
   box-shadow: 0 0 0 2px var(--bg-secondary), 0 0 0 4px var(--accent-blue);
 }
+
+/* ── Premium AI & Glassmorphism Styles ── */
+.bg-ai-gradient {
+  background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+}
+
+.text-ai-gradient {
+  background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.border-ai {
+  border: 1px solid #a855f7;
+}
+
+.glassmorphism {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+}

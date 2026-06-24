@@ -61,6 +61,9 @@ CREATE TABLE tickets (
     priority issue_priority NOT NULL,
     assigned_engineer_id UUID REFERENCES users(id) ON DELETE SET NULL,
     media_url VARCHAR(512),
+    upvotes_count INT DEFAULT 0,
+    sla_due_at TIMESTAMP WITH TIME ZONE,
+    sla_breached BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     resolved_at TIMESTAMP WITH TIME ZONE  -- Set when status transitions to RESOLVED
@@ -77,6 +80,25 @@ CREATE TABLE ticket_activities (
     new_status ticket_status,
     note TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Ticket Comments
+-- Stores public discussion comments on tickets
+CREATE TABLE ticket_comments (
+    id SERIAL PRIMARY KEY,
+    ticket_id UUID REFERENCES tickets(id) ON DELETE CASCADE,
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    comment TEXT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Ticket Upvotes
+-- Tracks user upvotes on tickets to calculate community priority
+CREATE TABLE ticket_upvotes (
+    ticket_id UUID REFERENCES tickets(id) ON DELETE CASCADE,
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    PRIMARY KEY (ticket_id, user_id)
 );
 
 -- ==========================================

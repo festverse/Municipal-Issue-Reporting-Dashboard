@@ -207,3 +207,38 @@ INSERT INTO ticket_activities (ticket_id, user_id, activity_type, old_status, ne
 SELECT t.id, 'b2c3d4e5-f6a7-8901-bcde-f12345678901', 'STATUS_CHANGE', 'OPEN', 'REJECTED', 
   'This light is maintained by the private factory. Please contact the factory management directly. Not under municipal jurisdiction.'
 FROM tickets t WHERE t.title = 'Dim streetlight on private property';
+
+-- ==========================================
+-- 6. Sample Upvotes, Comments, and SLA settings
+-- ==========================================
+
+UPDATE tickets SET upvotes_count = 14, sla_due_at = NOW() + INTERVAL '12 hours', sla_breached = false WHERE title = 'Large pothole near City Hall';
+UPDATE tickets SET upvotes_count = 28, sla_due_at = NOW() - INTERVAL '1 hour', sla_breached = true WHERE title = 'Water pipe burst on Varachha Main Road';
+UPDATE tickets SET upvotes_count = 5, sla_due_at = NOW() + INTERVAL '3 days', sla_breached = false WHERE title = 'Overflowing garbage bin at Katargam junction';
+UPDATE tickets SET upvotes_count = 12, sla_due_at = NOW() + INTERVAL '1 day', sla_breached = false WHERE title = 'Streetlight not working on Athwa Lines';
+UPDATE tickets SET upvotes_count = 19, sla_due_at = NOW() - INTERVAL '30 minutes', sla_breached = true WHERE title = 'Traffic signal malfunction at Ring Road junction';
+UPDATE tickets SET upvotes_count = 8, sla_due_at = NOW() + INTERVAL '2 days', sla_breached = false WHERE title = 'Drainage blockage causing waterlogging in Udhna';
+UPDATE tickets SET upvotes_count = 22, sla_due_at = NOW() + INTERVAL '4 days', sla_breached = false WHERE title = 'Road surface deteriorated on Rander Road';
+UPDATE tickets SET upvotes_count = 15, sla_due_at = NOW() + INTERVAL '5 days', sla_breached = false WHERE title = 'Fallen tree blocking Varachha residential street';
+
+-- Insert Sample Comments
+INSERT INTO ticket_comments (ticket_id, user_id, comment)
+SELECT id, 'a1b2c3d4-e5f6-7890-abcd-ef1234567890', 'This pothole is getting bigger every day! Please fix it ASAP before an accident happens.'
+FROM tickets WHERE title = 'Large pothole near City Hall';
+
+INSERT INTO ticket_comments (ticket_id, user_id, comment)
+SELECT id, 'b2c3d4e5-f6a7-8901-bcde-f12345678901', 'Thank you for reporting. Our inspection team is scheduling a visit this afternoon.'
+FROM tickets WHERE title = 'Large pothole near City Hall';
+
+INSERT INTO ticket_comments (ticket_id, user_id, comment)
+SELECT id, 'a1b2c3d4-e5f6-7890-abcd-ef1234567890', 'Water has reached the shops on the ground floor. It is a severe issue!'
+FROM tickets WHERE title = 'Water pipe burst on Varachha Main Road';
+
+-- Insert Sample Upvotes
+INSERT INTO ticket_upvotes (ticket_id, user_id)
+SELECT id, 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
+FROM tickets WHERE title = 'Large pothole near City Hall';
+
+INSERT INTO ticket_upvotes (ticket_id, user_id)
+SELECT id, 'b2c3d4e5-f6a7-8901-bcde-f12345678901'
+FROM tickets WHERE title = 'Large pothole near City Hall';

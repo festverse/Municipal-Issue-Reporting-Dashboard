@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { createTicket, fetchZones, fetchCategories } from '../api/client';
+import { createTicket, fetchZones, fetchCategories, analyzeIssueAI } from '../api/client';
 import { useAuth } from '../hooks/useAuth';
 import { useToast } from './ui/Toast';
 import { Link } from 'react-router-dom';
@@ -36,6 +36,8 @@ export default function TicketForm() {
   const [zoneId, setZoneId] = useState('');
   const [priority, setPriority] = useState('MEDIUM');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [aiInsight, setAiInsight] = useState(null);
   const [zones, setZones] = useState([]);
   const [categories, setCategories] = useState([]);
 
@@ -65,11 +67,32 @@ export default function TicketForm() {
         priority,
       });
       showToast('Issue reported successfully!', 'success');
-      setTitle(''); setDescription(''); setPosition(null); setCategoryId(''); setZoneId(''); setPriority('MEDIUM');
+      setTitle(''); setDescription(''); setPosition(null); setCategoryId(''); setZoneId(''); setPriority('MEDIUM'); setAiInsight(null);
     } catch (err) {
       showToast(err.message, 'error');
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleAIAssist = async () => {
+    if (!title && !description) {
+      showToast('Please enter a title or description first for AI analysis.', 'warning');
+      return;
+    }
+    setIsAnalyzing(true);
+    try {
+      const res = await analyzeIssueAI(title, description);
+      if (res && res.data) {
+        setCategoryId(String(res.data.categoryId));
+        setPriority(res.data.priority);
+        setAiInsight(res.data);
+        showToast('AI Smart Assist successfully evaluated the issue!', 'success');
+      }
+    } catch (err) {
+      showToast('AI Analysis failed: ' + err.message, 'error');
+    } finally {
+      setIsAnalyzing(false);
     }
   };
 
@@ -113,9 +136,45 @@ export default function TicketForm() {
 
           {/* Description */}
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1.5">Description</label>
+            <div className="flex justify-between items-center mb-1.5">
+              <label className="block text-sm font-medium text-slate-700">Description</label>
+              <button
+                type="button"
+                onClick={handleAIAssist}
+                disabled={isAnalyzing}
+                className="flex items-center gap-1.5 px-3 py-1 bg-ai-gradient text-white font-semibold text-xs rounded-lg shadow-sm hover:opacity-95 transition-all active:scale-95 disabled:opacity-50"
+              >
+                {isAnalyzing ? (
+                  <>
+                    <span className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full" style={{ animation: 'spin-ring 0.6s linear infinite' }} />
+                    Analyzing...
+                  </>
+                ) : (
+                  <>
+                    <span>✨</span> AI Smart Assist
+                  </>
+                )}
+              </button>
+            </div>
             <textarea value={description} onChange={(e) => setDescription(e.target.value)} required rows={4} placeholder="Provide specific details about the issue..." className={`${inputClass} resize-none`} />
           </div>
+
+          {/* AI Insight Card */}
+          {aiInsight && (
+            <div className="p-4 rounded-2xl bg-purple-50/80 border-ai animate-fade-in">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-bold uppercase tracking-wider text-ai-gradient flex items-center gap-1">
+                  <span>🤖</span> AI Triage Complete
+                </span>
+                <span className="text-xs font-semibold px-2 py-0.5 bg-purple-100 text-purple-700 rounded-full">
+                  {aiInsight.confidence}% Confidence
+                </span>
+              </div>
+              <p className="text-xs text-purple-950 leading-relaxed font-medium">
+                {aiInsight.explanation}
+              </p>
+            </div>
+          )}
 
           {/* Category & Zone */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

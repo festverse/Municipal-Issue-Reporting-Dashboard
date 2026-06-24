@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { fetchTickets, fetchZones, fetchCategories, fetchAnalyticsSummary, updateTicketStatus } from '../api/client';
-import { timeAgo } from '../api/client';
+import { fetchTickets, fetchZones, fetchCategories, fetchAnalyticsSummary, updateTicketStatus, generateAINote, timeAgo } from '../api/client';
 import { useToast } from './ui/Toast';
 import StatCard from './ui/StatCard';
 import StatusBadge from './ui/StatusBadge';
@@ -43,6 +42,7 @@ export default function Dashboard() {
 
   // Modal
   const [modal, setModal] = useState(null); // { ticket, newStatus, note }
+  const [isGeneratingNote, setIsGeneratingNote] = useState(false);
 
   // Load reference data & summary
   useEffect(() => {
@@ -95,6 +95,42 @@ export default function Dashboard() {
     }
   };
 
+  const handleAIGenerateNote = async () => {
+    if (!modal) return;
+    setIsGeneratingNote(true);
+    try {
+      const res = await generateAINote(modal.ticket.title, modal.ticket.status, modal.newStatus);
+      if (res && res.data && res.data.note) {
+        setModal({ ...modal, note: res.data.note });
+        showToast('AI Note generated successfully!', 'success');
+      }
+    } catch (err) {
+      showToast('Failed to generate AI note: ' + err.message, 'error');
+    } finally {
+      setIsGeneratingNote(false);
+    }
+  };
+
+  const handleCSVExport = () => {
+    if (tickets.length === 0) {
+      showToast('No tickets available to export.', 'warning');
+      return;
+    }
+    const headers = ['ID,Title,Category,Zone,Priority,Status,SLA Breached,Created At'];
+    const rows = tickets.map(t => 
+      `"${t.id}","${t.title.replace(/"/g, '""')}","${t.category_name || ''}","${t.zone_name || ''}","${t.priority}","${t.status}","${t.sla_breached ? 'YES' : 'NO'}","${t.created_at}"`
+    );
+    const csvContent = 'data:text/csv;charset=utf-8,' + [headers, ...rows].join('\n');
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', `municipal_tickets_export_${new Date().toISOString().slice(0,10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showToast('CSV Export downloaded successfully!', 'success');
+  };
+
   const selectClass = "px-3 py-2 bg-white border border-slate-300 rounded-xl text-slate-900 text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all appearance-none cursor-pointer";
 
   // Pagination range
@@ -107,9 +143,17 @@ export default function Dashboard() {
   return (
     <div className="max-w-7xl mx-auto py-8 px-4 animate-fade-in">
       {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-slate-900">Engineer Dashboard</h1>
-        <p className="text-slate-500 mt-1">Manage and track civic infrastructure reports.</p>
+      <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-slate-900">Engineer Dashboard</h1>
+          <p className="text-slate-500 mt-1">Manage and track civic infrastructure reports.</p>
+        </div>
+        <button
+          onClick={handleCSVExport}
+          className="flex items-center gap-2 px-4 py-2.5 bg-slate-800 hover:bg-slate-900 text-white font-semibold text-sm rounded-xl shadow-sm transition-all active:scale-95"
+        >
+          <span>📥</span> Export Enterprise CSV
+        </button>
       </div>
 
       {/* Stats */}
@@ -189,7 +233,8 @@ export default function Dashboard() {
                   <th className="px-4 py-3 font-semibold hidden md:table-cell">Zone</th>
                   <th className="px-4 py-3 font-semibold">Priority</th>
                   <th className="px-4 py-3 font-semibold">Status</th>
-                  <th className="px-4 py-3 font-semibold hidden lg:table-cell">Created</th>
+                  <th className="px-4 py-3 font-semibold hidden lg:table-cell">SLA Status</th>
+                  <th className="px-4 py-3 font-semibold hidden xl:table-cell">Created</th>
                   <th className="px-4 py-3 font-semibold text-right">Actions</th>
                 </tr>
               </thead>
@@ -208,7 +253,16 @@ export default function Dashboard() {
                     <td className="px-4 py-3 text-sm text-slate-500 hidden md:table-cell">{t.zone_name || t.zone || '—'}</td>
                     <td className="px-4 py-3"><PriorityBadge priority={t.priority} /></td>
                     <td className="px-4 py-3"><StatusBadge status={t.status} /></td>
-                    <td className="px-4 py-3 text-xs text-slate-500 hidden lg:table-cell">{timeAgo(t.created_at)}</td>
+                    <td className="px-4 py-3 hidden lg:table-cell">
+                      {t.status === 'RESOLVED' ? (
+                        <span className="text-xs font-semibold px-2 py-1 bg-slate-100 text-slate-600 rounded-lg">✅ Fulfilled</span>
+                      ) : t.sla_breached ? (
+                        <span className="text-xs font-bold px-2 py-1 bg-rose-100 text-rose-700 rounded-lg animate-pulse-critical">🔴 SLA Breached</span>
+                      ) : (
+                        <span className="text-xs font-semibold px-2 py-1 bg-emerald-100 text-emerald-700 rounded-lg">🟢 SLA Normal</span>
+                      )}
+                    </td>
+                    <td className="px-4 py-3 text-xs text-slate-500 hidden xl:table-cell">{timeAgo(t.created_at)}</td>
                     <td className="px-4 py-3 text-right">
                       <button
                         onClick={(e) => {
@@ -296,11 +350,21 @@ export default function Dashboard() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1.5">Note (optional)</label>
+                <div className="flex justify-between items-center mb-1.5">
+                  <label className="block text-sm font-medium text-slate-700">Note (optional)</label>
+                  <button
+                    type="button"
+                    onClick={handleAIGenerateNote}
+                    disabled={isGeneratingNote}
+                    className="flex items-center gap-1 px-2.5 py-1 bg-ai-gradient text-white font-semibold text-xs rounded-lg shadow-sm hover:opacity-95 transition-all active:scale-95 disabled:opacity-50"
+                  >
+                    {isGeneratingNote ? 'Generating...' : '✨ AI Generate Note'}
+                  </button>
+                </div>
                 <textarea
                   value={modal.note}
                   onChange={(e) => setModal({ ...modal, note: e.target.value })}
-                  rows={3}
+                  rows={4}
                   placeholder="Add a note about this status change..."
                   className="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl text-slate-900 placeholder-slate-400 text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all resize-none"
                 />
