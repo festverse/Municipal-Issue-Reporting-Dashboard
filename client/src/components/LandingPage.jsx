@@ -206,7 +206,7 @@ export default function LandingPage() {
                 <path d="M 50 250 C 250 400, 400 380, 550 250 C 700 120, 850 300, 980 60 C 1030 10, 1070 30, 1100 40" stroke="url(#blue_gradient)" strokeWidth="8" strokeLinecap="round" filter="url(#wave_shadow)" />
 
                 {/* Node 1 */}
-                <g transform="translate(260, 325)">
+                <g transform="translate(260, 355)">
                   <rect x="-35" y="-35" width="70" height="70" rx="24" fill="white" filter="url(#box_shadow)" />
                   <circle cx="0" cy="0" r="14" fill="#2563eb" />
                 </g>
@@ -228,7 +228,7 @@ export default function LandingPage() {
             {/* 3 Step Content Columns */}
             <div className="grid grid-cols-3 gap-8 relative z-10 w-full">
               {/* Step 1 */}
-              <ScrollReveal direction="up" delay={100} className="pl-12 pt-[480px]">
+              <ScrollReveal direction="up" delay={100} className="pl-12 pt-[510px]">
                 <div className="relative z-10 pr-8">
                   <div className="absolute -top-28 right-12 text-[10rem] font-black text-slate-200/70 pointer-events-none select-none leading-none font-mono">1</div>
                   <div className="relative z-10 pt-4">
