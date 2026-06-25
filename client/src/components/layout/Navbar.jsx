@@ -28,9 +28,11 @@ export default function Navbar() {
         <div className="flex h-16 items-center justify-between relative">
 
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
-
-            <span className="text-lg font-bold text-slate-900">
+          <Link to="/" className="flex items-center gap-2.5 group select-none">
+            <div className="w-9 h-9 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-violet-600 flex items-center justify-center text-white font-black text-lg shadow-lg shadow-blue-500/30 group-hover:scale-105 group-active:scale-95 transition-all">
+              C
+            </div>
+            <span className="text-xl font-black tracking-tight bg-gradient-to-r from-slate-900 via-slate-800 to-blue-700 bg-clip-text text-transparent group-hover:opacity-90 transition-opacity">
               Civic Portal
             </span>
           </Link>
@@ -111,9 +113,11 @@ export default function Navbar() {
         <>
           <div className="fixed inset-0 bg-slate-900/20 z-40 md:hidden" onClick={() => setMobileOpen(false)} />
           <div className="fixed inset-y-0 left-0 w-64 z-50 md:hidden bg-white border-r border-slate-200 animate-slide-in-left p-6 flex flex-col shadow-xl">
-            <Link to="/" className="flex items-center gap-2 mb-8" onClick={() => setMobileOpen(false)}>
-
-              <span className="text-lg font-bold text-slate-900">
+            <Link to="/" className="flex items-center gap-2.5 mb-8 group select-none" onClick={() => setMobileOpen(false)}>
+              <div className="w-9 h-9 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-violet-600 flex items-center justify-center text-white font-black text-lg shadow-lg shadow-blue-500/30 group-hover:scale-105 group-active:scale-95 transition-all">
+                C
+              </div>
+              <span className="text-xl font-black tracking-tight bg-gradient-to-r from-slate-900 via-slate-800 to-blue-700 bg-clip-text text-transparent">
                 Civic Portal
               </span>
             </Link>

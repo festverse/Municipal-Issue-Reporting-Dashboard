@@ -493,8 +493,13 @@ export default function LandingPage() {
           
           {/* Col 1 & 2: Branding & Bio */}
           <div className="lg:col-span-2 space-y-6">
-            <div className="flex items-center gap-2">
-              <span className="text-2xl font-black tracking-tight text-white">Civic Portal</span>
+            <div className="flex items-center gap-2.5 select-none">
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-500 via-indigo-500 to-violet-500 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-blue-500/30">
+                C
+              </div>
+              <span className="text-2xl font-black tracking-tight bg-gradient-to-r from-white via-slate-100 to-blue-400 bg-clip-text text-transparent">
+                Civic Portal
+              </span>
             </div>
             <p className="text-slate-400 text-sm leading-relaxed max-w-sm">
               Empowering smart cities through crowdsourced issue reporting, AI heuristic triage, real-time map telemetry, and enforced service level agreements.
