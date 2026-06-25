@@ -241,7 +241,7 @@ export default function LandingPage() {
               </ScrollReveal>
 
               {/* Step 2 */}
-              <ScrollReveal direction="up" delay={200} className="pl-16 pt-[275px]">
+              <ScrollReveal direction="up" delay={200} className="pl-16 pt-[360px]">
                 <div className="relative z-10 pr-6">
                   <div className="absolute -top-4 right-6 text-[10rem] font-black text-slate-200/70 pointer-events-none select-none leading-none font-mono">2</div>
                   <div className="relative z-10 pt-4">
@@ -254,7 +254,7 @@ export default function LandingPage() {
               </ScrollReveal>
 
               {/* Step 3 */}
-              <ScrollReveal direction="up" delay={300} className="pl-20 pt-[125px]">
+              <ScrollReveal direction="up" delay={300} className="pl-20 pt-[240px]">
                 <div className="relative z-10 pr-4">
                   <div className="absolute -top-4 right-0 text-[10rem] font-black text-slate-200/70 pointer-events-none select-none leading-none font-mono">3</div>
                   <div className="relative z-10 pt-4">
