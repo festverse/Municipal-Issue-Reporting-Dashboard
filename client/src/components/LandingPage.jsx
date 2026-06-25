@@ -334,8 +334,7 @@ export default function LandingPage() {
           
           {/* Heroic Callout Banner */}
           <ScrollReveal direction="scale">
-            <div className="bg-emerald-700 text-white rounded-[2.5rem] p-10 sm:p-14 shadow-2xl text-center mb-20 relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-r from-emerald-800 via-emerald-700 to-teal-700 opacity-90" />
+            <div className="bg-[#046c4e] text-white rounded-[2.5rem] p-10 sm:p-14 shadow-2xl text-center mb-20 relative overflow-hidden">
               <div className="relative z-10 max-w-3xl mx-auto">
                 <span className="text-xs font-bold uppercase tracking-widest text-emerald-200 block mb-2">Transparent Telemetry</span>
                 <p className="text-5xl sm:text-7xl font-black text-white mb-4">71%</p>
