@@ -171,9 +171,7 @@ const googleLogin = catchAsync(async (req, res, _next) => {
   }
 
   // Generate custom JWT token for seamless integration with existing auth middleware
-  const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET || 'fallback_super_secret_key_change_in_production', {
-    expiresIn: process.env.JWT_EXPIRES_IN || '30d',
-  });
+  const token = authService.generateToken(user);
 
   res.status(200).json({
     status: 'success',
