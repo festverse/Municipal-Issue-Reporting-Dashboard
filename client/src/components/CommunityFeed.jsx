@@ -129,7 +129,7 @@ export default function CommunityFeed() {
               'https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=600&q=80',
               'https://images.unsplash.com/photo-1527689368864-3a821dbccc34?auto=format&fit=crop&w=600&q=80',
               'https://images.unsplash.com/photo-1498084393753-b411b2d26b34?auto=format&fit=crop&w=600&q=80',
-              'https://images.unsplash.com/photo-1542013936693-88937e862b50?auto=format&fit=crop&w=600&q=80'
+              'https://picsum.photos/id/1029/600/400'
             ];
             const displayImg = t.media_url || dummyImages[index % dummyImages.length];
             return (

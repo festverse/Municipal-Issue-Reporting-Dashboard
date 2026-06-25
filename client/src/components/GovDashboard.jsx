@@ -14,7 +14,7 @@ export default function GovDashboard() {
   const recentActivities = [
     { id: 1, title: 'Major Pothole Repair Completed', department: 'Department of Transportation', time: '2 hours ago', image: 'https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=600&q=80', status: 'Completed' },
     { id: 2, title: 'Solar Streetlight Grid Inspection', department: 'Energy & Power Division', time: '5 hours ago', image: 'https://images.unsplash.com/photo-1498084393753-b411b2d26b34?auto=format&fit=crop&w=600&q=80', status: 'In Progress' },
-    { id: 3, title: 'Downtown Water Main Flushing', department: 'Water & Sanitation Board', time: '1 day ago', image: 'https://images.unsplash.com/photo-1542013936693-88937e862b50?auto=format&fit=crop&w=600&q=80', status: 'Completed' },
+    { id: 3, title: 'Downtown Water Main Flushing', department: 'Water & Sanitation Board', time: '1 day ago', image: 'https://picsum.photos/id/1029/600/400', status: 'Completed' },
     { id: 4, title: 'Community Park Landscaping Upgrade', department: 'Parks & Recreation', time: '2 days ago', image: 'https://images.unsplash.com/photo-1527689368864-3a821dbccc34?auto=format&fit=crop&w=600&q=80', status: 'Assigned' },
   ];
 

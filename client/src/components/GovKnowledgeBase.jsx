@@ -15,7 +15,7 @@ export default function GovKnowledgeBase() {
   ];
 
   const guides = [
-    { id: 101, title: 'Civic Reporting Best Practices & Landmark Guidelines', category: 'Getting Started', readTime: '4 min read', image: 'https://images.unsplash.com/photo-1542013936693-88937e862b50?auto=format&fit=crop&w=600&q=80' },
+    { id: 101, title: 'Civic Reporting Best Practices & Landmark Guidelines', category: 'Getting Started', readTime: '4 min read', image: 'https://picsum.photos/id/1029/600/400' },
     { id: 102, title: 'Understanding Your Statutory Rights under the SLA Charter', category: 'Legal Framework', readTime: '7 min read', image: 'https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=600&q=80' },
     { id: 103, title: 'How to Co-Sponsor Neighborhood Improvement Initiatives', category: 'Community Engagement', readTime: '5 min read', image: 'https://images.unsplash.com/photo-1527689368864-3a821dbccc34?auto=format&fit=crop&w=600&q=80' },
   ];

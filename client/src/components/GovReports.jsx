@@ -9,7 +9,7 @@ export default function GovReports() {
     { id: 'REP-1029', title: 'Grand Avenue Repaving Project', category: 'Roads & Streets', zone: 'Zone 4 - Downtown', date: 'June 24, 2026', status: 'Completed', sla: 'Met (18h)', image: 'https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=600&q=80' },
     { id: 'REP-1028', title: 'Sewer Line Rupture Mitigation', category: 'Sanitation', zone: 'Zone 2 - Westside', date: 'June 23, 2026', status: 'In Progress', sla: 'In Buffer (6h left)', image: 'https://images.unsplash.com/photo-1527689368864-3a821dbccc34?auto=format&fit=crop&w=600&q=80' },
     { id: 'REP-1027', title: 'Solar Array Transformer Repair', category: 'Energy & Power', zone: 'Zone 1 - North Hills', date: 'June 22, 2026', status: 'Completed', sla: 'Met (4h)', image: 'https://images.unsplash.com/photo-1498084393753-b411b2d26b34?auto=format&fit=crop&w=600&q=80' },
-    { id: 'REP-1026', title: 'Municipal Water Main Purge', category: 'Water Supply', zone: 'Zone 8 - East Port', date: 'June 20, 2026', status: 'Assigned', sla: 'Dispatched', image: 'https://images.unsplash.com/photo-1542013936693-88937e862b50?auto=format&fit=crop&w=600&q=80' },
+    { id: 'REP-1026', title: 'Municipal Water Main Purge', category: 'Water Supply', zone: 'Zone 8 - East Port', date: 'June 20, 2026', status: 'Assigned', sla: 'Dispatched', image: 'https://picsum.photos/id/1029/600/400' },
   ];
 
   const filteredReports = reportLogs.filter(r => {

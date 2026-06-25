@@ -9,7 +9,7 @@ export default function GovHeatmap() {
     { id: 1, name: 'Downtown Commercial Core', issues: 42, status: 'Severe Concentration', level: 'high', image: 'https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=600&q=80', activeRepair: 'Main Blvd Repaving' },
     { id: 2, name: 'North Residential Hills', issues: 14, status: 'Stable / Monitored', level: 'low', image: 'https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=600&q=80', activeRepair: 'Power Line Clearances' },
     { id: 3, name: 'Westside Industrial Park', issues: 28, status: 'Elevated Activity', level: 'medium', image: 'https://images.unsplash.com/photo-1498084393753-b411b2d26b34?auto=format&fit=crop&w=600&q=80', activeRepair: 'Streetlight Grid Overhaul' },
-    { id: 4, name: 'East Waterfront District', issues: 9, status: 'SLA Met / Resolved', level: 'optimal', image: 'https://images.unsplash.com/photo-1542013936693-88937e862b50?auto=format&fit=crop&w=600&q=80', activeRepair: 'Drainage Pipe Scouring' },
+    { id: 4, name: 'East Waterfront District', issues: 9, status: 'SLA Met / Resolved', level: 'optimal', image: 'https://picsum.photos/id/1029/600/400', activeRepair: 'Drainage Pipe Scouring' },
   ];
 
   return (
