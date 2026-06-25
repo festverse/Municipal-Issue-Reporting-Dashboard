@@ -118,9 +118,9 @@ export default function LandingPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <ScrollReveal direction="up" delay={100} className="h-full">
-            <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-lg transition-all group hover:-translate-y-1 h-full flex flex-col">
+            <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-lg hover:border-emerald-200 transition-all duration-300 hover:-translate-y-1 h-full flex flex-col">
               <div>
-                <div className="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"><Leaf className="w-7 h-7 text-emerald-600" /></div>
+                <div className="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center mb-6"><Leaf className="w-7 h-7 text-emerald-600" /></div>
                 <h3 className="text-lg font-bold text-slate-900 mb-3">Clean & Green</h3>
                 <p className="text-sm text-slate-600 leading-relaxed">
                   Dedicated to maintaining sustainable urban infrastructure, pristine public parks, and beautifully kept neighborhood spaces.
@@ -129,9 +129,9 @@ export default function LandingPage() {
             </div>
           </ScrollReveal>
           <ScrollReveal direction="up" delay={200} className="h-full">
-            <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-lg transition-all group hover:-translate-y-1 h-full flex flex-col">
+            <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-lg hover:border-blue-200 transition-all duration-300 hover:-translate-y-1 h-full flex flex-col">
               <div>
-                <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"><ShieldCheck className="w-7 h-7 text-blue-600" /></div>
+                <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center mb-6"><ShieldCheck className="w-7 h-7 text-blue-600" /></div>
                 <h3 className="text-lg font-bold text-slate-900 mb-3">Trust & Transparency</h3>
                 <p className="text-sm text-slate-600 leading-relaxed">
                   Open municipal data feeds ensure complete accountability, clear communication channels, and visible public progress.
@@ -140,9 +140,9 @@ export default function LandingPage() {
             </div>
           </ScrollReveal>
           <ScrollReveal direction="up" delay={300} className="h-full">
-            <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-lg transition-all group hover:-translate-y-1 h-full flex flex-col">
+            <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-lg hover:border-violet-200 transition-all duration-300 hover:-translate-y-1 h-full flex flex-col">
               <div>
-                <div className="w-14 h-14 rounded-2xl bg-violet-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"><Users className="w-7 h-7 text-violet-600" /></div>
+                <div className="w-14 h-14 rounded-2xl bg-violet-50 flex items-center justify-center mb-6"><Users className="w-7 h-7 text-violet-600" /></div>
                 <h3 className="text-lg font-bold text-slate-900 mb-3">Community Driven</h3>
                 <p className="text-sm text-slate-600 leading-relaxed">
                   Built for active citizens, collaborative neighborhoods, and proactive civic associations working together for public welfare.
@@ -151,9 +151,9 @@ export default function LandingPage() {
             </div>
           </ScrollReveal>
           <ScrollReveal direction="up" delay={400} className="h-full">
-            <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-lg transition-all group hover:-translate-y-1 h-full flex flex-col">
+            <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-lg hover:border-amber-200 transition-all duration-300 hover:-translate-y-1 h-full flex flex-col">
               <div>
-                <div className="w-14 h-14 rounded-2xl bg-amber-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"><Zap className="w-7 h-7 text-amber-600" /></div>
+                <div className="w-14 h-14 rounded-2xl bg-amber-50 flex items-center justify-center mb-6"><Zap className="w-7 h-7 text-amber-600" /></div>
                 <h3 className="text-lg font-bold text-slate-900 mb-3">Efficient Resolution</h3>
                 <p className="text-sm text-slate-600 leading-relaxed">
                   Automated AI dispatching and enforced service level agreements guarantee the fastest possible municipal response times.
@@ -179,7 +179,7 @@ export default function LandingPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
             <ScrollReveal direction="up" delay={100} className="h-full">
-              <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm relative overflow-hidden h-full flex flex-col justify-between">
+              <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-lg hover:border-blue-200 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden h-full flex flex-col justify-between">
                 <div>
                   <span className="absolute top-4 right-6 text-5xl font-black text-slate-100 pointer-events-none">01</span>
                   <div className="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-bold text-lg mb-6 shadow-md">1</div>
@@ -191,7 +191,7 @@ export default function LandingPage() {
               </div>
             </ScrollReveal>
             <ScrollReveal direction="up" delay={200} className="h-full">
-              <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm relative overflow-hidden h-full flex flex-col justify-between">
+              <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-lg hover:border-violet-200 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden h-full flex flex-col justify-between">
                 <div>
                   <span className="absolute top-4 right-6 text-5xl font-black text-slate-100 pointer-events-none">02</span>
                   <div className="w-12 h-12 rounded-2xl bg-violet-600 text-white flex items-center justify-center font-bold text-lg mb-6 shadow-md">2</div>
@@ -203,7 +203,7 @@ export default function LandingPage() {
               </div>
             </ScrollReveal>
             <ScrollReveal direction="up" delay={300} className="h-full">
-              <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm relative overflow-hidden h-full flex flex-col justify-between">
+              <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-lg hover:border-amber-200 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden h-full flex flex-col justify-between">
                 <div>
                   <span className="absolute top-4 right-6 text-5xl font-black text-slate-100 pointer-events-none">03</span>
                   <div className="w-12 h-12 rounded-2xl bg-amber-600 text-white flex items-center justify-center font-bold text-lg mb-6 shadow-md">3</div>
@@ -215,7 +215,7 @@ export default function LandingPage() {
               </div>
             </ScrollReveal>
             <ScrollReveal direction="up" delay={400} className="h-full">
-              <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm relative overflow-hidden h-full flex flex-col justify-between">
+              <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-lg hover:border-emerald-200 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden h-full flex flex-col justify-between">
                 <div>
                   <span className="absolute top-4 right-6 text-5xl font-black text-slate-100 pointer-events-none">04</span>
                   <div className="w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center font-bold text-lg mb-6 shadow-md">4</div>
@@ -254,9 +254,9 @@ export default function LandingPage() {
             { icon: <Lock className="w-6 h-6 text-blue-600" />, title: 'End-to-End Verified', desc: 'Secure role-based access control for citizens, engineers, and municipal administrators.' },
           ].map((feat, idx) => (
             <ScrollReveal key={idx} direction="up" delay={(idx % 4) * 100} className="h-full">
-              <div className="bg-white p-7 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group h-full">
+              <div className="bg-white p-7 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-lg hover:border-blue-200 transition-all duration-300 hover:-translate-y-1 flex flex-col justify-between h-full">
                 <div>
-                  <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">{feat.icon}</div>
+                  <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center mb-5">{feat.icon}</div>
                   <h3 className="text-lg font-bold text-slate-900 mb-2">{feat.title}</h3>
                   <p className="text-sm text-slate-600 leading-relaxed">{feat.desc}</p>
                 </div>
@@ -297,7 +297,7 @@ export default function LandingPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <ScrollReveal direction="up" delay={100} className="h-full">
-              <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm flex items-start gap-6 h-full">
+              <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-lg hover:border-rose-200 transition-all duration-300 hover:-translate-y-1 flex items-start gap-6 h-full">
                 <div className="w-14 h-14 rounded-2xl bg-rose-50 flex items-center justify-center shrink-0"><Heart className="w-7 h-7 text-rose-600" /></div>
                 <div>
                   <h3 className="text-xl font-bold text-slate-900 mb-2">Quality of Life</h3>
@@ -308,18 +308,18 @@ export default function LandingPage() {
               </div>
             </ScrollReveal>
             <ScrollReveal direction="up" delay={200} className="h-full">
-              <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm flex items-start gap-6 h-full">
+              <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-lg hover:border-blue-200 transition-all duration-300 hover:-translate-y-1 flex items-start gap-6 h-full">
                 <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center shrink-0"><Landmark className="w-7 h-7 text-blue-600" /></div>
                 <div>
                   <h3 className="text-xl font-bold text-slate-900 mb-2">Good Governance</h3>
                   <p className="text-sm text-slate-600 leading-relaxed">
-                    Real-time data feeds establish clear communication channels between citizens and leaders, eliminating bureaucratic black holes.
+                    Real-time data feeds font-bold establish clear communication channels between citizens and leaders, eliminating bureaucratic black holes.
                   </p>
                 </div>
               </div>
             </ScrollReveal>
             <ScrollReveal direction="up" delay={300} className="h-full">
-              <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm flex items-start gap-6 h-full">
+              <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-lg hover:border-emerald-200 transition-all duration-300 hover:-translate-y-1 flex items-start gap-6 h-full">
                 <div className="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center shrink-0"><TreePine className="w-7 h-7 text-emerald-600" /></div>
                 <div>
                   <h3 className="text-xl font-bold text-slate-900 mb-2">Environmental Impact</h3>
@@ -330,7 +330,7 @@ export default function LandingPage() {
               </div>
             </ScrollReveal>
             <ScrollReveal direction="up" delay={400} className="h-full">
-              <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm flex items-start gap-6 h-full">
+              <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-lg hover:border-violet-200 transition-all duration-300 hover:-translate-y-1 flex items-start gap-6 h-full">
                 <div className="w-14 h-14 rounded-2xl bg-violet-50 flex items-center justify-center shrink-0"><Users className="w-7 h-7 text-violet-600" /></div>
                 <div>
                   <h3 className="text-xl font-bold text-slate-900 mb-2">Community Unity</h3>
@@ -367,7 +367,7 @@ export default function LandingPage() {
             { q: 'Is my personal data secure?', a: 'Absolutely. We utilize enterprise-grade encryption, secure role-based access control, and strict privacy masking protocols.' },
           ].map((faq, idx) => (
             <ScrollReveal key={idx} direction="up" delay={(idx % 3) * 100} className="h-full">
-              <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm h-full">
+              <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-lg hover:border-blue-200 transition-all duration-300 hover:-translate-y-1 h-full">
                 <h3 className="text-lg font-bold text-slate-900 mb-3">{faq.q}</h3>
                 <p className="text-sm text-slate-600 leading-relaxed">{faq.a}</p>
               </div>
