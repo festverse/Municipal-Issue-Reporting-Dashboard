@@ -49,6 +49,7 @@ const loginValidation = validate([
 
 router.post('/register', registerValidation, authController.register);
 router.post('/login', loginValidation, authController.login);
+router.post('/google', authController.googleLogin);
 router.get('/me', protect, authController.getProfile);
 router.patch('/me', protect, authController.updateProfile);
 

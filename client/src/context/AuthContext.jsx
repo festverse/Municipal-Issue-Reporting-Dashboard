@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect, useCallback } from 'react';
-import { loginUser, registerUser, getProfile, updateProfileAPI } from '../api/client';
+import { loginUser, registerUser, getProfile, updateProfileAPI, loginWithGoogleAPI } from '../api/client';
 
 export const AuthContext = createContext(null);
 
@@ -19,6 +19,14 @@ export default function AuthProvider({ children }) {
 
   const login = useCallback(async (email, password) => {
     const data = await loginUser({ email, password });
+    localStorage.setItem('token', data.token);
+    setToken(data.token);
+    setUser(data.user);
+    return data;
+  }, []);
+
+  const loginWithGoogle = useCallback(async (body) => {
+    const data = await loginWithGoogleAPI(body);
     localStorage.setItem('token', data.token);
     setToken(data.token);
     setUser(data.user);
@@ -48,7 +56,7 @@ export default function AuthProvider({ children }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, register, logout, updateProfile, setUser }}>
+    <AuthContext.Provider value={{ user, token, loading, login, loginWithGoogle, register, logout, updateProfile, setUser }}>
       {children}
     </AuthContext.Provider>
   );
