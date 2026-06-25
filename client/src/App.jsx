@@ -12,6 +12,8 @@ import TicketDetail from './components/TicketDetail';
 import AnalyticsPanel from './components/AnalyticsPanel';
 import CityMap from './components/CityMap';
 import LegalPage from './components/LegalPage';
+import CommunityFeed from './components/CommunityFeed';
+import CivicRewards from './components/CivicRewards';
 
 function NotFound() {
   return (
@@ -39,6 +41,8 @@ function App() {
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/report" element={<TicketForm />} />
                 <Route path="/map" element={<CityMap />} />
+                <Route path="/feed" element={<CommunityFeed />} />
+                <Route path="/rewards" element={<CivicRewards />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/legal" element={<LegalPage />} />

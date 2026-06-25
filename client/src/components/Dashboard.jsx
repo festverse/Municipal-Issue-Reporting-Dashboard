@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { fetchTickets, fetchZones, fetchCategories, fetchAnalyticsSummary, updateTicketStatus, generateAINote, timeAgo } from '../api/client';
 import { useToast } from './ui/Toast';
 import StatCard from './ui/StatCard';
@@ -140,10 +140,41 @@ export default function Dashboard() {
   const visiblePages = pageNumbers.filter(
     (p) => p === 1 || p === totalPages || (p >= currentPage - 1 && p <= currentPage + 1)
   );
+  const breachedTickets = tickets.filter(t => t.sla_breached || t.priority === 'CRITICAL');
 
   return (
     <div className="max-w-7xl mx-auto py-8 px-4 animate-fade-in">
-      {/* Header */}
+      {/* High-Priority SLA Breach Alert Banner */}
+      {breachedTickets.length > 0 && (
+        <div className="mb-8 p-6 bg-gradient-to-r from-rose-500 to-red-600 rounded-2xl text-white shadow-lg shadow-rose-500/20 animate-fade-in flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-white/10 rounded-2xl backdrop-blur-md border border-white/20 flex-shrink-0 animate-pulse">
+              <AlertCircle className="w-8 h-8 text-white" />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold flex items-center gap-2">
+                <span>🚨 IMMEDIATE ACTION REQUIRED: {breachedTickets.length} SLA Breach{breachedTickets.length > 1 ? 'es' : ''} Detected</span>
+              </h2>
+              <p className="text-sm text-rose-100 mt-0.5 leading-relaxed">
+                These tickets have exceeded municipal resolution window guarantees or pose urgent civic hazards. Immediate dispatch required.
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-wrap gap-2 w-full md:w-auto">
+            {breachedTickets.slice(0, 2).map(t => (
+              <Link
+                key={t.id}
+                to={`/ticket/${t.id}`}
+                className="flex items-center gap-2 px-4 py-2.5 bg-white text-rose-700 hover:bg-rose-50 active:scale-95 transition-all rounded-xl text-xs font-bold shadow-sm flex-1 md:flex-none justify-center"
+              >
+                <span>View #{t.id} ({t.category_name || 'Urgent'}) →</span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Header & Quick Controls */}
       <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-slate-900">Engineer Dashboard</h1>

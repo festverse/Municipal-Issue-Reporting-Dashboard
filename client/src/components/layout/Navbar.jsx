@@ -40,6 +40,8 @@ export default function Navbar() {
             <NavLink to="/" end className={linkClass}>Home</NavLink>
             <NavLink to="/report" className={linkClass}>Report Issue</NavLink>
             <NavLink to="/map" className={linkClass}>Live Map</NavLink>
+            <NavLink to="/feed" className={linkClass}>Community Feed</NavLink>
+            <NavLink to="/rewards" className={linkClass}>Civic Rewards</NavLink>
             {isEngineerOrAdmin && (
               <NavLink to="/dashboard" className={linkClass}>Dashboard</NavLink>
             )}
@@ -52,6 +54,12 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-3">
             {user ? (
               <div className="flex items-center gap-3">
+                <Link to="/rewards" className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-xl transition-all shadow-sm group">
+                  <span className="text-base">🏆</span>
+                  <span className="text-xs font-bold text-amber-800 group-hover:text-amber-900">
+                    {user.civic_credits !== undefined ? user.civic_credits : 150} Civic Credits
+                  </span>
+                </Link>
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center text-xs font-bold text-white">
                     {(user.full_name || user.email || '?')[0].toUpperCase()}
@@ -114,6 +122,8 @@ export default function Navbar() {
               <NavLink to="/" end className={linkClass} onClick={() => setMobileOpen(false)}>Home</NavLink>
               <NavLink to="/report" className={linkClass} onClick={() => setMobileOpen(false)}>Report Issue</NavLink>
               <NavLink to="/map" className={linkClass} onClick={() => setMobileOpen(false)}>Live Map</NavLink>
+              <NavLink to="/feed" className={linkClass} onClick={() => setMobileOpen(false)}>Community Feed</NavLink>
+              <NavLink to="/rewards" className={linkClass} onClick={() => setMobileOpen(false)}>Civic Rewards</NavLink>
               {isEngineerOrAdmin && (
                 <NavLink to="/dashboard" className={linkClass} onClick={() => setMobileOpen(false)}>Dashboard</NavLink>
               )}
@@ -125,6 +135,12 @@ export default function Navbar() {
             <div className="border-t border-slate-200 pt-4 mt-4">
               {user ? (
                 <div className="space-y-3">
+                  <Link to="/rewards" className="flex items-center gap-1.5 px-3 py-2 bg-amber-50 border border-amber-200 rounded-xl" onClick={() => setMobileOpen(false)}>
+                    <span className="text-base">🏆</span>
+                    <span className="text-xs font-bold text-amber-800">
+                      {user.civic_credits !== undefined ? user.civic_credits : 150} Civic Credits
+                    </span>
+                  </Link>
                   <div className="flex items-center gap-2">
                     <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center text-xs font-bold text-white">
                       {(user.full_name || user.email || '?')[0].toUpperCase()}

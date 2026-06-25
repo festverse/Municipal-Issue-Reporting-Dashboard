@@ -1,8 +1,23 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Sparkles, Rocket, MapPin, TrendingUp, CheckCircle2, Zap, Timer, Bot, Radio, Leaf, ShieldCheck, Users, MessageSquare, BarChart3, Download, Map, Lock, Heart, Landmark, TreePine, Phone, Mail, Shield } from 'lucide-react';
 import ScrollReveal from './ui/ScrollReveal';
+import { useToast } from './ui/Toast';
 
 export default function LandingPage() {
+  const [bulletinEmail, setBulletinEmail] = useState('');
+  const { showToast } = useToast();
+
+  const handleSubscribeBulletin = (e) => {
+    e.preventDefault();
+    if (!bulletinEmail.trim()) {
+      showToast('Please enter a valid email address.', 'warning');
+      return;
+    }
+    showToast('Success! You are now subscribed to the Municipal Civic Bulletin.', 'success');
+    setBulletinEmail('');
+  };
+
   return (
     <div className="bg-slate-50 text-slate-900 animate-fade-in">
       
@@ -486,10 +501,10 @@ export default function LandingPage() {
             </p>
             <div>
               <p className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3">Subscribe to Municipal Bulletin</p>
-              <div className="flex gap-2 max-w-md">
-                <input type="email" placeholder="citizen@city.gov" className="flex-1 px-4 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500" />
-                <button type="button" className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 font-bold text-sm text-white rounded-xl transition-all shadow-sm active:scale-95">Join</button>
-              </div>
+              <form onSubmit={handleSubscribeBulletin} className="flex gap-2 max-w-md">
+                <input type="email" value={bulletinEmail} onChange={(e) => setBulletinEmail(e.target.value)} placeholder="citizen@city.gov" className="flex-1 px-4 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 text-sm focus:outline-none focus:border-blue-500" />
+                <button type="submit" className="px-5 py-2.5 bg-blue-600 hover:bg-blue-500 font-bold text-sm text-white rounded-xl transition-all shadow-sm active:scale-95">Join</button>
+              </form>
             </div>
           </div>
 

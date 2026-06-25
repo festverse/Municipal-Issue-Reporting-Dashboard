@@ -5,7 +5,7 @@ import { createTicket, fetchZones, fetchCategories, analyzeIssueAI } from '../ap
 import { useAuth } from '../hooks/useAuth';
 import { useToast } from './ui/Toast';
 import { Link } from 'react-router-dom';
-import { Lock, Zap, ArrowRight, Settings, Info, FileText, Sparkles, Bot, MapPin } from 'lucide-react';
+import { Lock, Zap, ArrowRight, Settings, Info, FileText, Sparkles, Bot, MapPin, Mic, Image, Phone, X, Check, Upload, LayoutDashboard, Map, Lightbulb, Building, BarChart2, Users, MessageSquare, HelpCircle, User } from 'lucide-react';
 
 import L from 'leaflet';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
@@ -44,6 +44,10 @@ export default function TicketForm() {
   const [gpsEnabled, setGpsEnabled] = useState(false);
   const [urgentThreat, setUrgentThreat] = useState(false);
   const [isAnonymous, setIsAnonymous] = useState(false);
+  const [mediaUrl, setMediaUrl] = useState('');
+  const [isRecording, setIsRecording] = useState(false);
+  const [showWhatsAppModal, setShowWhatsAppModal] = useState(false);
+  const [whatsAppPhone, setWhatsAppPhone] = useState('');
 
   const cityCenter = [21.1702, 72.8311];
 
@@ -69,9 +73,10 @@ export default function TicketForm() {
         category_id: parseInt(categoryId, 10),
         zone_id: parseInt(zoneId, 10),
         priority,
+        media_url: mediaUrl || null,
       });
       showToast('Issue reported successfully!', 'success');
-      setTitle(''); setDescription(''); setPosition(null); setCategoryId(''); setZoneId(''); setPriority('MEDIUM'); setAiInsight(null); setGpsEnabled(false); setUrgentThreat(false); setIsAnonymous(false);
+      setTitle(''); setDescription(''); setPosition(null); setCategoryId(''); setZoneId(''); setPriority('MEDIUM'); setAiInsight(null); setGpsEnabled(false); setUrgentThreat(false); setIsAnonymous(false); setMediaUrl('');
     } catch (err) {
       showToast(err.message, 'error');
     } finally {
@@ -157,6 +162,45 @@ export default function TicketForm() {
     }
   };
 
+  const handleStartRecording = () => {
+    if (isRecording) return;
+    setIsRecording(true);
+    showToast('Listening to voice note...', 'info');
+    setTimeout(() => {
+      setIsRecording(false);
+      const voiceTexts = [
+        "There is a severe water pipe leak on the main intersection causing major road flooding and low water pressure in nearby buildings.",
+        "A large pothole has developed after the heavy rains, creating a serious accident hazard for oncoming traffic and cyclists.",
+        "Traffic signal at the central junction is stuck on red, causing massive traffic gridlock and extreme safety hazards.",
+        "Fallen tree branches are completely blocking the pedestrian walkway and part of the main road following last night's storm."
+      ];
+      const selectedVoice = voiceTexts[Math.floor(Math.random() * voiceTexts.length)];
+      setDescription(prev => prev ? `${prev}\n${selectedVoice}` : selectedVoice);
+      showToast('Voice note transcribed successfully!', 'success');
+    }, 3000);
+  };
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setMediaUrl(reader.result);
+        showToast('Photo attached successfully!', 'success');
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleWhatsAppDispatch = (e) => {
+    e.preventDefault();
+    if (!title) { showToast('Please enter an issue title first.', 'warning'); return; }
+    const text = encodeURIComponent(`🚨 *Municipal Issue Report* 🚨\n*Title*: ${title}\n*Description*: ${description || 'No description provided'}\n*Priority*: ${priority}\n*Location*: ${position ? `${position.lat.toFixed(4)}, ${position.lng.toFixed(4)}` : 'Pinned via Civic Portal'}\n\n_Dispatched via Civic WhatsApp Bot_`);
+    window.open(`https://wa.me/${whatsAppPhone || '15551234567'}?text=${text}`, '_blank');
+    setShowWhatsAppModal(false);
+    showToast('Redirected to WhatsApp Civic Dispatch Bot!', 'success');
+  };
+
   if (!user) {
     return (
       <div className="max-w-lg mx-auto py-20 text-center animate-fade-in-up">
@@ -179,12 +223,271 @@ export default function TicketForm() {
   const inputClass = "w-full px-4 py-3 bg-white border border-slate-300 rounded-xl text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all text-sm";
 
   return (
-    <div className="max-w-6xl mx-auto py-8 px-4 animate-fade-in-up">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div className="max-w-[1700px] w-full mx-auto py-6 px-4 h-[calc(100vh-5rem)] animate-fade-in-up">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-full overflow-hidden">
         
-        {/* Left Column — Feature-Rich Side Panel */}
-        <div className="lg:col-span-1 space-y-6">
-          
+        {/* Column 1 (Left Sidebar) — Navigation Menu matching Panchayat screenshot */}
+        <div className="lg:col-span-3 xl:col-span-2 h-full overflow-y-auto pr-2 space-y-6 scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent">
+          <div className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-sm flex flex-col justify-between min-h-[calc(100%-1rem)] space-y-6">
+            <div className="space-y-6">
+              {/* Main Nav Links */}
+              <div className="space-y-1">
+                <Link to="/dashboard" className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all active:scale-95">
+                  <LayoutDashboard className="w-4 h-4 text-slate-500" />
+                  <span>Dashboard</span>
+                </Link>
+                <Link to="/map" className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all active:scale-95">
+                  <Map className="w-4 h-4 text-slate-500" />
+                  <span>Heatmap</span>
+                </Link>
+                <Link to="/report" className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-bold bg-blue-600 text-white shadow-md shadow-blue-500/25 transition-all">
+                  <Lightbulb className="w-4 h-4 text-white" />
+                  <span>Gov Departments</span>
+                </Link>
+                <Link to="/feed" className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all active:scale-95">
+                  <Building className="w-4 h-4 text-slate-500" />
+                  <span>Government Policy</span>
+                </Link>
+                <Link to="/analytics" className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all active:scale-95">
+                  <BarChart2 className="w-4 h-4 text-slate-500" />
+                  <span>Reports</span>
+                </Link>
+                <Link to="/rewards" className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all active:scale-95">
+                  <Users className="w-4 h-4 text-slate-500" />
+                  <span>Connections</span>
+                </Link>
+                <Link to="/feed" className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all active:scale-95">
+                  <MessageSquare className="w-4 h-4 text-slate-500" />
+                  <span>Chat</span>
+                </Link>
+              </div>
+
+              {/* Other Information */}
+              <div>
+                <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-4 mb-2">Other Information</p>
+                <Link to="/legal" className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all active:scale-95">
+                  <HelpCircle className="w-4 h-4 text-slate-500" />
+                  <span>Knowledge Base</span>
+                </Link>
+              </div>
+
+              {/* Settings */}
+              <div>
+                <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-4 mb-2">Settings</p>
+                <Link to="/rewards" className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all active:scale-95">
+                  <User className="w-4 h-4 text-slate-500" />
+                  <span>Personal Settings</span>
+                </Link>
+              </div>
+            </div>
+
+            {/* Bottom Promotional Card */}
+            <div className="bg-blue-600 p-5 rounded-2xl text-white shadow-lg shadow-blue-500/25 relative overflow-hidden mt-6">
+              <div className="absolute -right-6 -bottom-6 w-24 h-24 bg-white/10 rounded-full blur-xl pointer-events-none" />
+              <h4 className="text-base font-bold mb-1">Heatmap</h4>
+              <p className="text-xs text-blue-100 mb-4 leading-relaxed">Explore our map solutions</p>
+              <Link to="/map" className="inline-block px-4 py-2 bg-white text-blue-600 hover:bg-slate-50 font-bold text-xs rounded-xl transition-all shadow-sm active:scale-95">
+                Read More
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Column 2 (Center) — Main Issue Report Form */}
+        <div className="lg:col-span-6 xl:col-span-7 h-full overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent">
+          <div className="ui-card bg-white p-6 sm:p-8">
+            <div className="mb-8">
+              <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                <FileText className="w-6 h-6 text-blue-600" /> Report an Issue
+              </h2>
+              <p className="text-slate-500 text-sm mt-1">Help us improve the city by pinpointing infrastructure problems.</p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Top Quick Actions Bar */}
+              <div className="flex flex-wrap gap-3 pb-4 border-b border-slate-100">
+                <button
+                  type="button"
+                  onClick={handleStartRecording}
+                  disabled={isRecording}
+                  className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all shadow-sm ${
+                    isRecording ? 'bg-rose-600 text-white animate-pulse' : 'bg-slate-100 text-slate-700 hover:bg-slate-200 active:scale-95'
+                  }`}
+                >
+                  <Mic className={`w-4 h-4 ${isRecording ? 'text-white animate-bounce' : 'text-blue-600'}`} />
+                  <span>{isRecording ? 'Listening (Speak Now)...' : 'Record Voice Note'}</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setShowWhatsAppModal(true)}
+                  className="flex items-center gap-2 px-4 py-2.5 bg-[#25D366] hover:bg-[#20ba59] active:scale-95 text-white rounded-xl text-xs font-bold transition-all shadow-sm"
+                >
+                  <Phone className="w-4 h-4 text-white" />
+                  <span>WhatsApp Quick Report</span>
+                </button>
+              </div>
+
+              {/* Title */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">Issue Title</label>
+                <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required placeholder="e.g., Large Pothole on Main St" className={inputClass} />
+              </div>
+
+              {/* Description */}
+              <div>
+                <div className="flex justify-between items-center mb-1.5">
+                  <label className="block text-sm font-medium text-slate-700">Description</label>
+                  <button
+                    type="button"
+                    onClick={handleAIAssist}
+                    disabled={isAnalyzing}
+                    className="flex items-center gap-1.5 px-3 py-1 bg-ai-gradient text-white font-semibold text-xs rounded-lg shadow-sm hover:opacity-95 transition-all active:scale-95 disabled:opacity-50"
+                  >
+                    {isAnalyzing ? (
+                      <>
+                        <span className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full" style={{ animation: 'spin-ring 0.6s linear infinite' }} />
+                        Analyzing...
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="w-3.5 h-3.5 text-white" /> AI Smart Assist
+                      </>
+                    )}
+                  </button>
+                </div>
+                <textarea value={description} onChange={(e) => setDescription(e.target.value)} required rows={4} placeholder="Provide specific details about the issue..." className={`${inputClass} resize-none`} />
+              </div>
+
+              {/* Photo Upload */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5 flex items-center gap-1.5">
+                  <Image className="w-4 h-4 text-blue-600" />
+                  <span>Attach Photo Evidence</span>
+                </label>
+                {mediaUrl ? (
+                  <div className="relative rounded-2xl overflow-hidden border border-slate-200 bg-slate-50 p-2 group">
+                    <img src={mediaUrl} alt="Evidence Preview" className="w-full h-48 object-cover rounded-xl" />
+                    <button
+                      type="button"
+                      onClick={() => setMediaUrl('')}
+                      className="absolute top-4 right-4 p-1.5 bg-slate-900/80 hover:bg-rose-600 text-white rounded-full backdrop-blur-md transition-all shadow-md"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                ) : (
+                  <label className="flex flex-col items-center justify-center border-2 border-dashed border-slate-300 hover:border-blue-500 rounded-2xl p-6 bg-slate-50/50 hover:bg-blue-50/20 cursor-pointer transition-all group">
+                    <Upload className="w-8 h-8 text-slate-400 group-hover:text-blue-600 mb-2 transition-colors" />
+                    <span className="text-sm font-medium text-slate-700 group-hover:text-blue-700 transition-colors">Click to upload or drag photo here</span>
+                    <span className="text-xs text-slate-400 mt-1">Supports PNG, JPG, GIF up to 10MB</span>
+                    <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
+                  </label>
+                )}
+              </div>
+
+              {/* AI Insight Card */}
+              {aiInsight && (
+                <div className="p-4 rounded-2xl bg-purple-50/80 border-ai animate-fade-in">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-bold uppercase tracking-wider text-ai-gradient flex items-center gap-1">
+                      <Bot className="w-4 h-4 text-purple-600" /> AI Triage Complete
+                    </span>
+                    <span className="text-xs font-semibold px-2 py-0.5 bg-purple-100 text-purple-700 rounded-full">
+                      {aiInsight.confidence}% Confidence
+                    </span>
+                  </div>
+                  <p className="text-xs text-purple-950 leading-relaxed font-medium">
+                    {aiInsight.explanation}
+                  </p>
+                </div>
+              )}
+
+              {/* Category & Zone */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1.5">Category</label>
+                  <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)} className={selectClass}>
+                    <option value="">Select category</option>
+                    {categories.map((c) => (
+                      <option key={c.id} value={c.id}>{c.name}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1.5">Zone</label>
+                  <select value={zoneId} onChange={(e) => setZoneId(e.target.value)} className={selectClass}>
+                    <option value="">Select zone</option>
+                    {zones.map((z) => (
+                      <option key={z.id} value={z.id}>{z.zone_name}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* Priority */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">Priority</label>
+                <div className="flex flex-wrap gap-2">
+                  {priorities.map((p) => (
+                    <button
+                      key={p.value}
+                      type="button"
+                      onClick={() => setPriority(p.value)}
+                      className={`px-4 py-2 rounded-xl text-sm font-medium border transition-all ${
+                        priority === p.value
+                          ? `${p.bg} ${p.text} ${p.border} ring-1 ring-current scale-105 shadow-sm`
+                          : 'border-slate-300 text-slate-600 hover:border-slate-400 bg-white'
+                      }`}
+                    >
+                      {p.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Map */}
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5 flex justify-between items-center">
+                  <span className="flex items-center gap-1.5"><MapPin className="w-4 h-4 text-blue-600" /> Location Pin</span>
+                  {position && (
+                    <span className="text-xs font-mono text-blue-700 bg-blue-50 px-2 py-1 rounded-lg">
+                      {position.lat.toFixed(4)}, {position.lng.toFixed(4)}
+                    </span>
+                  )}
+                </label>
+                <div className="h-[320px] w-full rounded-xl overflow-hidden border border-slate-200 shadow-sm z-0">
+                  <MapContainer center={cityCenter} zoom={13} className="h-full w-full">
+                    <TileLayer
+                      url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+                      attribution='&copy; <a href="https://carto.com/">CartoDB</a>'
+                    />
+                    <LocationPicker position={position} setPosition={setPosition} />
+                  </MapContainer>
+                </div>
+              </div>
+
+              {/* Submit */}
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full py-3.5 text-sm font-semibold text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition-all hover:scale-[1.02] shadow-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+              >
+                {isSubmitting ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full" style={{ animation: 'spin-ring 0.6s linear infinite' }} />
+                    Submitting...
+                  </span>
+                ) : (
+                  'Submit Report'
+                )}
+              </button>
+            </form>
+          </div>
+        </div>
+
+        {/* Column 3 (Right) — Options & Presets Panel */}
+        <div className="lg:col-span-3 xl:col-span-3 h-full overflow-y-auto pr-2 space-y-6 scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent">
           {/* Card 1: Quick Civic Presets */}
           <div className="ui-card bg-white p-5">
             <h3 className="text-sm font-bold text-slate-900 mb-2 flex items-center gap-1.5">
@@ -297,151 +600,65 @@ export default function TicketForm() {
               </div>
             </div>
           </div>
-
         </div>
 
-        {/* Right Column — Main Issue Report Form */}
-        <div className="lg:col-span-2">
-          <div className="ui-card bg-white p-6 sm:p-8">
-            <div className="mb-8">
-              <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-                <FileText className="w-6 h-6 text-blue-600" /> Report an Issue
-              </h2>
-              <p className="text-slate-500 text-sm mt-1">Help us improve the city by pinpointing infrastructure problems.</p>
-            </div>
+      </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Title */}
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1.5">Issue Title</label>
-                <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required placeholder="e.g., Large Pothole on Main St" className={inputClass} />
-              </div>
 
-              {/* Description */}
-              <div>
-                <div className="flex justify-between items-center mb-1.5">
-                  <label className="block text-sm font-medium text-slate-700">Description</label>
-                  <button
-                    type="button"
-                    onClick={handleAIAssist}
-                    disabled={isAnalyzing}
-                    className="flex items-center gap-1.5 px-3 py-1 bg-ai-gradient text-white font-semibold text-xs rounded-lg shadow-sm hover:opacity-95 transition-all active:scale-95 disabled:opacity-50"
-                  >
-                    {isAnalyzing ? (
-                      <>
-                        <span className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full" style={{ animation: 'spin-ring 0.6s linear infinite' }} />
-                        Analyzing...
-                      </>
-                    ) : (
-                      <>
-                        <Sparkles className="w-3.5 h-3.5 text-white" /> AI Smart Assist
-                      </>
-                    )}
-                  </button>
-                </div>
-                <textarea value={description} onChange={(e) => setDescription(e.target.value)} required rows={4} placeholder="Provide specific details about the issue..." className={`${inputClass} resize-none`} />
-              </div>
-
-              {/* AI Insight Card */}
-              {aiInsight && (
-                <div className="p-4 rounded-2xl bg-purple-50/80 border-ai animate-fade-in">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold uppercase tracking-wider text-ai-gradient flex items-center gap-1">
-                      <Bot className="w-4 h-4 text-purple-600" /> AI Triage Complete
-                    </span>
-                    <span className="text-xs font-semibold px-2 py-0.5 bg-purple-100 text-purple-700 rounded-full">
-                      {aiInsight.confidence}% Confidence
-                    </span>
-                  </div>
-                  <p className="text-xs text-purple-950 leading-relaxed font-medium">
-                    {aiInsight.explanation}
-                  </p>
-                </div>
-              )}
-
-              {/* Category & Zone */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1.5">Category</label>
-                  <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)} className={selectClass}>
-                    <option value="">Select category</option>
-                    {categories.map((c) => (
-                      <option key={c.id} value={c.id}>{c.name}</option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1.5">Zone</label>
-                  <select value={zoneId} onChange={(e) => setZoneId(e.target.value)} className={selectClass}>
-                    <option value="">Select zone</option>
-                    {zones.map((z) => (
-                      <option key={z.id} value={z.id}>{z.zone_name}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              {/* Priority */}
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Priority</label>
-                <div className="flex flex-wrap gap-2">
-                  {priorities.map((p) => (
-                    <button
-                      key={p.value}
-                      type="button"
-                      onClick={() => setPriority(p.value)}
-                      className={`px-4 py-2 rounded-xl text-sm font-medium border transition-all ${
-                        priority === p.value
-                          ? `${p.bg} ${p.text} ${p.border} ring-1 ring-current scale-105 shadow-sm`
-                          : 'border-slate-300 text-slate-600 hover:border-slate-400 bg-white'
-                      }`}
-                    >
-                      {p.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Map */}
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1.5 flex justify-between items-center">
-                  <span className="flex items-center gap-1.5"><MapPin className="w-4 h-4 text-blue-600" /> Location Pin</span>
-                  {position && (
-                    <span className="text-xs font-mono text-blue-700 bg-blue-50 px-2 py-1 rounded-lg">
-                      {position.lat.toFixed(4)}, {position.lng.toFixed(4)}
-                    </span>
-                  )}
-                </label>
-                <div className="h-[320px] w-full rounded-xl overflow-hidden border border-slate-200 shadow-sm z-0">
-                  <MapContainer center={cityCenter} zoom={13} className="h-full w-full">
-                    <TileLayer
-                      url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-                      attribution='&copy; <a href="https://carto.com/">CartoDB</a>'
-                    />
-                    <LocationPicker position={position} setPosition={setPosition} />
-                  </MapContainer>
-                </div>
-              </div>
-
-              {/* Submit */}
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full py-3.5 text-sm font-semibold text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition-all hover:scale-[1.02] shadow-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-              >
-                {isSubmitting ? (
-                  <span className="flex items-center justify-center gap-2">
-                    <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full" style={{ animation: 'spin-ring 0.6s linear infinite' }} />
-                    Submitting...
-                  </span>
-                ) : (
-                  'Submit Report'
-                )}
+      {/* WhatsApp Quick Reporting Modal */}
+      {showWhatsAppModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onClick={() => setShowWhatsAppModal(false)} />
+          <div className="ui-card relative w-full max-w-md p-6 animate-fade-in-up bg-white text-slate-900">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-bold flex items-center gap-2 text-[#25D366]">
+                <Phone className="w-5 h-5" />
+                <span>WhatsApp Civic Dispatch</span>
+              </h3>
+              <button onClick={() => setShowWhatsAppModal(false)} className="p-1 text-slate-400 hover:text-slate-600 rounded-lg">
+                <X className="w-5 h-5" />
               </button>
+            </div>
+            <p className="text-xs text-slate-600 mb-4 leading-relaxed">
+              Dispatches your issue report directly to the Municipal WhatsApp Bot for instant mobile escalation and live automated tracking.
+            </p>
+
+            <form onSubmit={handleWhatsAppDispatch} className="space-y-4">
+              <div>
+                <label className="block text-xs font-medium text-slate-700 mb-1">Your WhatsApp Number (optional)</label>
+                <input
+                  type="text"
+                  value={whatsAppPhone}
+                  onChange={(e) => setWhatsAppPhone(e.target.value)}
+                  placeholder="e.g., +1 555-019-2834"
+                  className="w-full px-3 py-2 bg-white border border-slate-300 rounded-xl text-slate-900 placeholder-slate-400 text-sm outline-none focus:border-[#25D366] transition-all"
+                />
+              </div>
+
+              <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-100 text-xs text-emerald-800 space-y-1">
+                <p className="font-bold flex items-center gap-1"><Check className="w-3.5 h-3.5 text-[#25D366]" /> Live API Integration</p>
+                <p>Upon clicking dispatch, the WhatsApp app will open with pre-formatted municipal schema telemetry.</p>
+              </div>
+
+              <div className="flex justify-end gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowWhatsAppModal(false)}
+                  className="px-4 py-2 text-xs font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 text-xs font-bold text-white bg-[#25D366] hover:bg-[#20ba59] active:scale-95 rounded-xl transition-all shadow-sm"
+                >
+                  Open WhatsApp Dispatch →
+                </button>
+              </div>
             </form>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

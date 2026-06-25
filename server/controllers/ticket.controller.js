@@ -173,13 +173,20 @@ const getTickets = catchAsync(async (req, res, _next) => {
 
   const dataResult = await pool.query(dataQuery, params);
 
+  const tickets = dataResult.rows.map(t => {
+    if (t.description && t.description.includes('(Filed Anonymously)')) {
+      return { ...t, citizen_name: 'Anonymous Citizen', reporter_name: 'Anonymous Citizen' };
+    }
+    return t;
+  });
+
   res.status(200).json({
     status: 'success',
     results: dataResult.rowCount,
     totalCount,
     page,
     totalPages: Math.ceil(totalCount / limit),
-    tickets: dataResult.rows,
+    tickets,
   });
 });
 
@@ -239,9 +246,15 @@ const getTicketById = catchAsync(async (req, res, _next) => {
     [id]
   );
 
+  const ticket = ticketResult.rows[0];
+  if (ticket.description && ticket.description.includes('(Filed Anonymously)')) {
+    ticket.citizen_name = 'Anonymous Citizen';
+    ticket.reporter_name = 'Anonymous Citizen';
+  }
+
   res.status(200).json({
     status: 'success',
-    ticket: ticketResult.rows[0],
+    ticket,
     activities: activitiesResult.rows,
     comments: commentsResult.rows,
   });

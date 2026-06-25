@@ -157,6 +157,16 @@ export default function TicketDetail() {
             </div>
             <p className="text-slate-600 text-sm leading-relaxed mb-6 whitespace-pre-wrap">{ticket.description}</p>
 
+            {/* Photo Evidence */}
+            {ticket.media_url && (
+              <div className="mb-6">
+                <p className="text-xs text-slate-500 uppercase tracking-wider mb-2 font-bold">Attached Evidence</p>
+                <div className="rounded-2xl overflow-hidden border border-slate-200 bg-slate-50 max-h-[400px]">
+                  <img src={ticket.media_url} alt="Attached Evidence" className="w-full h-full object-contain" />
+                </div>
+              </div>
+            )}
+
             {/* Metadata Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
               <div>

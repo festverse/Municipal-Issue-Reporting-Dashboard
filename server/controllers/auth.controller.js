@@ -95,10 +95,21 @@ const login = catchAsync(async (req, res, _next) => {
  * Requires the `protect` middleware to have set req.user.
  */
 const getProfile = catchAsync(async (req, res, _next) => {
-  // req.user was already loaded (without password_hash) by the protect middleware
+  // Calculate verified fixes and civic credits (50 credits per resolved ticket)
+  const countResult = await pool.query(
+    `SELECT COUNT(*) FROM tickets WHERE citizen_id = $1 AND status = 'RESOLVED'`,
+    [req.user.id]
+  );
+  const verified_fixes = parseInt(countResult.rows[0].count, 10);
+  const civic_credits = verified_fixes * 50;
+
   res.status(200).json({
     status: 'success',
-    user: req.user,
+    user: {
+      ...req.user,
+      verified_fixes,
+      civic_credits,
+    },
   });
 });
 
