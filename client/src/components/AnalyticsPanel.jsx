@@ -157,30 +157,62 @@ export default function AnalyticsPanel() {
           </div>
         </div>
 
-        {/* Vertical Bar Chart — Priority Breakdown */}
-        <div className="ui-card p-6 animate-fade-in-up bg-white" style={{ animationDelay: '300ms', animationFillMode: 'both' }}>
-          <div className="flex justify-between items-center mb-6">
-            <h3 className="text-sm font-semibold text-slate-900">Priority Distribution</h3>
-            <span className={`text-xs px-2.5 py-1 rounded-full font-semibold ${slaBreachedCount > 0 ? 'bg-rose-100 text-rose-700' : 'bg-slate-100 text-slate-700'}`}>
-              {slaBreachedCount} SLA Breach{slaBreachedCount === 1 ? '' : 'es'}
-            </span>
-          </div>
-          <div className="flex items-end gap-3 h-48">
-            {priorityData.map((d, i) => {
-              const heightPct = (d.count / Math.max(...priorityData.map((x) => x.count), 1)) * 100;
-              return (
-                <div key={d.priority || i} className="flex-1 flex flex-col items-center gap-2">
-                  <span className="text-xs text-slate-500 font-mono">{d.count}</span>
-                  <div className="w-full bg-slate-100 rounded-t-lg overflow-hidden flex-1 flex items-end">
-                    <div
-                      className="w-full rounded-t-lg bar-animate-v"
-                      style={{ height: `${heightPct}%`, backgroundColor: d.color, animationDelay: `${i * 100}ms` }}
-                    />
+        {/* Premium Priority Impact & SLA Health Card (replaces empty vertical bar chart) */}
+        <div className="ui-card p-6 animate-fade-in-up bg-white flex flex-col justify-between" style={{ animationDelay: '300ms', animationFillMode: 'both' }}>
+          <div>
+            <div className="flex justify-between items-center mb-4">
+              <div>
+                <h3 className="text-sm font-bold text-slate-900">Priority & SLA Telemetry</h3>
+                <p className="text-[11px] text-slate-400 mt-0.5">Automated dispatch compliance targets</p>
+              </div>
+              <span className={`text-xs px-2.5 py-1 rounded-full font-bold shadow-sm ${slaBreachedCount > 0 ? 'bg-rose-100 text-rose-700 border border-rose-200' : 'bg-emerald-100 text-emerald-700 border border-emerald-200'}`}>
+                {slaBreachedCount} SLA Breach{slaBreachedCount === 1 ? '' : 'es'}
+              </span>
+            </div>
+
+            {/* SLA Overall Health Meter */}
+            <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-100 mb-5 flex items-center justify-between shadow-sm">
+              <div className="flex items-center gap-2.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-xs font-bold text-slate-700">System SLA Rating</span>
+              </div>
+              <span className="text-xs font-black text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-xl border border-emerald-200">
+                {slaCompliance}
+              </span>
+            </div>
+
+            {/* Beautiful Horizontal Stacked List */}
+            <div className="space-y-3">
+              {[
+                { priority: 'CRITICAL', label: 'Critical', sla: '2h SLA Target', color: '#e11d48', bg: 'bg-rose-50', border: 'border-rose-100', text: 'text-rose-700' },
+                { priority: 'HIGH', label: 'High', sla: '24h SLA Target', color: '#f97316', bg: 'bg-amber-50', border: 'border-amber-100', text: 'text-amber-700' },
+                { priority: 'MEDIUM', label: 'Medium', sla: '48h SLA Target', color: '#f59e0b', bg: 'bg-amber-50/50', border: 'border-amber-100/50', text: 'text-amber-600' },
+                { priority: 'LOW', label: 'Low', sla: '7d SLA Target', color: '#3b82f6', bg: 'bg-blue-50', border: 'border-blue-100', text: 'text-blue-700' },
+              ].map((pData) => {
+                const item = priorityData.find(d => d.priority === pData.priority) || { count: 0 };
+                const maxCount = Math.max(...priorityData.map(x => x.count), 1);
+                const widthPct = (item.count / maxCount) * 100;
+                return (
+                  <div key={pData.priority} className="p-3 rounded-2xl border border-slate-100 hover:border-slate-200 transition-all bg-white shadow-sm hover:shadow-md">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <span className={`px-2 py-0.5 rounded-lg text-[10px] font-extrabold uppercase tracking-wider border ${pData.bg} ${pData.border} ${pData.text}`}>
+                          {pData.label}
+                        </span>
+                        <span className="text-[10px] text-slate-400 font-medium">{pData.sla}</span>
+                      </div>
+                      <span className="text-xs font-bold text-slate-800 font-mono">{item.count}</span>
+                    </div>
+                    <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                      <div
+                        className="h-full rounded-full transition-all duration-1000"
+                        style={{ width: `${widthPct}%`, backgroundColor: pData.color }}
+                      />
+                    </div>
                   </div>
-                  <span className="text-[10px] text-slate-500 font-semibold truncate w-full text-center">{d.priority}</span>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
