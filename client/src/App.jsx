@@ -3,6 +3,7 @@ import AuthProvider from './context/AuthContext';
 import ToastProvider from './components/ui/Toast';
 import Navbar from './components/layout/Navbar';
 import ProtectedRoute from './components/layout/ProtectedRoute';
+import LandingPage from './components/LandingPage';
 import Login from './components/Login';
 import Register from './components/Register';
 import TicketForm from './components/TicketForm';
@@ -34,7 +35,8 @@ function App() {
             {/* Spacer for fixed navbar */}
             <div className="pt-16">
               <Routes>
-                <Route path="/" element={<TicketForm />} />
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/report" element={<TicketForm />} />
                 <Route path="/map" element={<CityMap />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />

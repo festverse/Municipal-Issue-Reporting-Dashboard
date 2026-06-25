@@ -37,7 +37,8 @@ export default function Navbar() {
 
           {/* Desktop Links (Perfectly Centered) */}
           <div className="hidden md:flex items-center gap-1 absolute left-1/2 -translate-x-1/2">
-            <NavLink to="/" end className={linkClass}>Report Issue</NavLink>
+            <NavLink to="/" end className={linkClass}>Home</NavLink>
+            <NavLink to="/report" className={linkClass}>Report Issue</NavLink>
             <NavLink to="/map" className={linkClass}>Live Map</NavLink>
             {isEngineerOrAdmin && (
               <NavLink to="/dashboard" className={linkClass}>Dashboard</NavLink>
@@ -110,7 +111,8 @@ export default function Navbar() {
             </Link>
 
             <div className="flex flex-col gap-1 flex-1">
-              <NavLink to="/" end className={linkClass} onClick={() => setMobileOpen(false)}>Report Issue</NavLink>
+              <NavLink to="/" end className={linkClass} onClick={() => setMobileOpen(false)}>Home</NavLink>
+              <NavLink to="/report" className={linkClass} onClick={() => setMobileOpen(false)}>Report Issue</NavLink>
               <NavLink to="/map" className={linkClass} onClick={() => setMobileOpen(false)}>Live Map</NavLink>
               {isEngineerOrAdmin && (
                 <NavLink to="/dashboard" className={linkClass} onClick={() => setMobileOpen(false)}>Dashboard</NavLink>
