@@ -66,7 +66,7 @@ export default function LandingPage() {
 
           {/* Gorgeous Wide Hero Banner */}
           <ScrollReveal direction="up">
-            <div className="max-w-6xl mx-auto bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 text-white rounded-[2.5rem] p-8 sm:p-12 shadow-2xl relative overflow-hidden text-left flex flex-col lg:flex-row items-center justify-between gap-8">
+            <div className="max-w-6xl mx-auto bg-gradient-to-r from-[#1a62ff] via-[#6839ff] to-[#a633ff] text-white rounded-[2.5rem] p-8 sm:p-12 shadow-2xl relative overflow-hidden text-left flex flex-col lg:flex-row items-center justify-between gap-8">
               <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-white/10 rounded-full blur-2xl pointer-events-none" />
               <div className="max-w-xl">
                 <span className="text-xs font-bold uppercase tracking-widest text-blue-200 block mb-2">Municipal Innovation</span>
