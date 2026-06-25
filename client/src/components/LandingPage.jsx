@@ -184,9 +184,9 @@ export default function LandingPage() {
           </div>
 
           {/* Desktop Visual Curved Flow */}
-          <div className="hidden lg:block relative mt-8 pb-12">
+          <div className="hidden lg:block relative mt-12 pb-16">
             {/* Glowing SVG Wave Path */}
-            <div className="absolute inset-0 pointer-events-none overflow-visible w-full h-[450px]">
+            <div className="absolute top-0 left-0 pointer-events-none overflow-visible w-full h-[450px]">
               <svg viewBox="0 0 1200 450" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full overflow-visible">
                 <defs>
                   <linearGradient id="blue_gradient" x1="0%" y1="0%" x2="100%" y2="0%">
@@ -226,12 +226,12 @@ export default function LandingPage() {
             </div>
 
             {/* 3 Step Content Columns */}
-            <div className="grid grid-cols-3 gap-8 relative z-10 -mt-12">
+            <div className="grid grid-cols-3 gap-8 relative z-10 w-full">
               {/* Step 1 */}
-              <ScrollReveal direction="up" delay={100} className="pl-12 pt-28">
-                <div className="relative">
-                  <div className="absolute -top-12 right-12 text-[11rem] font-black text-slate-200/70 pointer-events-none select-none leading-none font-mono">1</div>
-                  <div className="relative z-10 pt-16 pr-8">
+              <ScrollReveal direction="up" delay={100} className="pl-12 pt-[390px]">
+                <div className="relative z-10 pr-8">
+                  <div className="absolute -top-4 right-12 text-[10rem] font-black text-slate-200/70 pointer-events-none select-none leading-none font-mono">1</div>
+                  <div className="relative z-10 pt-4">
                     <h3 className="text-xl font-bold text-blue-600 mb-3">Report an Issue</h3>
                     <p className="text-base text-slate-600 leading-relaxed max-w-xs">
                       Snap a photo or send a voice/text via app or WhatsApp. Location and category are auto-detected for fast, accurate reporting.
@@ -241,10 +241,10 @@ export default function LandingPage() {
               </ScrollReveal>
 
               {/* Step 2 */}
-              <ScrollReveal direction="up" delay={200} className="pl-16 pt-8">
-                <div className="relative">
-                  <div className="absolute -top-12 right-6 text-[11rem] font-black text-slate-200/70 pointer-events-none select-none leading-none font-mono">2</div>
-                  <div className="relative z-10 pt-16 pr-6">
+              <ScrollReveal direction="up" delay={200} className="pl-16 pt-[275px]">
+                <div className="relative z-10 pr-6">
+                  <div className="absolute -top-4 right-6 text-[10rem] font-black text-slate-200/70 pointer-events-none select-none leading-none font-mono">2</div>
+                  <div className="relative z-10 pt-4">
                     <h3 className="text-xl font-bold text-blue-600 mb-3">Track & Collaborate</h3>
                     <p className="text-base text-slate-600 leading-relaxed max-w-xs">
                       See your report on the live map, attach to similar reports, upvote, and comment — stay informed as the community and officials interact!
@@ -254,10 +254,10 @@ export default function LandingPage() {
               </ScrollReveal>
 
               {/* Step 3 */}
-              <ScrollReveal direction="up" delay={300} className="pl-20 -mt-28">
-                <div className="relative">
-                  <div className="absolute -top-20 right-0 text-[11rem] font-black text-slate-200/70 pointer-events-none select-none leading-none font-mono">3</div>
-                  <div className="relative z-10 pt-16 pr-4">
+              <ScrollReveal direction="up" delay={300} className="pl-20 pt-[125px]">
+                <div className="relative z-10 pr-4">
+                  <div className="absolute -top-4 right-0 text-[10rem] font-black text-slate-200/70 pointer-events-none select-none leading-none font-mono">3</div>
+                  <div className="relative z-10 pt-4">
                     <h3 className="text-xl font-bold text-blue-600 mb-3">Resolve & Verify</h3>
                     <p className="text-base text-slate-600 leading-relaxed max-w-xs">
                       Assigned to the right department, updated in real time, and marked resolved after verification. Earn credits for verified fixes and help improve your neighborhood!
