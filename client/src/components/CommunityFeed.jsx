@@ -124,19 +124,20 @@ export default function CommunityFeed() {
         </div>
       ) : (
         <div className="space-y-6">
-          {filteredTickets.map((t) => (
-            <div key={t.id} className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col md:flex-row gap-6 items-start">
-              {/* Left Media Thumbnail / Icon */}
-              <div className="w-full md:w-48 h-48 rounded-2xl overflow-hidden bg-slate-50 border border-slate-200 flex-shrink-0 relative group">
-                {t.media_url ? (
-                  <img src={t.media_url} alt={t.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                ) : (
-                  <div className="w-full h-full flex flex-col items-center justify-center text-slate-300 p-4 text-center">
-                    <ImageIcon className="w-12 h-12 mb-2 text-slate-300" />
-                    <span className="text-xs font-medium text-slate-400">No Photo Evidence Attached</span>
-                  </div>
-                )}
-                {t.priority && (
+          {filteredTickets.map((t, index) => {
+            const dummyImages = [
+              'https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=600&q=80',
+              'https://images.unsplash.com/photo-1527689368864-3a821dbccc34?auto=format&fit=crop&w=600&q=80',
+              'https://images.unsplash.com/photo-1498084393753-b411b2d26b34?auto=format&fit=crop&w=600&q=80',
+              'https://images.unsplash.com/photo-1542013936693-88937e862b50?auto=format&fit=crop&w=600&q=80'
+            ];
+            const displayImg = t.media_url || dummyImages[index % dummyImages.length];
+            return (
+              <div key={t.id} className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col md:flex-row gap-6 items-start">
+                {/* Left Media Thumbnail / Icon */}
+                <div className="w-full md:w-48 h-48 rounded-2xl overflow-hidden bg-slate-50 border border-slate-200 flex-shrink-0 relative group">
+                  <img src={displayImg} alt={t.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  {t.priority && (
                   <div className="absolute top-3 left-3">
                     <PriorityBadge priority={t.priority} />
                   </div>
@@ -194,7 +195,8 @@ export default function CommunityFeed() {
                 </div>
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>

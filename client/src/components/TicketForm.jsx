@@ -7,6 +7,15 @@ import { useToast } from './ui/Toast';
 import { Link } from 'react-router-dom';
 import { Lock, Zap, ArrowRight, Settings, Info, FileText, Sparkles, Bot, MapPin, Mic, Image, Phone, X, Check, Upload, LayoutDashboard, Map, Lightbulb, Building, BarChart2, Users, MessageSquare, HelpCircle, User } from 'lucide-react';
 
+import GovDashboard from './GovDashboard';
+import GovHeatmap from './GovHeatmap';
+import GovPolicy from './GovPolicy';
+import GovReports from './GovReports';
+import GovConnections from './GovConnections';
+import GovChat from './GovChat';
+import GovKnowledgeBase from './GovKnowledgeBase';
+import GovSettings from './GovSettings';
+
 import L from 'leaflet';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
@@ -30,6 +39,7 @@ const priorities = [
 export default function TicketForm() {
   const { user } = useAuth();
   const { showToast } = useToast();
+  const [activeTab, setActiveTab] = useState('departments');
   const [position, setPosition] = useState(null);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -232,52 +242,52 @@ export default function TicketForm() {
             <div className="space-y-6">
               {/* Main Nav Links */}
               <div className="space-y-1">
-                <Link to="/dashboard" className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all active:scale-95">
-                  <LayoutDashboard className="w-4 h-4 text-slate-500" />
+                <button onClick={() => setActiveTab('dashboard')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm transition-all active:scale-95 ${activeTab === 'dashboard' ? 'font-bold bg-blue-600 text-white shadow-md shadow-blue-500/25' : 'font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}>
+                  <LayoutDashboard className={`w-4 h-4 ${activeTab === 'dashboard' ? 'text-white' : 'text-slate-500'}`} />
                   <span>Dashboard</span>
-                </Link>
-                <Link to="/map" className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all active:scale-95">
-                  <Map className="w-4 h-4 text-slate-500" />
+                </button>
+                <button onClick={() => setActiveTab('heatmap')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm transition-all active:scale-95 ${activeTab === 'heatmap' ? 'font-bold bg-blue-600 text-white shadow-md shadow-blue-500/25' : 'font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}>
+                  <Map className={`w-4 h-4 ${activeTab === 'heatmap' ? 'text-white' : 'text-slate-500'}`} />
                   <span>Heatmap</span>
-                </Link>
-                <Link to="/report" className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-bold bg-blue-600 text-white shadow-md shadow-blue-500/25 transition-all">
-                  <Lightbulb className="w-4 h-4 text-white" />
+                </button>
+                <button onClick={() => setActiveTab('departments')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm transition-all active:scale-95 ${activeTab === 'departments' ? 'font-bold bg-blue-600 text-white shadow-md shadow-blue-500/25' : 'font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}>
+                  <Lightbulb className={`w-4 h-4 ${activeTab === 'departments' ? 'text-white' : 'text-slate-500'}`} />
                   <span>Gov Departments</span>
-                </Link>
-                <Link to="/feed" className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all active:scale-95">
-                  <Building className="w-4 h-4 text-slate-500" />
+                </button>
+                <button onClick={() => setActiveTab('policy')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm transition-all active:scale-95 ${activeTab === 'policy' ? 'font-bold bg-blue-600 text-white shadow-md shadow-blue-500/25' : 'font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}>
+                  <Building className={`w-4 h-4 ${activeTab === 'policy' ? 'text-white' : 'text-slate-500'}`} />
                   <span>Government Policy</span>
-                </Link>
-                <Link to="/analytics" className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all active:scale-95">
-                  <BarChart2 className="w-4 h-4 text-slate-500" />
+                </button>
+                <button onClick={() => setActiveTab('reports')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm transition-all active:scale-95 ${activeTab === 'reports' ? 'font-bold bg-blue-600 text-white shadow-md shadow-blue-500/25' : 'font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}>
+                  <BarChart2 className={`w-4 h-4 ${activeTab === 'reports' ? 'text-white' : 'text-slate-500'}`} />
                   <span>Reports</span>
-                </Link>
-                <Link to="/rewards" className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all active:scale-95">
-                  <Users className="w-4 h-4 text-slate-500" />
+                </button>
+                <button onClick={() => setActiveTab('connections')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm transition-all active:scale-95 ${activeTab === 'connections' ? 'font-bold bg-blue-600 text-white shadow-md shadow-blue-500/25' : 'font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}>
+                  <Users className={`w-4 h-4 ${activeTab === 'connections' ? 'text-white' : 'text-slate-500'}`} />
                   <span>Connections</span>
-                </Link>
-                <Link to="/feed" className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all active:scale-95">
-                  <MessageSquare className="w-4 h-4 text-slate-500" />
+                </button>
+                <button onClick={() => setActiveTab('chat')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm transition-all active:scale-95 ${activeTab === 'chat' ? 'font-bold bg-blue-600 text-white shadow-md shadow-blue-500/25' : 'font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}>
+                  <MessageSquare className={`w-4 h-4 ${activeTab === 'chat' ? 'text-white' : 'text-slate-500'}`} />
                   <span>Chat</span>
-                </Link>
+                </button>
               </div>
 
               {/* Other Information */}
               <div>
                 <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-4 mb-2">Other Information</p>
-                <Link to="/legal" className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all active:scale-95">
-                  <HelpCircle className="w-4 h-4 text-slate-500" />
+                <button onClick={() => setActiveTab('knowledge')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm transition-all active:scale-95 ${activeTab === 'knowledge' ? 'font-bold bg-blue-600 text-white shadow-md shadow-blue-500/25' : 'font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}>
+                  <HelpCircle className={`w-4 h-4 ${activeTab === 'knowledge' ? 'text-white' : 'text-slate-500'}`} />
                   <span>Knowledge Base</span>
-                </Link>
+                </button>
               </div>
 
               {/* Settings */}
               <div>
                 <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-4 mb-2">Settings</p>
-                <Link to="/rewards" className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-all active:scale-95">
-                  <User className="w-4 h-4 text-slate-500" />
+                <button onClick={() => setActiveTab('settings')} className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm transition-all active:scale-95 ${activeTab === 'settings' ? 'font-bold bg-blue-600 text-white shadow-md shadow-blue-500/25' : 'font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}>
+                  <User className={`w-4 h-4 ${activeTab === 'settings' ? 'text-white' : 'text-slate-500'}`} />
                   <span>Personal Settings</span>
-                </Link>
+                </button>
               </div>
             </div>
 
@@ -286,13 +296,15 @@ export default function TicketForm() {
               <div className="absolute -right-6 -bottom-6 w-24 h-24 bg-white/10 rounded-full blur-xl pointer-events-none" />
               <h4 className="text-base font-bold mb-1">Heatmap</h4>
               <p className="text-xs text-blue-100 mb-4 leading-relaxed">Explore our map solutions</p>
-              <Link to="/map" className="inline-block px-4 py-2 bg-white text-blue-600 hover:bg-slate-50 font-bold text-xs rounded-xl transition-all shadow-sm active:scale-95">
+              <button onClick={() => setActiveTab('heatmap')} className="inline-block px-4 py-2 bg-white text-blue-600 hover:bg-slate-50 font-bold text-xs rounded-xl transition-all shadow-sm active:scale-95">
                 Read More
-              </Link>
+              </button>
             </div>
           </div>
         </div>
 
+        {activeTab === 'departments' ? (
+          <>
         {/* Column 2 (Center) — Main Issue Report Form */}
         <div className="lg:col-span-6 xl:col-span-7 h-full overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent">
           <div className="ui-card bg-white p-6 sm:p-8">
@@ -601,6 +613,24 @@ export default function TicketForm() {
             </div>
           </div>
         </div>
+          </>
+        ) : activeTab === 'dashboard' ? (
+          <GovDashboard />
+        ) : activeTab === 'heatmap' ? (
+          <GovHeatmap />
+        ) : activeTab === 'policy' ? (
+          <GovPolicy />
+        ) : activeTab === 'reports' ? (
+          <GovReports />
+        ) : activeTab === 'connections' ? (
+          <GovConnections />
+        ) : activeTab === 'chat' ? (
+          <GovChat />
+        ) : activeTab === 'knowledge' ? (
+          <GovKnowledgeBase />
+        ) : (
+          <GovSettings />
+        )}
 
       </div>
 
