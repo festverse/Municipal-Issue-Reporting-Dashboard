@@ -16,7 +16,7 @@ export default function LandingPage() {
           </div>
 
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-slate-900 tracking-tight leading-[1.15] mb-6 max-w-5xl mx-auto animate-fade-in-up">
-            Transforming Everyday Civic Challenges<br />into Real-Time Community <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 bg-clip-text text-transparent">Solutions.</span>
+            Transforming Everyday Civic <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 bg-clip-text text-transparent">Challenges</span><br />into Real-Time Community <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 bg-clip-text text-transparent">Solutions.</span>
           </h1>
 
           <p className="text-slate-600 text-lg sm:text-xl leading-relaxed mb-10 max-w-3xl mx-auto animate-fade-in-up">
