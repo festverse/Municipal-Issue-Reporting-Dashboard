@@ -39,7 +39,7 @@ export default function StatCard({ icon, label, value, color = 'blue', delay = 0
   return (
     <div
       ref={ref}
-      className={`ui-card border-l-4 ${c.border} p-5 animate-fade-in-up transition-shadow hover:shadow-lg cursor-default`}
+      className={`ui-card border-l-4 ${c.border} p-5 animate-fade-in-up transition-transform hover:scale-[1.03] hover:shadow-lg cursor-default`}
       style={{ animationDelay: `${delay}ms`, animationFillMode: 'both' }}
     >
       <div className={`absolute inset-0 bg-gradient-to-br ${c.glow} to-transparent rounded-2xl pointer-events-none`} />
