@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useToast } from './ui/Toast';
 import { Rocket, Shield, MessageSquare, Clock, ShieldCheck, AlertTriangle } from 'lucide-react';
+import { useGoogleLogin } from '@react-oauth/google';
 
 export default function Register() {
   const [form, setForm] = useState({ full_name: '', email: '', password: '', confirm: '', role: 'CITIZEN' });
@@ -37,26 +38,42 @@ export default function Register() {
     }
   };
 
-  const handleGoogleLogin = async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const data = await loginWithGoogle({
-        email: 'google.citizen@civicportal.org',
-        full_name: 'Google Citizen Explorer',
-        picture: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80'
-      });
-      showToast('Authenticated via Google OAuth / Supabase successfully!', 'success');
-      if (data.user?.role === 'CITIZEN') {
-        navigate('/');
-      } else {
-        navigate('/dashboard');
+  const googleLoginPrompt = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      setIsLoading(true);
+      try {
+        const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+        });
+        const userInfo = await res.json();
+        
+        // Pass the REAL Google Account data (email, full_name, picture) to our backend / AuthContext!
+        const data = await loginWithGoogle({
+          email: userInfo.email || 'google.citizen@civicportal.org',
+          full_name: userInfo.name || 'Google Citizen Explorer',
+          picture: userInfo.picture || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80'
+        });
+        showToast(`Welcome, ${userInfo.name || 'Citizen'}!`, 'success');
+        if (data.user?.role === 'CITIZEN') {
+          navigate('/');
+        } else {
+          navigate('/dashboard');
+        }
+      } catch (err) {
+        setError('Failed to fetch Google profile. Please try again.');
+      } finally {
+        setIsLoading(false);
       }
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setIsLoading(false);
-    }
+    },
+    onError: (errorResponse) => {
+      console.error('Google Login Error:', errorResponse);
+      setError('Google popup was closed or failed to authorize. Please ensure popups are allowed in your browser.');
+    },
+  });
+
+  const handleGoogleLogin = () => {
+    setError(null);
+    googleLoginPrompt();
   };
 
   const roles = [
