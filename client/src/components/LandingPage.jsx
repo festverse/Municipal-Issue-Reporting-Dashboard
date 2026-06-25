@@ -112,29 +112,29 @@ export default function LandingPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-lg transition-all group hover:-translate-y-1">
-            <div className="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"><Leaf className="w-7 h-7 text-emerald-600" /></div>
+          <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-lg transition-shadow">
+            <div className="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center mb-6"><Leaf className="w-7 h-7 text-emerald-600" /></div>
             <h3 className="text-lg font-bold text-slate-900 mb-3">Clean & Green</h3>
             <p className="text-sm text-slate-600 leading-relaxed">
               Dedicated to maintaining sustainable urban infrastructure, pristine public parks, and beautifully kept neighborhood spaces.
             </p>
           </div>
-          <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-lg transition-all group hover:-translate-y-1">
-            <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"><ShieldCheck className="w-7 h-7 text-blue-600" /></div>
+          <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-lg transition-shadow">
+            <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center mb-6"><ShieldCheck className="w-7 h-7 text-blue-600" /></div>
             <h3 className="text-lg font-bold text-slate-900 mb-3">Trust & Transparency</h3>
             <p className="text-sm text-slate-600 leading-relaxed">
               Open municipal data feeds ensure complete accountability, clear communication channels, and visible public progress.
             </p>
           </div>
-          <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-lg transition-all group hover:-translate-y-1">
-            <div className="w-14 h-14 rounded-2xl bg-violet-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"><Users className="w-7 h-7 text-violet-600" /></div>
+          <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-lg transition-shadow">
+            <div className="w-14 h-14 rounded-2xl bg-violet-50 flex items-center justify-center mb-6"><Users className="w-7 h-7 text-violet-600" /></div>
             <h3 className="text-lg font-bold text-slate-900 mb-3">Community Driven</h3>
             <p className="text-sm text-slate-600 leading-relaxed">
               Built for active citizens, collaborative neighborhoods, and proactive civic associations working together for public welfare.
             </p>
           </div>
-          <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-lg transition-all group hover:-translate-y-1">
-            <div className="w-14 h-14 rounded-2xl bg-amber-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"><Zap className="w-7 h-7 text-amber-600" /></div>
+          <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-lg transition-shadow">
+            <div className="w-14 h-14 rounded-2xl bg-amber-50 flex items-center justify-center mb-6"><Zap className="w-7 h-7 text-amber-600" /></div>
             <h3 className="text-lg font-bold text-slate-900 mb-3">Efficient Resolution</h3>
             <p className="text-sm text-slate-600 leading-relaxed">
               Automated AI dispatching and enforced service level agreements guarantee the fastest possible municipal response times.
@@ -212,9 +212,9 @@ export default function LandingPage() {
             { icon: <Map className="w-6 h-6 text-blue-600" />, title: 'Live City Heatmap', desc: 'Real-time geospatial issue tracking across all city zones and districts.' },
             { icon: <Lock className="w-6 h-6 text-blue-600" />, title: 'End-to-End Verified', desc: 'Secure role-based access control for citizens, engineers, and municipal administrators.' },
           ].map((feat, idx) => (
-            <div key={idx} className="bg-white p-7 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
+            <div key={idx} className="bg-white p-7 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between">
               <div>
-                <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">{feat.icon}</div>
+                <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center mb-5">{feat.icon}</div>
                 <h3 className="text-lg font-bold text-slate-900 mb-2">{feat.title}</h3>
                 <p className="text-sm text-slate-600 leading-relaxed">{feat.desc}</p>
               </div>
@@ -325,7 +325,7 @@ export default function LandingPage() {
           
           <div className="relative z-10 max-w-3xl mx-auto">
             <h2 className="text-4xl sm:text-5xl font-black text-white tracking-tight mb-6">
-              Ready to transform your <span className="underline decoration-blue-300 decoration-wavy underline-offset-[16px] pb-2" style={{ textDecorationSkipInk: 'none', WebkitTextDecorationSkipInk: 'none' }}>Community?</span>
+              Ready to transform your Community?
             </h2>
             <p className="text-slate-200 text-lg sm:text-xl leading-relaxed mb-10">
               Join thousands of active citizens and dedicated municipal engineers making an immediate impact today.
