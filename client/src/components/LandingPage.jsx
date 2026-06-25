@@ -243,7 +243,7 @@ export default function LandingPage() {
               {/* Step 2 */}
               <ScrollReveal direction="up" delay={200} className="pl-16 pt-[360px]">
                 <div className="relative z-10 pr-6">
-                  <div className="absolute -top-4 right-6 text-[10rem] font-black text-slate-200/70 pointer-events-none select-none leading-none font-mono">2</div>
+                  <div className="absolute -top-28 right-12 text-[10rem] font-black text-slate-200/70 pointer-events-none select-none leading-none font-mono">2</div>
                   <div className="relative z-10 pt-4">
                     <h3 className="text-xl font-bold text-blue-600 mb-3">Track & Collaborate</h3>
                     <p className="text-base text-slate-600 leading-relaxed max-w-xs">
@@ -256,7 +256,7 @@ export default function LandingPage() {
               {/* Step 3 */}
               <ScrollReveal direction="up" delay={300} className="pl-20 pt-[240px]">
                 <div className="relative z-10 pr-4">
-                  <div className="absolute -top-4 right-0 text-[10rem] font-black text-slate-200/70 pointer-events-none select-none leading-none font-mono">3</div>
+                  <div className="absolute -top-32 right-8 text-[10rem] font-black text-slate-200/70 pointer-events-none select-none leading-none font-mono">3</div>
                   <div className="relative z-10 pt-4">
                     <h3 className="text-xl font-bold text-blue-600 mb-3">Resolve & Verify</h3>
                     <p className="text-base text-slate-600 leading-relaxed max-w-xs">
