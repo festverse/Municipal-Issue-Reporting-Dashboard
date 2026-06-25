@@ -208,19 +208,19 @@ export default function LandingPage() {
                 {/* Node 1 */}
                 <g transform="translate(260, 355)">
                   <rect x="-35" y="-35" width="70" height="70" rx="24" fill="white" filter="url(#box_shadow)" />
-                  <circle cx="0" cy="0" r="20" fill="#2563eb" />
+                  <circle cx="0" cy="0" r="6" fill="#2563eb" />
                 </g>
 
                 {/* Node 2 */}
                 <g transform="translate(625, 210)">
                   <rect x="-35" y="-35" width="70" height="70" rx="24" fill="white" filter="url(#box_shadow)" />
-                  <circle cx="0" cy="0" r="20" fill="#2563eb" />
+                  <circle cx="0" cy="0" r="6" fill="#2563eb" />
                 </g>
 
                 {/* Node 3 */}
                 <g transform="translate(980, 60)">
                   <rect x="-35" y="-35" width="70" height="70" rx="24" fill="white" filter="url(#box_shadow)" />
-                  <circle cx="0" cy="0" r="20" fill="#2563eb" />
+                  <circle cx="0" cy="0" r="6" fill="#2563eb" />
                 </g>
               </svg>
             </div>
