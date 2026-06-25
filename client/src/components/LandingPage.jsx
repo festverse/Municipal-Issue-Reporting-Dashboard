@@ -165,68 +165,127 @@ export default function LandingPage() {
       </section>
 
       {/* 3. HOW IT WORKS (STEPPER) */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-slate-100/80 border-y border-slate-200/80">
-        <div className="max-w-7xl mx-auto">
-          <ScrollReveal direction="up">
-            <div className="text-center mb-16">
-              <span className="text-xs font-bold text-blue-600 uppercase tracking-widest block mb-2">Step-By-Step Workflow</span>
-              <h2 className="text-3xl sm:text-4xl font-black text-slate-900">How Panchayat Transforms Communities</h2>
-              <p className="text-slate-500 text-base mt-3 max-w-2xl mx-auto">
-                From identifying an everyday hazard to verifying its full municipal resolution, our four-step workflow keeps everyone connected.
+      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-slate-100/80 border-y border-slate-200/80 overflow-hidden">
+        <div className="max-w-7xl mx-auto relative">
+          
+          {/* Top Left Header & CTA Button */}
+          <div className="relative z-10 lg:max-w-xl mb-16 lg:mb-0">
+            <ScrollReveal direction="up">
+              <h2 className="text-4xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-6">
+                How Civic Portal<br />Transforms Communities
+              </h2>
+              <p className="text-slate-600 text-base sm:text-lg leading-relaxed mb-8 max-w-lg">
+                Civic Portal is like Google Maps for civic issues - citizens report problems with one tap, government departments get auto-notified, and everyone can track resolution in real-time. We're making local governance transparent, accountable, and community-driven.
               </p>
-            </div>
-          </ScrollReveal>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
-            <ScrollReveal direction="up" delay={100} className="h-full">
-              <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-lg hover:border-blue-200 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden h-full flex flex-col justify-between">
-                <div>
-                  <span className="absolute top-4 right-6 text-5xl font-black text-slate-100 pointer-events-none">01</span>
-                  <div className="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-bold text-lg mb-6 shadow-md">1</div>
-                  <h3 className="text-lg font-bold text-slate-900 mb-2">Report an Issue</h3>
-                  <p className="text-sm text-slate-600 leading-relaxed">
-                    Citizen identifies an infrastructure glitch, inputs details, and pins the exact location through our simple report form.
-                  </p>
-                </div>
-              </div>
-            </ScrollReveal>
-            <ScrollReveal direction="up" delay={200} className="h-full">
-              <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-lg hover:border-violet-200 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden h-full flex flex-col justify-between">
-                <div>
-                  <span className="absolute top-4 right-6 text-5xl font-black text-slate-100 pointer-events-none">02</span>
-                  <div className="w-12 h-12 rounded-2xl bg-violet-600 text-white flex items-center justify-center font-bold text-lg mb-6 shadow-md">2</div>
-                  <h3 className="text-lg font-bold text-slate-900 mb-2">AI Smart Triage</h3>
-                  <p className="text-sm text-slate-600 leading-relaxed">
-                    Our AI instantly evaluates the hazard, scans for emergency keywords, assigns priority level, and routes to the correct department.
-                  </p>
-                </div>
-              </div>
-            </ScrollReveal>
-            <ScrollReveal direction="up" delay={300} className="h-full">
-              <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-lg hover:border-amber-200 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden h-full flex flex-col justify-between">
-                <div>
-                  <span className="absolute top-4 right-6 text-5xl font-black text-slate-100 pointer-events-none">03</span>
-                  <div className="w-12 h-12 rounded-2xl bg-amber-600 text-white flex items-center justify-center font-bold text-lg mb-6 shadow-md">3</div>
-                  <h3 className="text-lg font-bold text-slate-900 mb-2">Active SLA Resolution</h3>
-                  <p className="text-sm text-slate-600 leading-relaxed">
-                    Municipal authorities receive automated real-time alerts and dispatch maintenance teams within guaranteed resolution windows.
-                  </p>
-                </div>
-              </div>
-            </ScrollReveal>
-            <ScrollReveal direction="up" delay={400} className="h-full">
-              <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-lg hover:border-emerald-200 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden h-full flex flex-col justify-between">
-                <div>
-                  <span className="absolute top-4 right-6 text-5xl font-black text-slate-100 pointer-events-none">04</span>
-                  <div className="w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center font-bold text-lg mb-6 shadow-md">4</div>
-                  <h3 className="text-lg font-bold text-slate-900 mb-2">Track & Verify</h3>
-                  <p className="text-sm text-slate-600 leading-relaxed">
-                    Citizens receive real-time status notifications, verify completed repairs, and participate in public community feeds.
-                  </p>
-                </div>
-              </div>
+              <Link to="/report" className="inline-flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-4 rounded-2xl shadow-lg shadow-blue-600/30 hover:shadow-blue-600/50 transition-all hover:-translate-y-0.5 text-base sm:text-lg">
+                Start Reporting Issues in Your Area
+              </Link>
             </ScrollReveal>
           </div>
+
+          {/* Desktop Visual Curved Flow */}
+          <div className="hidden lg:block relative mt-8 pb-12">
+            {/* Glowing SVG Wave Path */}
+            <div className="absolute inset-0 pointer-events-none overflow-visible w-full h-[450px]">
+              <svg viewBox="0 0 1200 450" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full overflow-visible">
+                <defs>
+                  <linearGradient id="blue_gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#0284c7" />
+                    <stop offset="50%" stopColor="#0ea5e9" />
+                    <stop offset="100%" stopColor="#2563eb" />
+                  </linearGradient>
+                  <filter id="wave_shadow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feDropShadow dx="0" dy="12" stdDeviation="12" floodColor="#0284c7" floodOpacity="0.3" />
+                  </filter>
+                  <filter id="box_shadow" x="-40%" y="-40%" width="180%" height="180%">
+                    <feDropShadow dx="0" dy="12" stdDeviation="16" floodColor="#000000" floodOpacity="0.12" />
+                  </filter>
+                </defs>
+
+                {/* Smooth glowing curved line */}
+                <path d="M 50 250 C 250 400, 400 380, 550 250 C 700 120, 850 300, 980 60 C 1030 10, 1070 30, 1100 40" stroke="url(#blue_gradient)" strokeWidth="8" strokeLinecap="round" filter="url(#wave_shadow)" />
+
+                {/* Node 1 */}
+                <g transform="translate(260, 325)">
+                  <rect x="-35" y="-35" width="70" height="70" rx="24" fill="white" filter="url(#box_shadow)" />
+                  <circle cx="0" cy="0" r="14" fill="#2563eb" />
+                </g>
+
+                {/* Node 2 */}
+                <g transform="translate(625, 210)">
+                  <rect x="-35" y="-35" width="70" height="70" rx="24" fill="white" filter="url(#box_shadow)" />
+                  <circle cx="0" cy="0" r="14" fill="#2563eb" />
+                </g>
+
+                {/* Node 3 */}
+                <g transform="translate(980, 60)">
+                  <rect x="-35" y="-35" width="70" height="70" rx="24" fill="white" filter="url(#box_shadow)" />
+                  <circle cx="0" cy="0" r="14" fill="#2563eb" />
+                </g>
+              </svg>
+            </div>
+
+            {/* 3 Step Content Columns */}
+            <div className="grid grid-cols-3 gap-8 relative z-10 -mt-12">
+              {/* Step 1 */}
+              <ScrollReveal direction="up" delay={100} className="pl-12 pt-28">
+                <div className="relative">
+                  <div className="absolute -top-12 right-12 text-[11rem] font-black text-slate-200/70 pointer-events-none select-none leading-none font-mono">1</div>
+                  <div className="relative z-10 pt-16 pr-8">
+                    <h3 className="text-xl font-bold text-blue-600 mb-3">Report an Issue</h3>
+                    <p className="text-base text-slate-600 leading-relaxed max-w-xs">
+                      Snap a photo or send a voice/text via app or WhatsApp. Location and category are auto-detected for fast, accurate reporting.
+                    </p>
+                  </div>
+                </div>
+              </ScrollReveal>
+
+              {/* Step 2 */}
+              <ScrollReveal direction="up" delay={200} className="pl-16 pt-8">
+                <div className="relative">
+                  <div className="absolute -top-12 right-6 text-[11rem] font-black text-slate-200/70 pointer-events-none select-none leading-none font-mono">2</div>
+                  <div className="relative z-10 pt-16 pr-6">
+                    <h3 className="text-xl font-bold text-blue-600 mb-3">Track & Collaborate</h3>
+                    <p className="text-base text-slate-600 leading-relaxed max-w-xs">
+                      See your report on the live map, attach to similar reports, upvote, and comment — stay informed as the community and officials interact!
+                    </p>
+                  </div>
+                </div>
+              </ScrollReveal>
+
+              {/* Step 3 */}
+              <ScrollReveal direction="up" delay={300} className="pl-20 -mt-28">
+                <div className="relative">
+                  <div className="absolute -top-20 right-0 text-[11rem] font-black text-slate-200/70 pointer-events-none select-none leading-none font-mono">3</div>
+                  <div className="relative z-10 pt-16 pr-4">
+                    <h3 className="text-xl font-bold text-blue-600 mb-3">Resolve & Verify</h3>
+                    <p className="text-base text-slate-600 leading-relaxed max-w-xs">
+                      Assigned to the right department, updated in real time, and marked resolved after verification. Earn credits for verified fixes and help improve your neighborhood!
+                    </p>
+                  </div>
+                </div>
+              </ScrollReveal>
+            </div>
+          </div>
+
+          {/* Mobile / Tablet Fallback Layout */}
+          <div className="lg:hidden mt-12 space-y-8">
+            {[
+              { num: '1', title: 'Report an Issue', desc: 'Snap a photo or send a voice/text via app or WhatsApp. Location and category are auto-detected for fast, accurate reporting.' },
+              { num: '2', title: 'Track & Collaborate', desc: 'See your report on the live map, attach to similar reports, upvote, and comment — stay informed as the community and officials interact!' },
+              { num: '3', title: 'Resolve & Verify', desc: 'Assigned to the right department, updated in real time, and marked resolved after verification. Earn credits for verified fixes and help improve your neighborhood!' },
+            ].map((step, idx) => (
+              <ScrollReveal key={idx} direction="up" delay={idx * 100}>
+                <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-lg hover:border-blue-200 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
+                  <span className="absolute top-4 right-6 text-6xl font-black text-slate-100 pointer-events-none font-mono">0{step.num}</span>
+                  <div className="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-bold text-lg mb-6 shadow-md">{step.num}</div>
+                  <h3 className="text-xl font-bold text-blue-600 mb-3">{step.title}</h3>
+                  <p className="text-base text-slate-600 leading-relaxed">{step.desc}</p>
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
+
         </div>
       </section>
 
