@@ -44,7 +44,7 @@ const protect = catchAsync(async (req, _res, next) => {
 
   // 3. Confirm the user still exists in the database
   const result = await pool.query(
-    'SELECT id, email, full_name, role, created_at FROM users WHERE id = $1',
+    'SELECT id, email, full_name, phone, zone, notifications, session_expiry, role, created_at FROM users WHERE id = $1',
     [decoded.id]
   );
 

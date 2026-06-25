@@ -61,7 +61,7 @@ const login = catchAsync(async (req, res, _next) => {
 
   // 1. Find user by email (include password_hash for comparison)
   const result = await pool.query(
-    'SELECT id, email, password_hash, full_name, role, created_at FROM users WHERE email = $1',
+    'SELECT id, email, password_hash, full_name, phone, zone, notifications, session_expiry, role, created_at FROM users WHERE email = $1',
     [email]
   );
 
@@ -113,4 +113,31 @@ const getProfile = catchAsync(async (req, res, _next) => {
   });
 });
 
-module.exports = { register, login, getProfile };
+/**
+ * PATCH /api/auth/me
+ * Update user profile and preferences.
+ */
+const updateProfile = catchAsync(async (req, res, _next) => {
+  const { full_name, email, phone, zone, notifications, session_expiry } = req.body;
+  const result = await pool.query(
+    `UPDATE users 
+     SET full_name = COALESCE($1, full_name),
+         email = COALESCE($2, email),
+         phone = COALESCE($3, phone),
+         zone = COALESCE($4, zone),
+         notifications = COALESCE($5, notifications),
+         session_expiry = COALESCE($6, session_expiry)
+     WHERE id = $7
+     RETURNING id, email, full_name, phone, zone, notifications, session_expiry, role, created_at`,
+    [full_name, email, phone, zone,
+     notifications !== undefined ? JSON.stringify(notifications) : undefined,
+     session_expiry, req.user.id]
+  );
+
+  res.status(200).json({
+    status: 'success',
+    user: result.rows[0],
+  });
+});
+
+module.exports = { register, login, getProfile, updateProfile };

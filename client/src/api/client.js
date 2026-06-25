@@ -32,6 +32,9 @@ export const loginUser = (body) =>
 export const getProfile = () =>
   request(`${BASE_URL}/auth/me`);
 
+export const updateProfileAPI = (body) =>
+  request(`${BASE_URL}/auth/me`, { method: 'PATCH', body: JSON.stringify(body) });
+
 // ── Tickets ──
 export const createTicket = (body) =>
   request(`${BASE_URL}/tickets`, { method: 'POST', body: JSON.stringify(body) });

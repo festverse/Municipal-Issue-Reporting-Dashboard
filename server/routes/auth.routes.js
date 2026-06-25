@@ -50,5 +50,6 @@ const loginValidation = validate([
 router.post('/register', registerValidation, authController.register);
 router.post('/login', loginValidation, authController.login);
 router.get('/me', protect, authController.getProfile);
+router.patch('/me', protect, authController.updateProfile);
 
 module.exports = router;

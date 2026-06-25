@@ -1,12 +1,16 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { User, Bell, Shield, Key, Save, Image as ImageIcon, Sparkles, MapPin, Check, CheckCircle2 } from 'lucide-react';
+import { useAuth } from '../hooks/useAuth';
 
 export default function GovSettings() {
+  const { user, updateProfile, logout } = useAuth();
+
   const [profileData, setProfileData] = useState({
-    name: 'Alexander Sterling',
-    email: 'alexander.sterling@civicelite.org',
-    phone: '+1 (555) 234-5678',
-    zone: 'Zone 4 - Downtown Commercial Core',
+    name: user?.full_name || 'Alexander Sterling',
+    email: user?.email || 'alexander.sterling@civicelite.org',
+    phone: user?.phone || '+1 (555) 234-5678',
+    zone: user?.zone || 'Zone 4 - Downtown Commercial Core',
+    session_expiry: user?.session_expiry || '30 Days (Recommended)',
     notifications: {
       emailAlerts: true,
       smsDispatch: true,
@@ -19,12 +23,55 @@ export default function GovSettings() {
     }
   });
 
-  const [isSaved, setIsSaved] = useState(false);
+  useEffect(() => {
+    if (user) {
+      let notifs = { emailAlerts: true, smsDispatch: true, slaReminders: true, marketing: false };
+      if (user.notifications) {
+        try {
+          notifs = typeof user.notifications === 'string' ? JSON.parse(user.notifications) : user.notifications;
+        } catch (e) {}
+      }
+      setProfileData(prev => ({
+        ...prev,
+        name: user.full_name || prev.name,
+        email: user.email || prev.email,
+        phone: user.phone || prev.phone,
+        zone: user.zone || prev.zone,
+        session_expiry: user.session_expiry || prev.session_expiry,
+        notifications: notifs
+      }));
+    }
+  }, [user]);
 
-  const handleSave = (e) => {
+  const [isSaved, setIsSaved] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+
+  const handleSave = async (e) => {
     e.preventDefault();
-    setIsSaved(true);
-    setTimeout(() => setIsSaved(false), 3000);
+    if (!updateProfile) return;
+    setIsSaving(true);
+    try {
+      await updateProfile({
+        full_name: profileData.name,
+        email: profileData.email,
+        phone: profileData.phone,
+        zone: profileData.zone,
+        notifications: profileData.notifications,
+        session_expiry: profileData.session_expiry
+      });
+      setIsSaved(true);
+      setTimeout(() => setIsSaved(false), 3000);
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleRevoke = () => {
+    if (window.confirm("Are you sure you want to revoke your account access and log out?")) {
+      if (logout) logout();
+    }
   };
 
   return (
@@ -44,9 +91,9 @@ export default function GovSettings() {
             </p>
           </div>
 
-          <button onClick={handleSave} className="flex items-center gap-2 px-6 py-3 bg-white text-blue-600 hover:bg-slate-50 font-bold text-sm rounded-2xl transition-all shadow-lg active:scale-95 whitespace-nowrap">
+          <button onClick={handleSave} disabled={isSaving} className="flex items-center gap-2 px-6 py-3 bg-white text-blue-600 hover:bg-slate-50 font-bold text-sm rounded-2xl transition-all shadow-lg active:scale-95 whitespace-nowrap disabled:opacity-50">
             {isSaved ? <CheckCircle2 className="w-4 h-4 text-emerald-600" /> : <Save className="w-4 h-4 text-blue-600" />}
-            <span>{isSaved ? 'Settings Saved!' : 'Save Changes'}</span>
+            <span>{isSaving ? 'Saving...' : isSaved ? 'Settings Saved!' : 'Save Changes'}</span>
           </button>
         </div>
       </div>
@@ -200,7 +247,11 @@ export default function GovSettings() {
 
               <div>
                 <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Session Expiry</label>
-                <select className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 text-sm outline-none focus:border-blue-500 focus:bg-white transition-all shadow-sm">
+                <select
+                  value={profileData.session_expiry}
+                  onChange={(e) => setProfileData({...profileData, session_expiry: e.target.value})}
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 text-sm outline-none focus:border-blue-500 focus:bg-white transition-all shadow-sm"
+                >
                   <option>30 Days (Recommended)</option>
                   <option>7 Days</option>
                   <option>24 Hours</option>
@@ -225,7 +276,7 @@ export default function GovSettings() {
             <div className="absolute -right-8 -bottom-8 w-32 h-32 bg-rose-500/20 rounded-full blur-xl pointer-events-none" />
             <h4 className="text-base font-bold mb-1">Danger Zone</h4>
             <p className="text-xs text-slate-300 mb-4 leading-relaxed">Permanently revoke your civic profile and erase all audit logs from municipal nodes.</p>
-            <button className="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl transition-all shadow-sm active:scale-95">
+            <button onClick={handleRevoke} className="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl transition-all shadow-sm active:scale-95">
               Revoke Account Access
             </button>
           </div>

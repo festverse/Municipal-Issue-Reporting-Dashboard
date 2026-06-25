@@ -38,6 +38,13 @@ const testConnection = async () => {
   const client = await pool.connect();
   try {
     const result = await client.query('SELECT NOW()');
+    await client.query(`
+      ALTER TABLE users 
+      ADD COLUMN IF NOT EXISTS phone VARCHAR(50),
+      ADD COLUMN IF NOT EXISTS zone VARCHAR(100),
+      ADD COLUMN IF NOT EXISTS notifications VARCHAR(1000),
+      ADD COLUMN IF NOT EXISTS session_expiry VARCHAR(50);
+    `);
     console.log('[DB] Connected successfully at', result.rows[0].now);
   } finally {
     client.release();

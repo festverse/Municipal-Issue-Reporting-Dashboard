@@ -40,7 +40,13 @@ const priorities = [
 export default function TicketForm() {
   const { user } = useAuth();
   const { showToast } = useToast();
-  const [activeTab, setActiveTab] = useState('report');
+  const [activeTab, setActiveTab] = useState(user?.role === 'ENGINEER' || user?.role === 'ADMIN' ? 'dashboard' : 'report');
+  
+  useEffect(() => {
+    if (user) {
+      setActiveTab(user?.role === 'ENGINEER' || user?.role === 'ADMIN' ? 'dashboard' : 'report');
+    }
+  }, [user]);
   const [position, setPosition] = useState(null);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -242,35 +248,46 @@ export default function TicketForm() {
           <div className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-sm flex flex-col justify-between min-h-[calc(100%-1rem)] space-y-6">
             <div className="space-y-6">
               {/* Main Nav Links */}
+              {/* Main Nav Links */}
               <div className="space-y-1">
-                <button onClick={() => setActiveTab('dashboard')} className={`w-full flex items-center justify-start text-left gap-3 px-4 py-3 rounded-2xl text-sm transition-all active:scale-95 ${activeTab === 'dashboard' ? 'font-bold bg-blue-600 text-white shadow-md shadow-blue-500/25' : 'font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}>
-                  <LayoutDashboard className={`w-4 h-4 flex-shrink-0 ${activeTab === 'dashboard' ? 'text-white' : 'text-slate-500'}`} />
-                  <span className="truncate">Dashboard</span>
-                </button>
-                <button onClick={() => setActiveTab('heatmap')} className={`w-full flex items-center justify-start text-left gap-3 px-4 py-3 rounded-2xl text-sm transition-all active:scale-95 ${activeTab === 'heatmap' ? 'font-bold bg-blue-600 text-white shadow-md shadow-blue-500/25' : 'font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}>
-                  <Map className={`w-4 h-4 flex-shrink-0 ${activeTab === 'heatmap' ? 'text-white' : 'text-slate-500'}`} />
-                  <span className="truncate">Heatmap</span>
-                </button>
+                {(user?.role === 'ENGINEER' || user?.role === 'ADMIN') && (
+                  <>
+                    <button onClick={() => setActiveTab('dashboard')} className={`w-full flex items-center justify-start text-left gap-3 px-4 py-3 rounded-2xl text-sm transition-all active:scale-95 ${activeTab === 'dashboard' ? 'font-bold bg-blue-600 text-white shadow-md shadow-blue-500/25' : 'font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}>
+                      <LayoutDashboard className={`w-4 h-4 flex-shrink-0 ${activeTab === 'dashboard' ? 'text-white' : 'text-slate-500'}`} />
+                      <span className="truncate">Dashboard</span>
+                    </button>
+                    <button onClick={() => setActiveTab('heatmap')} className={`w-full flex items-center justify-start text-left gap-3 px-4 py-3 rounded-2xl text-sm transition-all active:scale-95 ${activeTab === 'heatmap' ? 'font-bold bg-blue-600 text-white shadow-md shadow-blue-500/25' : 'font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}>
+                      <Map className={`w-4 h-4 flex-shrink-0 ${activeTab === 'heatmap' ? 'text-white' : 'text-slate-500'}`} />
+                      <span className="truncate">Heatmap</span>
+                    </button>
+                  </>
+                )}
                 <button onClick={() => setActiveTab('departments')} className={`w-full flex items-center justify-start text-left gap-3 px-4 py-3 rounded-2xl text-sm transition-all active:scale-95 ${activeTab === 'departments' ? 'font-bold bg-blue-600 text-white shadow-md shadow-blue-500/25' : 'font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}>
                   <Building className={`w-4 h-4 flex-shrink-0 ${activeTab === 'departments' ? 'text-white' : 'text-slate-500'}`} />
                   <span className="truncate">Gov Departments</span>
                 </button>
-                <button onClick={() => setActiveTab('report')} className={`w-full flex items-center justify-start text-left gap-3 px-4 py-3 rounded-2xl text-sm transition-all active:scale-95 ${activeTab === 'report' ? 'font-bold bg-blue-600 text-white shadow-md shadow-blue-500/25' : 'font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}>
-                  <FileText className={`w-4 h-4 flex-shrink-0 ${activeTab === 'report' ? 'text-white' : 'text-slate-500'}`} />
-                  <span className="truncate">Report an Issue</span>
-                </button>
+                {user?.role !== 'ENGINEER' && user?.role !== 'ADMIN' && (
+                  <button onClick={() => setActiveTab('report')} className={`w-full flex items-center justify-start text-left gap-3 px-4 py-3 rounded-2xl text-sm transition-all active:scale-95 ${activeTab === 'report' ? 'font-bold bg-blue-600 text-white shadow-md shadow-blue-500/25' : 'font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}>
+                    <FileText className={`w-4 h-4 flex-shrink-0 ${activeTab === 'report' ? 'text-white' : 'text-slate-500'}`} />
+                    <span className="truncate">Report an Issue</span>
+                  </button>
+                )}
                 <button onClick={() => setActiveTab('policy')} className={`w-full flex items-center justify-start text-left gap-3 px-4 py-3 rounded-2xl text-sm transition-all active:scale-95 ${activeTab === 'policy' ? 'font-bold bg-blue-600 text-white shadow-md shadow-blue-500/25' : 'font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}>
                   <Lightbulb className={`w-4 h-4 flex-shrink-0 ${activeTab === 'policy' ? 'text-white' : 'text-slate-500'}`} />
                   <span className="truncate">Government Policy</span>
                 </button>
-                <button onClick={() => setActiveTab('reports')} className={`w-full flex items-center justify-start text-left gap-3 px-4 py-3 rounded-2xl text-sm transition-all active:scale-95 ${activeTab === 'reports' ? 'font-bold bg-blue-600 text-white shadow-md shadow-blue-500/25' : 'font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}>
-                  <BarChart2 className={`w-4 h-4 flex-shrink-0 ${activeTab === 'reports' ? 'text-white' : 'text-slate-500'}`} />
-                  <span className="truncate">Reports</span>
-                </button>
-                <button onClick={() => setActiveTab('connections')} className={`w-full flex items-center justify-start text-left gap-3 px-4 py-3 rounded-2xl text-sm transition-all active:scale-95 ${activeTab === 'connections' ? 'font-bold bg-blue-600 text-white shadow-md shadow-blue-500/25' : 'font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}>
-                  <Users className={`w-4 h-4 flex-shrink-0 ${activeTab === 'connections' ? 'text-white' : 'text-slate-500'}`} />
-                  <span className="truncate">Connections</span>
-                </button>
+                {(user?.role === 'ENGINEER' || user?.role === 'ADMIN') && (
+                  <>
+                    <button onClick={() => setActiveTab('reports')} className={`w-full flex items-center justify-start text-left gap-3 px-4 py-3 rounded-2xl text-sm transition-all active:scale-95 ${activeTab === 'reports' ? 'font-bold bg-blue-600 text-white shadow-md shadow-blue-500/25' : 'font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}>
+                      <BarChart2 className={`w-4 h-4 flex-shrink-0 ${activeTab === 'reports' ? 'text-white' : 'text-slate-500'}`} />
+                      <span className="truncate">Reports</span>
+                    </button>
+                    <button onClick={() => setActiveTab('connections')} className={`w-full flex items-center justify-start text-left gap-3 px-4 py-3 rounded-2xl text-sm transition-all active:scale-95 ${activeTab === 'connections' ? 'font-bold bg-blue-600 text-white shadow-md shadow-blue-500/25' : 'font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}>
+                      <Users className={`w-4 h-4 flex-shrink-0 ${activeTab === 'connections' ? 'text-white' : 'text-slate-500'}`} />
+                      <span className="truncate">Connections</span>
+                    </button>
+                  </>
+                )}
                 <button onClick={() => setActiveTab('chat')} className={`w-full flex items-center justify-start text-left gap-3 px-4 py-3 rounded-2xl text-sm transition-all active:scale-95 ${activeTab === 'chat' ? 'font-bold bg-blue-600 text-white shadow-md shadow-blue-500/25' : 'font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900'}`}>
                   <MessageSquare className={`w-4 h-4 flex-shrink-0 ${activeTab === 'chat' ? 'text-white' : 'text-slate-500'}`} />
                   <span className="truncate">Chat</span>

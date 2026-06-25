@@ -80,7 +80,7 @@ export default function GovChat() {
             />
           </div>
 
-          <div className="flex-1 space-y-2 overflow-y-auto pr-1">
+          <div className="flex-1 space-y-2 overflow-y-auto px-1 py-1 -mx-1">
             {chats.map((chat) => (
               <button
                 key={chat.id}

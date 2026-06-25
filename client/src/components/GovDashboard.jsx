@@ -1,21 +1,50 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { LayoutDashboard, TrendingUp, Users, CheckCircle, Clock, AlertTriangle, Calendar, ArrowUpRight, Sparkles } from 'lucide-react';
+import { fetchTickets } from '../api/client';
+import { Link } from 'react-router-dom';
 
 export default function GovDashboard() {
   const [timeRange, setTimeRange] = useState('7d');
+  const [tickets, setTickets] = useState([]);
 
-  const stats = [
-    { title: 'Total Reported Issues', value: '1,284', change: '+12.5%', isPositive: true, icon: AlertTriangle, color: 'text-amber-500', bg: 'bg-amber-50' },
-    { title: 'Resolved & Closed', value: '948', change: '+18.2%', isPositive: true, icon: CheckCircle, color: 'text-emerald-500', bg: 'bg-emerald-50' },
-    { title: 'In Progress / Assigned', value: '242', change: '-4.3%', isPositive: false, icon: Clock, color: 'text-blue-500', bg: 'bg-blue-50' },
-    { title: 'Citizen Contributions', value: '8,429', change: '+24.8%', isPositive: true, icon: Users, color: 'text-violet-500', bg: 'bg-violet-50' },
+  useEffect(() => {
+    fetchTickets().then((data) => {
+      if (data && data.tickets) {
+        setTickets(data.tickets);
+      }
+    }).catch(() => {});
+  }, []);
+
+  const defaultActivities = [
+    { id: 'def-1', title: 'Major Pothole Repair Completed', department: 'Department of Transportation', time: '2 hours ago', image: 'https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=600&q=80', status: 'Completed', isDefault: true },
+    { id: 'def-2', title: 'Solar Streetlight Grid Inspection', department: 'Energy & Power Division', time: '5 hours ago', image: 'https://images.unsplash.com/photo-1498084393753-b411b2d26b34?auto=format&fit=crop&w=600&q=80', status: 'In Progress', isDefault: true },
+    { id: 'def-3', title: 'Downtown Water Main Flushing', department: 'Water & Sanitation Board', time: '1 day ago', image: 'https://picsum.photos/id/1029/600/400', status: 'Completed', isDefault: true },
+    { id: 'def-4', title: 'Community Park Landscaping Upgrade', department: 'Parks & Recreation', time: '2 days ago', image: 'https://images.unsplash.com/photo-1527689368864-3a821dbccc34?auto=format&fit=crop&w=600&q=80', status: 'Assigned', isDefault: true },
   ];
 
   const recentActivities = [
-    { id: 1, title: 'Major Pothole Repair Completed', department: 'Department of Transportation', time: '2 hours ago', image: 'https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=600&q=80', status: 'Completed' },
-    { id: 2, title: 'Solar Streetlight Grid Inspection', department: 'Energy & Power Division', time: '5 hours ago', image: 'https://images.unsplash.com/photo-1498084393753-b411b2d26b34?auto=format&fit=crop&w=600&q=80', status: 'In Progress' },
-    { id: 3, title: 'Downtown Water Main Flushing', department: 'Water & Sanitation Board', time: '1 day ago', image: 'https://picsum.photos/id/1029/600/400', status: 'Completed' },
-    { id: 4, title: 'Community Park Landscaping Upgrade', department: 'Parks & Recreation', time: '2 days ago', image: 'https://images.unsplash.com/photo-1527689368864-3a821dbccc34?auto=format&fit=crop&w=600&q=80', status: 'Assigned' },
+    ...tickets.map(t => ({
+      id: t.id,
+      title: t.title,
+      department: t.category_name || 'Civic Infrastructure',
+      time: new Date(t.created_at).toLocaleDateString() + ' ' + new Date(t.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
+      image: t.media_url || 'https://picsum.photos/id/1029/600/400',
+      status: t.status === 'RESOLVED' ? 'Completed' : t.status === 'IN_PROGRESS' ? 'In Progress' : 'Assigned',
+      isDefault: false
+    })),
+    ...defaultActivities
+  ];
+
+  const realTotal = 1284 + tickets.length;
+  const realResolved = 948 + tickets.filter(t => t.status === 'RESOLVED').length;
+  const realInProgress = 242 + tickets.filter(t => t.status !== 'RESOLVED').length;
+  const realCitizens = 8429 + tickets.length;
+
+  const stats = [
+    { title: 'Total Reported Issues', value: realTotal.toLocaleString(), change: '+12.5%', isPositive: true, icon: AlertTriangle, color: 'text-amber-500', bg: 'bg-amber-50' },
+    { title: 'Resolved & Closed', value: realResolved.toLocaleString(), change: '+18.2%', isPositive: true, icon: CheckCircle, color: 'text-emerald-500', bg: 'bg-emerald-50' },
+    { title: 'In Progress / Assigned', value: realInProgress.toLocaleString(), change: '-4.3%', isPositive: false, icon: Clock, color: 'text-blue-500', bg: 'bg-blue-50' },
+    { title: 'Citizen Contributions', value: realCitizens.toLocaleString(), change: '+24.8%', isPositive: true, icon: Users, color: 'text-violet-500', bg: 'bg-violet-50' },
   ];
 
   return (
@@ -113,7 +142,11 @@ export default function GovDashboard() {
                       <Calendar className="w-3.5 h-3.5 text-slate-400" />
                       <span>{act.time}</span>
                     </div>
-                    <button className="text-blue-600 hover:text-blue-700 font-bold text-xs">Details →</button>
+                    {act.isDefault ? (
+                      <button className="text-blue-600 hover:text-blue-700 font-bold text-xs">Details →</button>
+                    ) : (
+                      <Link to={`/tickets/${act.id}`} className="text-blue-600 hover:text-blue-700 font-bold text-xs">Details →</Link>
+                    )}
                   </div>
                 </div>
               </div>
