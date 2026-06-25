@@ -290,9 +290,9 @@ export default function LandingPage() {
       </section>
 
       {/* 4. POWERFUL FEATURES */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative z-0">
         <ScrollReveal direction="up">
-          <div className="text-center mb-16">
+          <div className="text-center mb-16 relative z-10">
             <span className="text-xs font-bold text-blue-600 uppercase tracking-widest block mb-2">Platform Capabilities</span>
             <h2 className="text-3xl sm:text-4xl font-black text-slate-900">Powerful Features</h2>
             <p className="text-slate-500 text-base mt-3 max-w-2xl mx-auto">
@@ -301,7 +301,10 @@ export default function LandingPage() {
           </div>
         </ScrollReveal>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {/* Gorgeous Colored Blur Background */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85%] h-[75%] bg-gradient-to-tr from-blue-500/35 via-indigo-500/25 to-sky-400/35 blur-[120px] rounded-[100rem] pointer-events-none" />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
           {[
             { icon: <MapPin className="w-6 h-6 text-blue-600" />, title: 'Simple Reporting Form', desc: 'Pinpoint issues on an interactive map in seconds with precise GPS telemetry.' },
             { icon: <Sparkles className="w-6 h-6 text-blue-600" />, title: 'AI Heuristic Triage', desc: 'Auto-categorization & emergency keyword scanning to route issues instantly.' },
