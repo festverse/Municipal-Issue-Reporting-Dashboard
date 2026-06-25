@@ -334,11 +334,11 @@ export default function LandingPage() {
           
           {/* Heroic Callout Banner */}
           <ScrollReveal direction="scale">
-            <div className="bg-[#046c4e] text-white rounded-[2.5rem] p-10 sm:p-14 shadow-2xl text-center mb-20 relative overflow-hidden">
+            <div className="bg-gradient-to-r from-[#1a62ff] via-[#6839ff] to-[#a633ff] text-white rounded-[2.5rem] p-10 sm:p-14 shadow-2xl text-center mb-20 relative overflow-hidden">
               <div className="relative z-10 max-w-3xl mx-auto">
-                <span className="text-xs font-bold uppercase tracking-widest text-emerald-200 block mb-2">Transparent Telemetry</span>
+                <span className="text-xs font-bold uppercase tracking-widest text-blue-200 block mb-2">Transparent Telemetry</span>
                 <p className="text-5xl sm:text-7xl font-black text-white mb-4">71%</p>
-                <p className="text-lg sm:text-xl font-bold text-emerald-100 mb-6">SLA Resolution Rate</p>
+                <p className="text-lg sm:text-xl font-bold text-indigo-100 mb-6">SLA Resolution Rate</p>
                 <h3 className="text-2xl sm:text-3xl font-black text-white leading-tight italic">
                   "When citizens and government work together transparently, extraordinary things happen for our communities."
                 </h3>
