@@ -6,6 +6,7 @@ import StatCard from './ui/StatCard';
 import StatusBadge from './ui/StatusBadge';
 import PriorityBadge from './ui/PriorityBadge';
 import LoadingSpinner from './ui/LoadingSpinner';
+import { Download, ClipboardList, Unlock, Settings, CheckCircle2, Search, AlertCircle, Sparkles } from 'lucide-react';
 
 const statuses = ['All', 'OPEN', 'ASSIGNED', 'IN_PROGRESS', 'RESOLVED', 'REJECTED'];
 
@@ -152,16 +153,17 @@ export default function Dashboard() {
           onClick={handleCSVExport}
           className="flex items-center gap-2 px-4 py-2.5 bg-slate-800 hover:bg-slate-900 text-white font-semibold text-sm rounded-xl shadow-sm transition-all active:scale-95"
         >
-          <span>📥</span> Export Enterprise CSV
+          <Download className="w-4 h-4 text-white" />
+          <span>Export Enterprise CSV</span>
         </button>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <StatCard icon="📋" label="Total Issues" value={summary.total} color="blue" delay={0} />
-        <StatCard icon="🔓" label="Open" value={summary.open} color="amber" delay={100} />
-        <StatCard icon="⚙️" label="In Progress" value={summary.in_progress} color="violet" delay={200} />
-        <StatCard icon="✅" label="Resolved" value={summary.resolved} color="emerald" delay={300} />
+        <StatCard icon={<ClipboardList className="w-6 h-6 text-blue-600" />} label="Total Issues" value={summary.total} color="blue" delay={0} />
+        <StatCard icon={<Unlock className="w-6 h-6 text-amber-600" />} label="Open" value={summary.open} color="amber" delay={100} />
+        <StatCard icon={<Settings className="w-6 h-6 text-violet-600" />} label="In Progress" value={summary.in_progress} color="violet" delay={200} />
+        <StatCard icon={<CheckCircle2 className="w-6 h-6 text-emerald-600" />} label="Resolved" value={summary.resolved} color="emerald" delay={300} />
       </div>
 
       {/* Filters */}
@@ -218,7 +220,7 @@ export default function Dashboard() {
           <LoadingSpinner text="Loading tickets..." />
         ) : tickets.length === 0 ? (
           <div className="text-center py-16 text-slate-500">
-            <span className="text-4xl block mb-3">🔍</span>
+            <div className="flex justify-center mb-3"><Search className="w-10 h-10 text-slate-400" /></div>
             <p className="font-medium text-slate-700">No tickets found</p>
             <p className="text-sm mt-1">Try adjusting your filters.</p>
           </div>
@@ -255,11 +257,11 @@ export default function Dashboard() {
                     <td className="px-4 py-3"><StatusBadge status={t.status} /></td>
                     <td className="px-4 py-3 hidden lg:table-cell">
                       {t.status === 'RESOLVED' ? (
-                        <span className="text-xs font-semibold px-2 py-1 bg-slate-100 text-slate-600 rounded-lg">✅ Fulfilled</span>
+                        <span className="text-xs font-semibold px-2 py-1 bg-slate-100 text-slate-600 rounded-lg inline-flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5 text-slate-500" /> Fulfilled</span>
                       ) : t.sla_breached ? (
-                        <span className="text-xs font-bold px-2 py-1 bg-rose-100 text-rose-700 rounded-lg animate-pulse-critical">🔴 SLA Breached</span>
+                        <span className="text-xs font-bold px-2 py-1 bg-rose-100 text-rose-700 rounded-lg inline-flex items-center gap-1 animate-pulse-critical"><AlertCircle className="w-3.5 h-3.5 text-rose-600" /> SLA Breached</span>
                       ) : (
-                        <span className="text-xs font-semibold px-2 py-1 bg-emerald-100 text-emerald-700 rounded-lg">🟢 SLA Normal</span>
+                        <span className="text-xs font-semibold px-2 py-1 bg-emerald-100 text-emerald-700 rounded-lg inline-flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> SLA Normal</span>
                       )}
                     </td>
                     <td className="px-4 py-3 text-xs text-slate-500 hidden xl:table-cell">{timeAgo(t.created_at)}</td>
@@ -358,7 +360,7 @@ export default function Dashboard() {
                     disabled={isGeneratingNote}
                     className="flex items-center gap-1 px-2.5 py-1 bg-ai-gradient text-white font-semibold text-xs rounded-lg shadow-sm hover:opacity-95 transition-all active:scale-95 disabled:opacity-50"
                   >
-                    {isGeneratingNote ? 'Generating...' : '✨ AI Generate Note'}
+                    {isGeneratingNote ? 'Generating...' : <span className="flex items-center gap-1"><Sparkles className="w-3.5 h-3.5 text-white" /> AI Generate Note</span>}
                   </button>
                 </div>
                 <textarea

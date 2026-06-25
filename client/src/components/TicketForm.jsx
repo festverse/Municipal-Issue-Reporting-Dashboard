@@ -5,6 +5,7 @@ import { createTicket, fetchZones, fetchCategories, analyzeIssueAI } from '../ap
 import { useAuth } from '../hooks/useAuth';
 import { useToast } from './ui/Toast';
 import { Link } from 'react-router-dom';
+import { Lock, Zap, ArrowRight, Settings, Info, FileText, Sparkles, Bot, MapPin } from 'lucide-react';
 
 import L from 'leaflet';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
@@ -160,7 +161,7 @@ export default function TicketForm() {
     return (
       <div className="max-w-lg mx-auto py-20 text-center animate-fade-in-up">
         <div className="ui-card bg-white p-10">
-          <span className="text-5xl block mb-4">🔐</span>
+          <div className="flex justify-center mb-4"><Lock className="w-12 h-12 text-blue-600" /></div>
           <h2 className="text-xl font-bold text-slate-900 mb-2">Authentication Required</h2>
           <p className="text-slate-500 text-sm mb-6">
             Please log in as a Citizen to report an issue.<br/>
@@ -187,7 +188,7 @@ export default function TicketForm() {
           {/* Card 1: Quick Civic Presets */}
           <div className="ui-card bg-white p-5">
             <h3 className="text-sm font-bold text-slate-900 mb-2 flex items-center gap-1.5">
-              <span>⚡</span> Quick Civic Presets
+              <Zap className="w-4 h-4 text-amber-500" /> Quick Civic Presets
             </h3>
             <p className="text-xs text-slate-500 mb-4">Instantly populate common municipal reports with AI-calibrated settings.</p>
             <div className="space-y-2">
@@ -207,7 +208,7 @@ export default function TicketForm() {
                     <p className="text-xs font-semibold text-slate-800 group-hover:text-blue-700 transition-colors">{preset.label}</p>
                     <p className="text-[10px] text-slate-400 mt-0.5">Priority: {preset.priority}</p>
                   </div>
-                  <span className="text-xs text-slate-400 group-hover:text-blue-600 transition-colors">→</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-600 transition-colors" />
                 </button>
               ))}
             </div>
@@ -216,7 +217,7 @@ export default function TicketForm() {
           {/* Card 2: Report Settings & Overrides */}
           <div className="ui-card bg-white p-5">
             <h3 className="text-sm font-bold text-slate-900 mb-2 flex items-center gap-1.5">
-              <span>🛠️</span> Report Options & Overrides
+              <Settings className="w-4 h-4 text-blue-600" /> Report Options & Overrides
             </h3>
             <p className="text-xs text-slate-500 mb-4">Advanced filing controls and telemetry overrides.</p>
             <div className="space-y-4">
@@ -272,26 +273,26 @@ export default function TicketForm() {
           {/* Card 3: AI Triage & SLA Guarantees */}
           <div className="ui-card bg-white p-5 border-t-4 border-blue-600">
             <h3 className="text-sm font-bold text-slate-900 mb-2 flex items-center gap-1.5">
-              <span>ℹ️</span> Dispatch & SLA Guarantee
+              <Info className="w-4 h-4 text-blue-600" /> Dispatch & SLA Guarantee
             </h3>
             <p className="text-xs text-slate-600 mb-3 leading-relaxed">
               All reports are evaluated in real-time by the City AI Engine. Guaranteed municipal emergency dispatch resolution windows:
             </p>
             <div className="space-y-2 text-xs font-medium">
               <div className="flex justify-between items-center py-1 border-b border-slate-100">
-                <span className="text-rose-700 font-bold">🔴 Critical Priority</span>
+                <span className="flex items-center gap-1.5 text-rose-700 font-bold"><span className="w-2.5 h-2.5 rounded-full bg-rose-600" /> Critical Priority</span>
                 <span className="text-slate-600">&lt; 24 Hours</span>
               </div>
               <div className="flex justify-between items-center py-1 border-b border-slate-100">
-                <span className="text-amber-700 font-bold">🟡 High Priority</span>
+                <span className="flex items-center gap-1.5 text-amber-700 font-bold"><span className="w-2.5 h-2.5 rounded-full bg-amber-500" /> High Priority</span>
                 <span className="text-slate-600">&lt; 48 Hours</span>
               </div>
               <div className="flex justify-between items-center py-1 border-b border-slate-100">
-                <span className="text-blue-700 font-bold">🔵 Medium Priority</span>
+                <span className="flex items-center gap-1.5 text-blue-700 font-bold"><span className="w-2.5 h-2.5 rounded-full bg-blue-600" /> Medium Priority</span>
                 <span className="text-slate-600">&lt; 5 Days</span>
               </div>
               <div className="flex justify-between items-center py-1">
-                <span className="text-slate-700 font-bold">⚪ Low Priority</span>
+                <span className="flex items-center gap-1.5 text-slate-700 font-bold"><span className="w-2.5 h-2.5 rounded-full bg-slate-500" /> Low Priority</span>
                 <span className="text-slate-600">&lt; 7 Days</span>
               </div>
             </div>
@@ -304,7 +305,7 @@ export default function TicketForm() {
           <div className="ui-card bg-white p-6 sm:p-8">
             <div className="mb-8">
               <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-                <span>📝</span> Report an Issue
+                <FileText className="w-6 h-6 text-blue-600" /> Report an Issue
               </h2>
               <p className="text-slate-500 text-sm mt-1">Help us improve the city by pinpointing infrastructure problems.</p>
             </div>
@@ -333,7 +334,7 @@ export default function TicketForm() {
                       </>
                     ) : (
                       <>
-                        <span>✨</span> AI Smart Assist
+                        <Sparkles className="w-3.5 h-3.5 text-white" /> AI Smart Assist
                       </>
                     )}
                   </button>
@@ -346,7 +347,7 @@ export default function TicketForm() {
                 <div className="p-4 rounded-2xl bg-purple-50/80 border-ai animate-fade-in">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-xs font-bold uppercase tracking-wider text-ai-gradient flex items-center gap-1">
-                      <span>🤖</span> AI Triage Complete
+                      <Bot className="w-4 h-4 text-purple-600" /> AI Triage Complete
                     </span>
                     <span className="text-xs font-semibold px-2 py-0.5 bg-purple-100 text-purple-700 rounded-full">
                       {aiInsight.confidence}% Confidence
@@ -404,7 +405,7 @@ export default function TicketForm() {
               {/* Map */}
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1.5 flex justify-between items-center">
-                  <span>📍 Location Pin</span>
+                  <span className="flex items-center gap-1.5"><MapPin className="w-4 h-4 text-blue-600" /> Location Pin</span>
                   {position && (
                     <span className="text-xs font-mono text-blue-700 bg-blue-50 px-2 py-1 rounded-lg">
                       {position.lat.toFixed(4)}, {position.lng.toFixed(4)}

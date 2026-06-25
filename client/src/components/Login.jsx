@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useToast } from './ui/Toast';
+import { Sparkles, Landmark, Zap, Map, ShieldCheck, Rocket, Wrench, User, AlertTriangle } from 'lucide-react';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -42,7 +43,8 @@ export default function Login() {
 
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-semibold text-blue-200 mb-8 shadow-inner animate-fade-in">
-            <span>✨</span> Next-Generation Civic Engagement Platform
+            <Sparkles className="w-4 h-4 text-blue-300" />
+            <span>Next-Generation Civic Engagement Platform</span>
           </div>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-[1.15] mb-6 animate-fade-in-up">
             Transform local governance through <span className="bg-gradient-to-r from-blue-400 via-indigo-300 to-violet-400 bg-clip-text text-transparent">collective action.</span>
@@ -57,7 +59,7 @@ export default function Login() {
           <div className="flex items-center justify-between border-b border-white/10 pb-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-500 to-violet-500 flex items-center justify-center shadow-lg text-white font-bold text-lg">
-                🏛️
+                <Landmark className="w-6 h-6 text-white" />
               </div>
               <div>
                 <h4 className="text-sm font-bold text-white">Smart City Command</h4>
@@ -75,12 +77,18 @@ export default function Login() {
               <p className="text-[11px] text-slate-300 font-medium mt-1">SLA Compliance</p>
             </div>
             <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10">
-              <p className="text-xl font-extrabold text-violet-300">⚡ AI</p>
+              <p className="text-xl font-extrabold text-violet-300 flex items-center justify-center gap-1">
+                <Zap className="w-5 h-5 text-violet-300" />
+                <span>AI</span>
+              </p>
               <p className="text-[11px] text-slate-300 font-medium mt-1">Smart Triage</p>
             </div>
             <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10">
-              <p className="text-xl font-extrabold text-emerald-300">🗺️ Real-time</p>
-              <p className="text-[11px] text-slate-300 font-medium mt-1">Live Heatmaps</p>
+              <p className="text-xl font-extrabold text-emerald-300 flex items-center justify-center gap-1">
+                <Map className="w-5 h-5 text-emerald-300" />
+                <span>Live</span>
+              </p>
+              <p className="text-[11px] text-slate-300 font-medium mt-1">Heatmaps</p>
             </div>
           </div>
         </div>
@@ -88,7 +96,7 @@ export default function Login() {
         {/* Footer info */}
         <div className="flex items-center justify-between text-xs text-slate-400 border-t border-white/10 pt-6 mt-auto">
           <span>© Civic Portal Enterprise</span>
-          <span>🔒 End-to-end Verified</span>
+          <span className="flex items-center gap-1"><ShieldCheck className="w-4 h-4 text-slate-400" /> End-to-end Verified</span>
         </div>
       </div>
 
@@ -105,7 +113,8 @@ export default function Login() {
           {/* Demo Credentials for Recruiters */}
           <div className="mb-8 p-5 bg-gradient-to-br from-slate-50 to-blue-50/50 border border-slate-200/80 rounded-2xl shadow-sm">
             <h3 className="text-xs font-bold text-slate-600 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-              <span>🚀</span> Recruiter Demo Accounts
+              <Rocket className="w-4 h-4 text-blue-600" />
+              <span>Recruiter Demo Accounts</span>
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               <button 
@@ -113,14 +122,16 @@ export default function Login() {
                 onClick={() => { setEmail('engineer@demo.com'); setPassword('engineer123'); }}
                 className="py-2.5 px-3 text-xs font-semibold bg-white border border-slate-200 text-slate-700 rounded-xl hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700 transition-all shadow-sm active:scale-95 flex items-center justify-center gap-1.5"
               >
-                <span>🛠️</span> Fill Engineer Data
+                <Wrench className="w-4 h-4 text-slate-600" />
+                <span>Fill Engineer Data</span>
               </button>
               <button 
                 type="button" 
                 onClick={() => { setEmail('citizen@demo.com'); setPassword('citizen123'); }}
                 className="py-2.5 px-3 text-xs font-semibold bg-white border border-slate-200 text-slate-700 rounded-xl hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700 transition-all shadow-sm active:scale-95 flex items-center justify-center gap-1.5"
               >
-                <span>👤</span> Fill Citizen Data
+                <User className="w-4 h-4 text-slate-600" />
+                <span>Fill Citizen Data</span>
               </button>
             </div>
           </div>
@@ -128,7 +139,7 @@ export default function Login() {
           {/* Error */}
           {error && (
             <div className="mb-6 p-4 bg-rose-50 border border-rose-200 rounded-2xl animate-fade-in flex items-center gap-3">
-              <span className="text-rose-600 text-lg">⚠️</span>
+              <AlertTriangle className="w-5 h-5 text-rose-600 flex-shrink-0" />
               <p className="text-rose-700 text-sm font-medium">{error}</p>
             </div>
           )}

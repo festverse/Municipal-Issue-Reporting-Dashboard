@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useToast } from './ui/Toast';
+import { Rocket, Shield, MessageSquare, Clock, ShieldCheck, AlertTriangle } from 'lucide-react';
 
 export default function Register() {
   const [form, setForm] = useState({ full_name: '', email: '', password: '', confirm: '', role: 'CITIZEN' });
@@ -52,7 +53,8 @@ export default function Register() {
 
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-semibold text-blue-200 mb-8 shadow-inner animate-fade-in">
-            <span>🚀</span> Join the Civic Revolution
+            <Rocket className="w-4 h-4 text-blue-300" />
+            <span>Join the Civic Revolution</span>
           </div>
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-[1.15] mb-6 animate-fade-in-up">
             Empowering communities with <span className="bg-gradient-to-r from-blue-400 via-indigo-300 to-violet-400 bg-clip-text text-transparent">real-time accountability.</span>
@@ -67,7 +69,7 @@ export default function Register() {
           <div className="flex items-center justify-between border-b border-white/10 pb-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-500 to-violet-500 flex items-center justify-center shadow-lg text-white font-bold text-lg">
-                🛡️
+                <Shield className="w-6 h-6 text-white" />
               </div>
               <div>
                 <h4 className="text-sm font-bold text-white">Community Verification</h4>
@@ -85,11 +87,17 @@ export default function Register() {
               <p className="text-[11px] text-slate-300 font-medium mt-1">Transparent</p>
             </div>
             <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10">
-              <p className="text-xl font-extrabold text-violet-300">💬 Feed</p>
+              <p className="text-xl font-extrabold text-violet-300 flex items-center justify-center gap-1">
+                <MessageSquare className="w-5 h-5 text-violet-300" />
+                <span>Feed</span>
+              </p>
               <p className="text-[11px] text-slate-300 font-medium mt-1">Civic Discussions</p>
             </div>
             <div className="p-3.5 rounded-2xl bg-white/5 border border-white/10">
-              <p className="text-xl font-extrabold text-emerald-300">⏱️ SLA</p>
+              <p className="text-xl font-extrabold text-emerald-300 flex items-center justify-center gap-1">
+                <Clock className="w-5 h-5 text-emerald-300" />
+                <span>SLA</span>
+              </p>
               <p className="text-[11px] text-slate-300 font-medium mt-1">Protected Rights</p>
             </div>
           </div>
@@ -98,7 +106,7 @@ export default function Register() {
         {/* Footer info */}
         <div className="flex items-center justify-between text-xs text-slate-400 border-t border-white/10 pt-6 mt-auto">
           <span>© Civic Portal Enterprise</span>
-          <span>🔒 End-to-end Verified</span>
+          <span className="flex items-center gap-1"><ShieldCheck className="w-4 h-4 text-slate-400" /> End-to-end Verified</span>
         </div>
       </div>
 
@@ -114,7 +122,7 @@ export default function Register() {
 
           {error && (
             <div className="mb-6 p-4 bg-rose-50 border border-rose-200 rounded-2xl animate-fade-in flex items-center gap-3">
-              <span className="text-rose-600 text-lg">⚠️</span>
+              <AlertTriangle className="w-5 h-5 text-rose-600 flex-shrink-0" />
               <p className="text-rose-700 text-sm font-medium">{error}</p>
             </div>
           )}

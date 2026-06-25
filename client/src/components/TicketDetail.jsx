@@ -8,6 +8,7 @@ import { useToast } from './ui/Toast';
 import StatusBadge from './ui/StatusBadge';
 import PriorityBadge from './ui/PriorityBadge';
 import LoadingSpinner from './ui/LoadingSpinner';
+import { ThumbsUp, MapPin, MessageSquare, RefreshCw, Sparkles, User, Pin } from 'lucide-react';
 
 import L from 'leaflet';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
@@ -26,10 +27,10 @@ const statusTransitions = {
 };
 
 const activityIcons = {
-  STATUS_CHANGE: '🔄',
-  COMMENT: '💬',
-  CREATED: '✨',
-  ASSIGNED: '👤',
+  STATUS_CHANGE: <RefreshCw className="w-3.5 h-3.5 text-blue-600" />,
+  COMMENT: <MessageSquare className="w-3.5 h-3.5 text-emerald-600" />,
+  CREATED: <Sparkles className="w-3.5 h-3.5 text-amber-500" />,
+  ASSIGNED: <User className="w-3.5 h-3.5 text-violet-600" />,
 };
 
 export default function TicketDetail() {
@@ -150,7 +151,7 @@ export default function TicketDetail() {
                 onClick={handleUpvote}
                 className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 active:scale-95 transition-all rounded-xl text-xs font-bold text-slate-700 shadow-sm"
               >
-                <span>👍</span>
+                <ThumbsUp className="w-4 h-4 text-blue-600" />
                 <span>Affects me ({ticket.upvotes_count || 0})</span>
               </button>
             </div>
@@ -202,8 +203,9 @@ export default function TicketDetail() {
                   <Marker position={[parseFloat(ticket.latitude), parseFloat(ticket.longitude)]} />
                 </MapContainer>
               </div>
-              <div className="px-4 py-3 border-t border-slate-200 text-xs text-slate-500 font-mono bg-slate-50">
-                📍 {parseFloat(ticket.latitude).toFixed(4)}, {parseFloat(ticket.longitude).toFixed(4)}
+              <div className="px-4 py-3 border-t border-slate-200 text-xs text-slate-500 font-mono bg-slate-50 flex items-center gap-1">
+                <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                <span>{parseFloat(ticket.latitude).toFixed(4)}, {parseFloat(ticket.longitude).toFixed(4)}</span>
               </div>
             </div>
           )}
@@ -211,7 +213,8 @@ export default function TicketDetail() {
           {/* Community Comments Feed */}
           <div className="ui-card bg-white p-6">
             <h2 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
-              <span>💬</span> Community Comments ({ticket.comments?.length || 0})
+              <MessageSquare className="w-5 h-5 text-blue-600" />
+              <span>Community Comments ({ticket.comments?.length || 0})</span>
             </h2>
 
             {/* Comments List */}
@@ -309,7 +312,7 @@ export default function TicketDetail() {
                     <div key={i} className="flex gap-3 animate-fade-in" style={{ animationDelay: `${i * 80}ms`, animationFillMode: 'both' }}>
                       {/* Dot */}
                       <div className="relative z-10 w-6 h-6 flex items-center justify-center rounded-full bg-white border border-slate-200 text-xs flex-shrink-0">
-                        {activityIcons[a.activity_type] || '📌'}
+                        {activityIcons[a.activity_type] || <Pin className="w-3.5 h-3.5 text-slate-500" />}
                       </div>
                       {/* Content */}
                       <div className="flex-1 min-w-0">

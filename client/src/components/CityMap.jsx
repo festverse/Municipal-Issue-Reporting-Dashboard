@@ -5,6 +5,7 @@ import { fetchTickets, toggleUpvoteTicket } from '../api/client';
 import { useToast } from './ui/Toast';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
+import { Map, AlertOctagon, Circle, RefreshCw, CheckCircle2, ThumbsUp } from 'lucide-react';
 
 import L from 'leaflet';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
@@ -70,7 +71,8 @@ export default function CityMap() {
       <div className="bg-white/90 backdrop-blur-md border-b border-slate-200 p-4 flex flex-wrap items-center justify-between gap-4 z-20 shadow-sm">
         <div>
           <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-            <span>🗺️</span> City Live Issue Map
+            <Map className="w-5 h-5 text-blue-600" />
+            <span>City Live Issue Map</span>
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">Real-time geospatial visualization of civic infrastructure repairs & reports.</p>
         </div>
@@ -78,22 +80,23 @@ export default function CityMap() {
         {/* Filter Tabs */}
         <div className="flex flex-wrap gap-1.5 p-1 bg-slate-100/80 rounded-xl border border-slate-200/60">
           {[
-            { label: 'All Issues', value: 'ALL' },
-            { label: '🔴 Critical', value: 'CRITICAL' },
-            { label: '🟢 Open', value: 'OPEN' },
-            { label: '🟡 In Progress', value: 'IN_PROGRESS' },
-            { label: '✅ Resolved', value: 'RESOLVED' }
+            { label: 'All Issues', value: 'ALL', icon: null },
+            { label: 'Critical', value: 'CRITICAL', icon: <AlertOctagon className="w-3.5 h-3.5 text-rose-600" /> },
+            { label: 'Open', value: 'OPEN', icon: <Circle className="w-3.5 h-3.5 text-amber-500" /> },
+            { label: 'In Progress', value: 'IN_PROGRESS', icon: <RefreshCw className="w-3.5 h-3.5 text-violet-600" /> },
+            { label: 'Resolved', value: 'RESOLVED', icon: <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> }
           ].map((tab) => (
             <button
               key={tab.value}
               onClick={() => setFilter(tab.value)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 filter === tab.value
                   ? 'bg-blue-600 text-white shadow-sm scale-105'
                   : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
               }`}
             >
-              {tab.label}
+              {tab.icon}
+              <span>{tab.label}</span>
             </button>
           ))}
         </div>
@@ -137,7 +140,7 @@ export default function CityMap() {
                       onClick={() => handleUpvote(ticket.id)}
                       className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 active:scale-95 transition-all rounded-xl text-xs font-bold text-slate-700 shadow-sm"
                     >
-                      <span>👍</span>
+                      <ThumbsUp className="w-4 h-4 text-blue-600" />
                       <span>Affects me ({ticket.upvotes_count || 0})</span>
                     </button>
                     <Link

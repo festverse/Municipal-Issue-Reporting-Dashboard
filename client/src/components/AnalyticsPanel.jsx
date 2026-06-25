@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { fetchAnalyticsSummary, fetchAnalyticsByZone, fetchAnalyticsByStatus, fetchRecentActivity, fetchTickets, timeAgo } from '../api/client';
 import StatCard from './ui/StatCard';
 import LoadingSpinner from './ui/LoadingSpinner';
+import { ClipboardList, Clock, AlertOctagon, ThumbsUp, ShieldCheck } from 'lucide-react';
 
 const statusColors = {
   OPEN: '#f59e0b',
@@ -74,6 +75,13 @@ export default function AnalyticsPanel() {
   });
   const slaBreachedCount = tickets.filter(t => t.sla_breached).length;
 
+  // Meaningful Advanced Analytics Metrics (replacing redundant status counts)
+  const criticalHighCount = tickets.filter(t => t.priority === 'CRITICAL' || t.priority === 'HIGH').length;
+  const totalUpvotes = tickets.reduce((acc, t) => acc + (t.upvotes_count || 0), 0);
+  const slaCompliance = tickets.length > 0 
+    ? (((tickets.length - slaBreachedCount) / tickets.length) * 100).toFixed(1) + '%'
+    : '100%';
+
   return (
     <div className="max-w-7xl mx-auto py-8 px-4 animate-fade-in">
       {/* Header */}
@@ -84,11 +92,11 @@ export default function AnalyticsPanel() {
 
       {/* Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
-        <StatCard icon="📋" label="Total Issues" value={summary.total} color="blue" delay={0} />
-        <StatCard icon="🔓" label="Open" value={summary.open} color="amber" delay={100} />
-        <StatCard icon="⚙️" label="In Progress" value={summary.in_progress} color="violet" delay={200} />
-        <StatCard icon="✅" label="Resolved" value={summary.resolved} color="emerald" delay={300} />
-        <StatCard icon="⏱️" label="Avg Hrs to Resolve" value={summary.avgResolutionHours ? String(Math.round(summary.avgResolutionHours * 10) / 10) : '—'} color="rose" delay={400} />
+        <StatCard icon={<ClipboardList className="w-6 h-6 text-blue-600" />} label="Total Issues" value={summary.total} color="blue" delay={0} />
+        <StatCard icon={<AlertOctagon className="w-6 h-6 text-amber-600" />} label="High & Critical" value={criticalHighCount} color="amber" delay={100} />
+        <StatCard icon={<ThumbsUp className="w-6 h-6 text-violet-600" />} label="Community Upvotes" value={totalUpvotes} color="violet" delay={200} />
+        <StatCard icon={<ShieldCheck className="w-6 h-6 text-emerald-600" />} label="SLA Compliance" value={slaCompliance} color="emerald" delay={300} />
+        <StatCard icon={<Clock className="w-6 h-6 text-rose-600" />} label="Avg Hrs to Resolve" value={summary.avgResolutionHours ? String(Math.round(summary.avgResolutionHours * 10) / 10) : '—'} color="rose" delay={400} />
       </div>
 
       {/* Charts Row */}

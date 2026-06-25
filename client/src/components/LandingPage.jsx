@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { Sparkles, Rocket, MapPin, TrendingUp, CheckCircle2, Zap, Timer, Bot, Radio, Leaf, ShieldCheck, Users, MessageSquare, BarChart3, Download, Map, Lock, Heart, Landmark, TreePine, Phone, Mail, Shield } from 'lucide-react';
 
 export default function LandingPage() {
   return (
@@ -9,7 +10,8 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto text-center relative z-10">
           
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-200 text-xs font-bold text-blue-700 mb-8 shadow-sm animate-fade-in">
-            <span>✨</span> Next-Generation Civic Engagement Platform
+            <Sparkles className="w-4 h-4 text-blue-600" />
+            <span>Next-Generation Civic Engagement Platform</span>
           </div>
 
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-slate-900 tracking-tight leading-[1.15] mb-6 max-w-5xl mx-auto animate-fade-in-up">
@@ -25,35 +27,37 @@ export default function LandingPage() {
               to="/report"
               className="w-full sm:w-auto px-8 py-4 text-base font-bold text-white bg-blue-600 rounded-2xl hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/25 hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
             >
-              <span>🚀</span> Report an Issue Now
+              <Rocket className="w-5 h-5 text-white" />
+              <span>Report an Issue Now</span>
             </Link>
             <Link
               to="/map"
               className="w-full sm:w-auto px-8 py-4 text-base font-bold text-slate-700 bg-white border border-slate-300 rounded-2xl hover:bg-slate-50 transition-all shadow-sm hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
             >
-              <span>🗺️</span> View Live Heatmap
+              <MapPin className="w-5 h-5 text-slate-700" />
+              <span>View Live Heatmap</span>
             </Link>
           </div>
 
           {/* Quick Stat Cards */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 max-w-5xl mx-auto mb-16 animate-fade-in-up">
             <div className="p-6 bg-white border border-slate-200/80 rounded-3xl shadow-sm text-center hover:border-blue-300 transition-colors">
-              <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl mx-auto mb-3">📈</div>
+              <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center mx-auto mb-3"><TrendingUp className="w-6 h-6 text-blue-600" /></div>
               <p className="text-3xl font-extrabold text-slate-900">120+</p>
               <p className="text-xs font-semibold text-slate-500 mt-1 uppercase tracking-wider">Total Reports</p>
             </div>
             <div className="p-6 bg-white border border-slate-200/80 rounded-3xl shadow-sm text-center hover:border-emerald-300 transition-colors">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl mx-auto mb-3">✅</div>
+              <div className="w-12 h-12 rounded-2xl bg-emerald-50 flex items-center justify-center mx-auto mb-3"><CheckCircle2 className="w-6 h-6 text-emerald-600" /></div>
               <p className="text-3xl font-extrabold text-emerald-600">85</p>
               <p className="text-xs font-semibold text-slate-500 mt-1 uppercase tracking-wider">Issues Resolved</p>
             </div>
             <div className="p-6 bg-white border border-slate-200/80 rounded-3xl shadow-sm text-center hover:border-amber-300 transition-colors">
-              <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-2xl mx-auto mb-3">⚡</div>
+              <div className="w-12 h-12 rounded-2xl bg-amber-50 flex items-center justify-center mx-auto mb-3"><Zap className="w-6 h-6 text-amber-600" /></div>
               <p className="text-3xl font-extrabold text-amber-600">25</p>
               <p className="text-xs font-semibold text-slate-500 mt-1 uppercase tracking-wider">In Progress</p>
             </div>
             <div className="p-6 bg-white border border-slate-200/80 rounded-3xl shadow-sm text-center hover:border-violet-300 transition-colors">
-              <div className="w-12 h-12 rounded-2xl bg-violet-50 text-violet-600 flex items-center justify-center text-2xl mx-auto mb-3">⏱️</div>
+              <div className="w-12 h-12 rounded-2xl bg-violet-50 flex items-center justify-center mx-auto mb-3"><Timer className="w-6 h-6 text-violet-600" /></div>
               <p className="text-3xl font-extrabold text-violet-600">10</p>
               <p className="text-xs font-semibold text-slate-500 mt-1 uppercase tracking-wider">Pending SLA</p>
             </div>
@@ -71,21 +75,21 @@ export default function LandingPage() {
             </div>
             <div className="flex flex-col gap-4 w-full lg:w-auto">
               <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/20 flex items-center gap-4 shadow-inner">
-                <span className="text-2xl">🤖</span>
+                <Bot className="w-6 h-6 text-blue-200" />
                 <div>
                   <h4 className="text-sm font-bold text-white">AI Smart Triage</h4>
                   <p className="text-xs text-slate-200">Emergency keyword scanning & auto-routing</p>
                 </div>
               </div>
               <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/20 flex items-center gap-4 shadow-inner">
-                <span className="text-2xl">📡</span>
+                <Radio className="w-6 h-6 text-blue-200" />
                 <div>
                   <h4 className="text-sm font-bold text-white">Direct Telemetry</h4>
                   <p className="text-xs text-slate-200">High-precision HTML5 geolocation tagging</p>
                 </div>
               </div>
               <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/20 flex items-center gap-4 shadow-inner">
-                <span className="text-2xl">⏱️</span>
+                <Timer className="w-6 h-6 text-blue-200" />
                 <div>
                   <h4 className="text-sm font-bold text-white">Real-Time SLAs</h4>
                   <p className="text-xs text-slate-200">Enforced municipal dispatch deadlines</p>
@@ -109,28 +113,28 @@ export default function LandingPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-lg transition-all group hover:-translate-y-1">
-            <div className="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">🌿</div>
+            <div className="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"><Leaf className="w-7 h-7 text-emerald-600" /></div>
             <h3 className="text-lg font-bold text-slate-900 mb-3">Clean & Green</h3>
             <p className="text-sm text-slate-600 leading-relaxed">
               Dedicated to maintaining sustainable urban infrastructure, pristine public parks, and beautifully kept neighborhood spaces.
             </p>
           </div>
           <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-lg transition-all group hover:-translate-y-1">
-            <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">🛡️</div>
+            <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"><ShieldCheck className="w-7 h-7 text-blue-600" /></div>
             <h3 className="text-lg font-bold text-slate-900 mb-3">Trust & Transparency</h3>
             <p className="text-sm text-slate-600 leading-relaxed">
               Open municipal data feeds ensure complete accountability, clear communication channels, and visible public progress.
             </p>
           </div>
           <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-lg transition-all group hover:-translate-y-1">
-            <div className="w-14 h-14 rounded-2xl bg-violet-50 text-violet-600 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">🤝</div>
+            <div className="w-14 h-14 rounded-2xl bg-violet-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"><Users className="w-7 h-7 text-violet-600" /></div>
             <h3 className="text-lg font-bold text-slate-900 mb-3">Community Driven</h3>
             <p className="text-sm text-slate-600 leading-relaxed">
               Built for active citizens, collaborative neighborhoods, and proactive civic associations working together for public welfare.
             </p>
           </div>
           <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-lg transition-all group hover:-translate-y-1">
-            <div className="w-14 h-14 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">⚡</div>
+            <div className="w-14 h-14 rounded-2xl bg-amber-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"><Zap className="w-7 h-7 text-amber-600" /></div>
             <h3 className="text-lg font-bold text-slate-900 mb-3">Efficient Resolution</h3>
             <p className="text-sm text-slate-600 leading-relaxed">
               Automated AI dispatching and enforced service level agreements guarantee the fastest possible municipal response times.
@@ -199,18 +203,18 @@ export default function LandingPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {[
-            { icon: '📍', title: 'Simple Reporting Form', desc: 'Pinpoint issues on an interactive map in seconds with precise GPS telemetry.' },
-            { icon: '✨', title: 'AI Heuristic Triage', desc: 'Auto-categorization & emergency keyword scanning to route issues instantly.' },
-            { icon: '⏱️', title: 'Real-Time SLA Tracking', desc: 'Visual breach warnings and automated escalation for municipal engineers.' },
-            { icon: '💬', title: 'Civic Community Feed', desc: 'Public discussion threads and "Affects me too" community upvoting.' },
-            { icon: '📊', title: 'Executive Analytics', desc: 'Comprehensive breakdown of priority tiers, SLA compliance, and status distribution.' },
-            { icon: '📥', title: 'Enterprise Export', desc: 'Download tabular CSV datasets instantly for official municipal and government reporting.' },
-            { icon: '🗺️', title: 'Live City Heatmap', desc: 'Real-time geospatial issue tracking across all city zones and districts.' },
-            { icon: '🔒', title: 'End-to-End Verified', desc: 'Secure role-based access control for citizens, engineers, and municipal administrators.' },
+            { icon: <MapPin className="w-6 h-6 text-blue-600" />, title: 'Simple Reporting Form', desc: 'Pinpoint issues on an interactive map in seconds with precise GPS telemetry.' },
+            { icon: <Sparkles className="w-6 h-6 text-blue-600" />, title: 'AI Heuristic Triage', desc: 'Auto-categorization & emergency keyword scanning to route issues instantly.' },
+            { icon: <Timer className="w-6 h-6 text-blue-600" />, title: 'Real-Time SLA Tracking', desc: 'Visual breach warnings and automated escalation for municipal engineers.' },
+            { icon: <MessageSquare className="w-6 h-6 text-blue-600" />, title: 'Civic Community Feed', desc: 'Public discussion threads and "Affects me too" community upvoting.' },
+            { icon: <BarChart3 className="w-6 h-6 text-blue-600" />, title: 'Executive Analytics', desc: 'Comprehensive breakdown of priority tiers, SLA compliance, and status distribution.' },
+            { icon: <Download className="w-6 h-6 text-blue-600" />, title: 'Enterprise Export', desc: 'Download tabular CSV datasets instantly for official municipal and government reporting.' },
+            { icon: <Map className="w-6 h-6 text-blue-600" />, title: 'Live City Heatmap', desc: 'Real-time geospatial issue tracking across all city zones and districts.' },
+            { icon: <Lock className="w-6 h-6 text-blue-600" />, title: 'End-to-End Verified', desc: 'Secure role-based access control for citizens, engineers, and municipal administrators.' },
           ].map((feat, idx) => (
             <div key={idx} className="bg-white p-7 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group">
               <div>
-                <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl mb-5 group-hover:scale-110 transition-transform">{feat.icon}</div>
+                <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">{feat.icon}</div>
                 <h3 className="text-lg font-bold text-slate-900 mb-2">{feat.title}</h3>
                 <p className="text-sm text-slate-600 leading-relaxed">{feat.desc}</p>
               </div>
@@ -246,7 +250,7 @@ export default function LandingPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm flex items-start gap-6">
-              <div className="w-14 h-14 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-3xl shrink-0">💖</div>
+              <div className="w-14 h-14 rounded-2xl bg-rose-50 flex items-center justify-center shrink-0"><Heart className="w-7 h-7 text-rose-600" /></div>
               <div>
                 <h3 className="text-xl font-bold text-slate-900 mb-2">Quality of Life</h3>
                 <p className="text-sm text-slate-600 leading-relaxed">
@@ -255,7 +259,7 @@ export default function LandingPage() {
               </div>
             </div>
             <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm flex items-start gap-6">
-              <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-3xl shrink-0">🏛️</div>
+              <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center shrink-0"><Landmark className="w-7 h-7 text-blue-600" /></div>
               <div>
                 <h3 className="text-xl font-bold text-slate-900 mb-2">Good Governance</h3>
                 <p className="text-sm text-slate-600 leading-relaxed">
@@ -264,7 +268,7 @@ export default function LandingPage() {
               </div>
             </div>
             <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm flex items-start gap-6">
-              <div className="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-3xl shrink-0">🌳</div>
+              <div className="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center shrink-0"><TreePine className="w-7 h-7 text-emerald-600" /></div>
               <div>
                 <h3 className="text-xl font-bold text-slate-900 mb-2">Environmental Impact</h3>
                 <p className="text-sm text-slate-600 leading-relaxed">
@@ -273,7 +277,7 @@ export default function LandingPage() {
               </div>
             </div>
             <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm flex items-start gap-6">
-              <div className="w-14 h-14 rounded-2xl bg-violet-50 text-violet-600 flex items-center justify-center text-3xl shrink-0">🤝</div>
+              <div className="w-14 h-14 rounded-2xl bg-violet-50 flex items-center justify-center shrink-0"><Users className="w-7 h-7 text-violet-600" /></div>
               <div>
                 <h3 className="text-xl font-bold text-slate-900 mb-2">Community Unity</h3>
                 <p className="text-sm text-slate-600 leading-relaxed">
@@ -331,13 +335,15 @@ export default function LandingPage() {
                 to="/report"
                 className="w-full sm:w-auto px-10 py-5 text-base font-bold text-slate-900 bg-white rounded-2xl hover:bg-slate-50 transition-all shadow-xl hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
               >
-                <span>🚀</span> Get Started Now
+                <Rocket className="w-5 h-5 text-slate-900" />
+                <span>Get Started Now</span>
               </Link>
               <Link
                 to="/map"
                 className="w-full sm:w-auto px-10 py-5 text-base font-bold text-white bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl hover:bg-white/20 transition-all shadow-sm hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
               >
-                <span>🗺️</span> Explore Live Map
+                <MapPin className="w-5 h-5 text-white" />
+                <span>Explore Live Map</span>
               </Link>
             </div>
           </div>
@@ -393,10 +399,10 @@ export default function LandingPage() {
           <div>
             <h4 className="text-sm font-bold text-white uppercase tracking-wider mb-5">Contact Municipal HQ</h4>
             <ul className="space-y-3 text-sm text-slate-400">
-              <li className="flex items-center gap-2"><span>📍</span> Municipal Plaza, Suite 400</li>
-              <li className="flex items-center gap-2"><span>📞</span> +1 (800) 555-CIVIC</li>
-              <li className="flex items-center gap-2"><span>✉️</span> support@civicportal.gov</li>
-              <li className="flex items-center gap-2 text-emerald-400 font-semibold mt-4"><span>🟢</span> All Systems Normal</li>
+              <li className="flex items-center gap-2"><MapPin className="w-4 h-4 text-slate-400" /><span>Municipal Plaza, Suite 400</span></li>
+              <li className="flex items-center gap-2"><Phone className="w-4 h-4 text-slate-400" /><span>+1 (800) 555-CIVIC</span></li>
+              <li className="flex items-center gap-2"><Mail className="w-4 h-4 text-slate-400" /><span>support@civicportal.gov</span></li>
+              <li className="flex items-center gap-2 text-emerald-400 font-semibold mt-4"><CheckCircle2 className="w-4 h-4 text-emerald-400" /><span>All Systems Normal</span></li>
             </ul>
           </div>
 
@@ -405,9 +411,9 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto border-t border-slate-800 pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
           <p>© 2026 Civic Portal Enterprise. All rights reserved.</p>
           <div className="flex gap-6">
-            <span>🛡️ End-to-End Verified</span>
-            <span>⚡ AI Powered</span>
-            <span>📊 Open Data Standard</span>
+            <span className="flex items-center gap-1.5"><Shield className="w-4 h-4 text-slate-500" /> End-to-End Verified</span>
+            <span className="flex items-center gap-1.5"><Zap className="w-4 h-4 text-slate-500" /> AI Powered</span>
+            <span className="flex items-center gap-1.5"><BarChart3 className="w-4 h-4 text-slate-500" /> Open Data Standard</span>
           </div>
         </div>
       </footer>
