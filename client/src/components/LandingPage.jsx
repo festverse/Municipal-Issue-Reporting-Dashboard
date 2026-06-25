@@ -208,19 +208,19 @@ export default function LandingPage() {
                 {/* Node 1 */}
                 <g transform="translate(260, 355)">
                   <rect x="-35" y="-35" width="70" height="70" rx="24" fill="white" filter="url(#box_shadow)" />
-                  <circle cx="0" cy="0" r="4" fill="#2563eb" />
+                  <circle cx="0" cy="0" r="14" fill="#2563eb" />
                 </g>
 
                 {/* Node 2 */}
                 <g transform="translate(625, 210)">
                   <rect x="-35" y="-35" width="70" height="70" rx="24" fill="white" filter="url(#box_shadow)" />
-                  <circle cx="0" cy="0" r="4" fill="#2563eb" />
+                  <circle cx="0" cy="0" r="14" fill="#2563eb" />
                 </g>
 
                 {/* Node 3 */}
                 <g transform="translate(980, 60)">
                   <rect x="-35" y="-35" width="70" height="70" rx="24" fill="white" filter="url(#box_shadow)" />
-                  <circle cx="0" cy="0" r="4" fill="#2563eb" />
+                  <circle cx="0" cy="0" r="14" fill="#2563eb" />
                 </g>
               </svg>
             </div>
@@ -302,7 +302,7 @@ export default function LandingPage() {
         </ScrollReveal>
 
         {/* Gorgeous Colored Blur Background */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85%] h-[75%] bg-gradient-to-tr from-blue-500/35 via-indigo-500/25 to-sky-400/35 blur-[120px] rounded-[100rem] pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[55%] h-[55%] bg-gradient-to-tr from-blue-500/35 via-indigo-500/25 to-sky-400/35 blur-[120px] rounded-[100rem] pointer-events-none" />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
           {[
