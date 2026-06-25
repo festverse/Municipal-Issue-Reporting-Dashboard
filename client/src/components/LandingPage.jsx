@@ -64,17 +64,17 @@ export default function LandingPage() {
             </div>
             <div className="p-6 bg-white border border-slate-200/80 rounded-3xl shadow-sm text-center hover:border-emerald-300 transition-colors">
               <div className="w-12 h-12 rounded-2xl bg-emerald-50 flex items-center justify-center mx-auto mb-3"><CheckCircle2 className="w-6 h-6 text-emerald-600" /></div>
-              <p className="text-3xl font-extrabold text-emerald-600">85</p>
+              <p className="text-3xl font-extrabold text-slate-900">85</p>
               <p className="text-xs font-semibold text-slate-500 mt-1 uppercase tracking-wider">Issues Resolved</p>
             </div>
             <div className="p-6 bg-white border border-slate-200/80 rounded-3xl shadow-sm text-center hover:border-amber-300 transition-colors">
               <div className="w-12 h-12 rounded-2xl bg-amber-50 flex items-center justify-center mx-auto mb-3"><Zap className="w-6 h-6 text-amber-600" /></div>
-              <p className="text-3xl font-extrabold text-amber-600">25</p>
+              <p className="text-3xl font-extrabold text-slate-900">25</p>
               <p className="text-xs font-semibold text-slate-500 mt-1 uppercase tracking-wider">In Progress</p>
             </div>
             <div className="p-6 bg-white border border-slate-200/80 rounded-3xl shadow-sm text-center hover:border-violet-300 transition-colors">
               <div className="w-12 h-12 rounded-2xl bg-violet-50 flex items-center justify-center mx-auto mb-3"><Timer className="w-6 h-6 text-violet-600" /></div>
-              <p className="text-3xl font-extrabold text-violet-600">10</p>
+              <p className="text-3xl font-extrabold text-slate-900">10</p>
               <p className="text-xs font-semibold text-slate-500 mt-1 uppercase tracking-wider">Pending SLA</p>
             </div>
           </div>
