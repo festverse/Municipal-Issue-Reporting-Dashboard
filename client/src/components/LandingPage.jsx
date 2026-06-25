@@ -317,7 +317,7 @@ export default function LandingPage() {
         </ScrollReveal>
 
         {/* Gorgeous Colored Blur Background */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[55%] h-[55%] bg-gradient-to-tr from-blue-500/35 via-indigo-500/25 to-sky-400/35 blur-[120px] rounded-[100rem] pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[32%] bg-gradient-to-tr from-blue-500/35 via-indigo-500/25 to-sky-400/35 blur-[120px] rounded-[100rem] pointer-events-none" />
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
           {[
