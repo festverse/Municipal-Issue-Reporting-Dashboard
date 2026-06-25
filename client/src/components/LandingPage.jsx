@@ -325,7 +325,7 @@ export default function LandingPage() {
           
           <div className="relative z-10 max-w-3xl mx-auto">
             <h2 className="text-4xl sm:text-5xl font-black text-white tracking-tight mb-6">
-              Ready to transform your <span className="underline decoration-blue-300 decoration-wavy decoration-skip-ink-none underline-offset-8 pb-2">Community?</span>
+              Ready to transform your <span className="underline decoration-blue-300 decoration-wavy underline-offset-[16px] pb-2" style={{ textDecorationSkipInk: 'none', WebkitTextDecorationSkipInk: 'none' }}>Community?</span>
             </h2>
             <p className="text-slate-200 text-lg sm:text-xl leading-relaxed mb-10">
               Join thousands of active citizens and dedicated municipal engineers making an immediate impact today.
