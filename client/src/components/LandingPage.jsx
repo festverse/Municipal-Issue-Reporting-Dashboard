@@ -117,40 +117,48 @@ export default function LandingPage() {
         </ScrollReveal>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <ScrollReveal direction="up" delay={100}>
-            <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-lg transition-all group hover:-translate-y-1">
-              <div className="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"><Leaf className="w-7 h-7 text-emerald-600" /></div>
-              <h3 className="text-lg font-bold text-slate-900 mb-3">Clean & Green</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Dedicated to maintaining sustainable urban infrastructure, pristine public parks, and beautifully kept neighborhood spaces.
-              </p>
+          <ScrollReveal direction="up" delay={100} className="h-full">
+            <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-lg transition-all group hover:-translate-y-1 h-full flex flex-col">
+              <div>
+                <div className="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"><Leaf className="w-7 h-7 text-emerald-600" /></div>
+                <h3 className="text-lg font-bold text-slate-900 mb-3">Clean & Green</h3>
+                <p className="text-sm text-slate-600 leading-relaxed">
+                  Dedicated to maintaining sustainable urban infrastructure, pristine public parks, and beautifully kept neighborhood spaces.
+                </p>
+              </div>
             </div>
           </ScrollReveal>
-          <ScrollReveal direction="up" delay={200}>
-            <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-lg transition-all group hover:-translate-y-1">
-              <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"><ShieldCheck className="w-7 h-7 text-blue-600" /></div>
-              <h3 className="text-lg font-bold text-slate-900 mb-3">Trust & Transparency</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Open municipal data feeds ensure complete accountability, clear communication channels, and visible public progress.
-              </p>
+          <ScrollReveal direction="up" delay={200} className="h-full">
+            <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-lg transition-all group hover:-translate-y-1 h-full flex flex-col">
+              <div>
+                <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"><ShieldCheck className="w-7 h-7 text-blue-600" /></div>
+                <h3 className="text-lg font-bold text-slate-900 mb-3">Trust & Transparency</h3>
+                <p className="text-sm text-slate-600 leading-relaxed">
+                  Open municipal data feeds ensure complete accountability, clear communication channels, and visible public progress.
+                </p>
+              </div>
             </div>
           </ScrollReveal>
-          <ScrollReveal direction="up" delay={300}>
-            <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-lg transition-all group hover:-translate-y-1">
-              <div className="w-14 h-14 rounded-2xl bg-violet-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"><Users className="w-7 h-7 text-violet-600" /></div>
-              <h3 className="text-lg font-bold text-slate-900 mb-3">Community Driven</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Built for active citizens, collaborative neighborhoods, and proactive civic associations working together for public welfare.
-              </p>
+          <ScrollReveal direction="up" delay={300} className="h-full">
+            <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-lg transition-all group hover:-translate-y-1 h-full flex flex-col">
+              <div>
+                <div className="w-14 h-14 rounded-2xl bg-violet-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"><Users className="w-7 h-7 text-violet-600" /></div>
+                <h3 className="text-lg font-bold text-slate-900 mb-3">Community Driven</h3>
+                <p className="text-sm text-slate-600 leading-relaxed">
+                  Built for active citizens, collaborative neighborhoods, and proactive civic associations working together for public welfare.
+                </p>
+              </div>
             </div>
           </ScrollReveal>
-          <ScrollReveal direction="up" delay={400}>
-            <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-lg transition-all group hover:-translate-y-1">
-              <div className="w-14 h-14 rounded-2xl bg-amber-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"><Zap className="w-7 h-7 text-amber-600" /></div>
-              <h3 className="text-lg font-bold text-slate-900 mb-3">Efficient Resolution</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Automated AI dispatching and enforced service level agreements guarantee the fastest possible municipal response times.
-              </p>
+          <ScrollReveal direction="up" delay={400} className="h-full">
+            <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-lg transition-all group hover:-translate-y-1 h-full flex flex-col">
+              <div>
+                <div className="w-14 h-14 rounded-2xl bg-amber-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"><Zap className="w-7 h-7 text-amber-600" /></div>
+                <h3 className="text-lg font-bold text-slate-900 mb-3">Efficient Resolution</h3>
+                <p className="text-sm text-slate-600 leading-relaxed">
+                  Automated AI dispatching and enforced service level agreements guarantee the fastest possible municipal response times.
+                </p>
+              </div>
             </div>
           </ScrollReveal>
         </div>
@@ -170,44 +178,52 @@ export default function LandingPage() {
           </ScrollReveal>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
-            <ScrollReveal direction="up" delay={100}>
-              <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm relative overflow-hidden">
-                <span className="absolute top-4 right-6 text-5xl font-black text-slate-100 pointer-events-none">01</span>
-                <div className="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-bold text-lg mb-6 shadow-md">1</div>
-                <h3 className="text-lg font-bold text-slate-900 mb-2">Report an Issue</h3>
-                <p className="text-sm text-slate-600 leading-relaxed">
-                  Citizen identifies an infrastructure glitch, inputs details, and pins the exact location through our simple report form.
-                </p>
+            <ScrollReveal direction="up" delay={100} className="h-full">
+              <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm relative overflow-hidden h-full flex flex-col justify-between">
+                <div>
+                  <span className="absolute top-4 right-6 text-5xl font-black text-slate-100 pointer-events-none">01</span>
+                  <div className="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-bold text-lg mb-6 shadow-md">1</div>
+                  <h3 className="text-lg font-bold text-slate-900 mb-2">Report an Issue</h3>
+                  <p className="text-sm text-slate-600 leading-relaxed">
+                    Citizen identifies an infrastructure glitch, inputs details, and pins the exact location through our simple report form.
+                  </p>
+                </div>
               </div>
             </ScrollReveal>
-            <ScrollReveal direction="up" delay={200}>
-              <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm relative overflow-hidden">
-                <span className="absolute top-4 right-6 text-5xl font-black text-slate-100 pointer-events-none">02</span>
-                <div className="w-12 h-12 rounded-2xl bg-violet-600 text-white flex items-center justify-center font-bold text-lg mb-6 shadow-md">2</div>
-                <h3 className="text-lg font-bold text-slate-900 mb-2">AI Smart Triage</h3>
-                <p className="text-sm text-slate-600 leading-relaxed">
-                  Our AI instantly evaluates the hazard, scans for emergency keywords, assigns priority level, and routes to the correct department.
-                </p>
+            <ScrollReveal direction="up" delay={200} className="h-full">
+              <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm relative overflow-hidden h-full flex flex-col justify-between">
+                <div>
+                  <span className="absolute top-4 right-6 text-5xl font-black text-slate-100 pointer-events-none">02</span>
+                  <div className="w-12 h-12 rounded-2xl bg-violet-600 text-white flex items-center justify-center font-bold text-lg mb-6 shadow-md">2</div>
+                  <h3 className="text-lg font-bold text-slate-900 mb-2">AI Smart Triage</h3>
+                  <p className="text-sm text-slate-600 leading-relaxed">
+                    Our AI instantly evaluates the hazard, scans for emergency keywords, assigns priority level, and routes to the correct department.
+                  </p>
+                </div>
               </div>
             </ScrollReveal>
-            <ScrollReveal direction="up" delay={300}>
-              <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm relative overflow-hidden">
-                <span className="absolute top-4 right-6 text-5xl font-black text-slate-100 pointer-events-none">03</span>
-                <div className="w-12 h-12 rounded-2xl bg-amber-600 text-white flex items-center justify-center font-bold text-lg mb-6 shadow-md">3</div>
-                <h3 className="text-lg font-bold text-slate-900 mb-2">Active SLA Resolution</h3>
-                <p className="text-sm text-slate-600 leading-relaxed">
-                  Municipal authorities receive automated real-time alerts and dispatch maintenance teams within guaranteed resolution windows.
-                </p>
+            <ScrollReveal direction="up" delay={300} className="h-full">
+              <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm relative overflow-hidden h-full flex flex-col justify-between">
+                <div>
+                  <span className="absolute top-4 right-6 text-5xl font-black text-slate-100 pointer-events-none">03</span>
+                  <div className="w-12 h-12 rounded-2xl bg-amber-600 text-white flex items-center justify-center font-bold text-lg mb-6 shadow-md">3</div>
+                  <h3 className="text-lg font-bold text-slate-900 mb-2">Active SLA Resolution</h3>
+                  <p className="text-sm text-slate-600 leading-relaxed">
+                    Municipal authorities receive automated real-time alerts and dispatch maintenance teams within guaranteed resolution windows.
+                  </p>
+                </div>
               </div>
             </ScrollReveal>
-            <ScrollReveal direction="up" delay={400}>
-              <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm relative overflow-hidden">
-                <span className="absolute top-4 right-6 text-5xl font-black text-slate-100 pointer-events-none">04</span>
-                <div className="w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center font-bold text-lg mb-6 shadow-md">4</div>
-                <h3 className="text-lg font-bold text-slate-900 mb-2">Track & Verify</h3>
-                <p className="text-sm text-slate-600 leading-relaxed">
-                  Citizens receive real-time status notifications, verify completed repairs, and participate in public community feeds.
-                </p>
+            <ScrollReveal direction="up" delay={400} className="h-full">
+              <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm relative overflow-hidden h-full flex flex-col justify-between">
+                <div>
+                  <span className="absolute top-4 right-6 text-5xl font-black text-slate-100 pointer-events-none">04</span>
+                  <div className="w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center font-bold text-lg mb-6 shadow-md">4</div>
+                  <h3 className="text-lg font-bold text-slate-900 mb-2">Track & Verify</h3>
+                  <p className="text-sm text-slate-600 leading-relaxed">
+                    Citizens receive real-time status notifications, verify completed repairs, and participate in public community feeds.
+                  </p>
+                </div>
               </div>
             </ScrollReveal>
           </div>
@@ -237,7 +253,7 @@ export default function LandingPage() {
             { icon: <Map className="w-6 h-6 text-blue-600" />, title: 'Live City Heatmap', desc: 'Real-time geospatial issue tracking across all city zones and districts.' },
             { icon: <Lock className="w-6 h-6 text-blue-600" />, title: 'End-to-End Verified', desc: 'Secure role-based access control for citizens, engineers, and municipal administrators.' },
           ].map((feat, idx) => (
-            <ScrollReveal key={idx} direction="up" delay={(idx % 4) * 100}>
+            <ScrollReveal key={idx} direction="up" delay={(idx % 4) * 100} className="h-full">
               <div className="bg-white p-7 rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-md transition-all flex flex-col justify-between group h-full">
                 <div>
                   <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">{feat.icon}</div>
@@ -280,7 +296,7 @@ export default function LandingPage() {
           </ScrollReveal>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <ScrollReveal direction="up" delay={100}>
+            <ScrollReveal direction="up" delay={100} className="h-full">
               <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm flex items-start gap-6 h-full">
                 <div className="w-14 h-14 rounded-2xl bg-rose-50 flex items-center justify-center shrink-0"><Heart className="w-7 h-7 text-rose-600" /></div>
                 <div>
@@ -291,7 +307,7 @@ export default function LandingPage() {
                 </div>
               </div>
             </ScrollReveal>
-            <ScrollReveal direction="up" delay={200}>
+            <ScrollReveal direction="up" delay={200} className="h-full">
               <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm flex items-start gap-6 h-full">
                 <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center shrink-0"><Landmark className="w-7 h-7 text-blue-600" /></div>
                 <div>
@@ -302,7 +318,7 @@ export default function LandingPage() {
                 </div>
               </div>
             </ScrollReveal>
-            <ScrollReveal direction="up" delay={300}>
+            <ScrollReveal direction="up" delay={300} className="h-full">
               <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm flex items-start gap-6 h-full">
                 <div className="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center shrink-0"><TreePine className="w-7 h-7 text-emerald-600" /></div>
                 <div>
@@ -313,7 +329,7 @@ export default function LandingPage() {
                 </div>
               </div>
             </ScrollReveal>
-            <ScrollReveal direction="up" delay={400}>
+            <ScrollReveal direction="up" delay={400} className="h-full">
               <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm flex items-start gap-6 h-full">
                 <div className="w-14 h-14 rounded-2xl bg-violet-50 flex items-center justify-center shrink-0"><Users className="w-7 h-7 text-violet-600" /></div>
                 <div>
@@ -350,7 +366,7 @@ export default function LandingPage() {
             { q: 'Who resolves the tickets?', a: 'Certified municipal engineers and public works department heads are assigned to investigate, update status, and resolve reported issues.' },
             { q: 'Is my personal data secure?', a: 'Absolutely. We utilize enterprise-grade encryption, secure role-based access control, and strict privacy masking protocols.' },
           ].map((faq, idx) => (
-            <ScrollReveal key={idx} direction="up" delay={(idx % 3) * 100}>
+            <ScrollReveal key={idx} direction="up" delay={(idx % 3) * 100} className="h-full">
               <div className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm h-full">
                 <h3 className="text-lg font-bold text-slate-900 mb-3">{faq.q}</h3>
                 <p className="text-sm text-slate-600 leading-relaxed">{faq.a}</p>
@@ -369,7 +385,7 @@ export default function LandingPage() {
             
             <div className="relative z-10 max-w-3xl mx-auto">
               <h2 className="text-4xl sm:text-5xl font-black text-white tracking-tight mb-6">
-                Ready to transform your <span className="underline decoration-blue-300 decoration-wavy underline-offset-[16px] pb-2" style={{ textDecorationSkipInk: 'none', WebkitTextDecorationSkipInk: 'none' }}>Community?</span>
+                Ready to transform your Community?
               </h2>
               <p className="text-slate-200 text-lg sm:text-xl leading-relaxed mb-10">
                 Join thousands of active citizens and dedicated municipal engineers making an immediate impact today.
