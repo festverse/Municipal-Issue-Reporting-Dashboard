@@ -251,7 +251,7 @@ export default function TicketForm() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-full">
         
         {/* Column 1 (Left Sidebar) — Navigation Menu matching Panchayat screenshot */}
-        <div className="lg:col-span-3 xl:col-span-2 sticky top-24 h-[calc(100vh-7rem)] overflow-y-auto pr-2 space-y-6 scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent self-start">
+        <div data-lenis-prevent="true" className="lg:col-span-3 xl:col-span-2 sticky top-24 h-[calc(100vh-7rem)] overflow-y-auto pr-2 space-y-6 scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent self-start">
           <div className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-sm flex flex-col justify-between min-h-[calc(100%-1rem)] space-y-6">
             <div className="space-y-6">
               {/* Main Nav Links */}
@@ -528,7 +528,7 @@ export default function TicketForm() {
         </div>
 
         {/* Column 3 (Right) — Options & Presets Panel */}
-        <div className="lg:col-span-3 xl:col-span-3 sticky top-24 h-[calc(100vh-7rem)] overflow-y-auto pr-2 space-y-6 scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent self-start">
+        <div data-lenis-prevent="true" className="lg:col-span-3 xl:col-span-3 sticky top-24 h-[calc(100vh-7rem)] overflow-y-auto pr-2 space-y-6 scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent self-start">
           {/* Card 1: Quick Civic Presets */}
           <div className="ui-card bg-white p-5">
             <h3 className="text-sm font-bold text-slate-900 mb-2 flex items-center gap-1.5">
