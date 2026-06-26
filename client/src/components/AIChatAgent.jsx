@@ -309,7 +309,7 @@ export default function AIChatAgent() {
                 }`}
                 title={voiceMode ? "AI Voice Active (Male Expert)" : "AI Voice Muted"}
               >
-                {voiceMode ? <Volume2 className={`w-3.5 h-3.5 ${isSpeaking ? 'animate-bounce text-emerald-300' : ''}`} /> : <VolumeX className="w-3.5 h-3.5" />}
+                {voiceMode ? <Volume2 className={`w-3.5 h-3.5 ${isSpeaking ? 'animate-speaker-waves text-emerald-300' : ''}`} /> : <VolumeX className="w-3.5 h-3.5" />}
                 <span>{voiceMode ? 'Unmute' : 'Muted'}</span>
               </button>
               <button

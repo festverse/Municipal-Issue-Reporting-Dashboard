@@ -596,3 +596,22 @@ body.dark-theme .glassmorphism {
   border-color: rgba(255, 255, 255, 0.1) !important;
   color: #f8fafc !important;
 }
+
+/* AI Speaker Sound Wave Animation */
+@keyframes wave-pulse-inner {
+  0%, 100% { opacity: 0.3; transform: scaleX(0.8); transform-origin: 11px 12px; }
+  50% { opacity: 1; transform: scaleX(1.15); transform-origin: 11px 12px; }
+}
+
+@keyframes wave-pulse-outer {
+  0%, 100% { opacity: 0.2; transform: scaleX(0.85); transform-origin: 11px 12px; }
+  50% { opacity: 1; transform: scaleX(1.2); transform-origin: 11px 12px; }
+}
+
+.animate-speaker-waves path:nth-child(2) {
+  animation: wave-pulse-inner 0.8s ease-in-out infinite;
+}
+
+.animate-speaker-waves path:nth-child(3) {
+  animation: wave-pulse-outer 0.8s ease-in-out infinite 0.2s;
+}
