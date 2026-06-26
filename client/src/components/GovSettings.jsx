@@ -11,6 +11,7 @@ export default function GovSettings() {
     phone: user?.phone || '+1 (555) 234-5678',
     zone: user?.zone || 'Zone 4 - Downtown Commercial Core',
     session_expiry: user?.session_expiry || '30 Days (Recommended)',
+    avatar: user?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80',
     notifications: {
       emailAlerts: true,
       smsDispatch: true,
@@ -38,6 +39,7 @@ export default function GovSettings() {
         phone: user.phone || prev.phone,
         zone: user.zone || prev.zone,
         session_expiry: user.session_expiry || prev.session_expiry,
+        avatar: user.avatar || prev.avatar,
         notifications: notifs
       }));
     }
@@ -57,7 +59,8 @@ export default function GovSettings() {
         phone: profileData.phone,
         zone: profileData.zone,
         notifications: profileData.notifications,
-        session_expiry: profileData.session_expiry
+        session_expiry: profileData.session_expiry,
+        avatar: profileData.avatar
       });
       setIsSaved(true);
       setTimeout(() => setIsSaved(false), 3000);
@@ -67,6 +70,53 @@ export default function GovSettings() {
       setIsSaving(false);
     }
   };
+
+  const handleAvatarUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = async () => {
+        setProfileData(prev => ({ ...prev, avatar: reader.result }));
+        if (updateProfile) {
+          try {
+            await updateProfile({
+              full_name: profileData.name,
+              email: profileData.email,
+              phone: profileData.phone,
+              zone: profileData.zone,
+              notifications: profileData.notifications,
+              session_expiry: profileData.session_expiry,
+              avatar: reader.result
+            });
+          } catch (err) {
+            console.error(err);
+          }
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleAvatarRemove = async () => {
+    const defaultAvatar = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80';
+    setProfileData(prev => ({ ...prev, avatar: defaultAvatar }));
+    if (updateProfile) {
+      try {
+        await updateProfile({
+          full_name: profileData.name,
+          email: profileData.email,
+          phone: profileData.phone,
+          zone: profileData.zone,
+          notifications: profileData.notifications,
+          session_expiry: profileData.session_expiry,
+          avatar: defaultAvatar
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  };
+
 
   const handleRevoke = () => {
     if (window.confirm("Are you sure you want to revoke your account access and log out?")) {
@@ -110,9 +160,9 @@ export default function GovSettings() {
             </div>
 
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 mb-8">
-              <div className="relative group cursor-pointer">
+              <label className="relative group cursor-pointer block">
                 <img
-                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80"
+                  src={profileData.avatar}
                   alt="Profile Avatar"
                   className="w-24 h-24 rounded-3xl object-cover border-4 border-white shadow-md group-hover:opacity-90 transition-opacity"
                 />
@@ -120,7 +170,8 @@ export default function GovSettings() {
                   <ImageIcon className="w-4 h-4" />
                   <span>Change</span>
                 </div>
-              </div>
+                <input type="file" accept="image/*" onChange={handleAvatarUpload} className="hidden" />
+              </label>
 
               <div>
                 <h4 className="text-base font-bold text-slate-900 mb-1">Citizen Elite Verification Active</h4>
@@ -128,10 +179,11 @@ export default function GovSettings() {
                   Uploaded avatars must be at least 300x300px in JPG or PNG format. Your verified status badge will appear alongside your picture.
                 </p>
                 <div className="flex items-center gap-2">
-                  <button className="px-4 py-2 bg-blue-50 text-blue-600 hover:bg-blue-100 font-bold text-xs rounded-xl transition-all shadow-sm active:scale-95">
-                    Upload New Photo
-                  </button>
-                  <button className="px-4 py-2 bg-slate-100 text-slate-600 hover:bg-slate-200 font-bold text-xs rounded-xl transition-all shadow-sm active:scale-95">
+                  <label className="px-4 py-2 bg-blue-50 text-blue-600 hover:bg-blue-100 font-bold text-xs rounded-xl transition-all shadow-sm active:scale-95 cursor-pointer inline-block">
+                    <span>Upload New Photo</span>
+                    <input type="file" accept="image/*" onChange={handleAvatarUpload} className="hidden" />
+                  </label>
+                  <button type="button" onClick={handleAvatarRemove} className="px-4 py-2 bg-slate-100 text-slate-600 hover:bg-slate-200 font-bold text-xs rounded-xl transition-all shadow-sm active:scale-95">
                     Remove
                   </button>
                 </div>

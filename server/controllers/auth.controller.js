@@ -61,7 +61,7 @@ const login = catchAsync(async (req, res, _next) => {
 
   // 1. Find user by email (include password_hash for comparison)
   const result = await pool.query(
-    'SELECT id, email, password_hash, full_name, phone, zone, notifications, session_expiry, role, created_at FROM users WHERE email = $1',
+    'SELECT id, email, password_hash, full_name, phone, zone, notifications, session_expiry, avatar, role, created_at FROM users WHERE email = $1',
     [email]
   );
 
@@ -118,7 +118,7 @@ const getProfile = catchAsync(async (req, res, _next) => {
  * Update user profile and preferences.
  */
 const updateProfile = catchAsync(async (req, res, _next) => {
-  const { full_name, email, phone, zone, notifications, session_expiry } = req.body;
+  const { full_name, email, phone, zone, notifications, session_expiry, avatar } = req.body;
   const result = await pool.query(
     `UPDATE users 
      SET full_name = COALESCE($1, full_name),
@@ -126,12 +126,13 @@ const updateProfile = catchAsync(async (req, res, _next) => {
          phone = COALESCE($3, phone),
          zone = COALESCE($4, zone),
          notifications = COALESCE($5, notifications),
-         session_expiry = COALESCE($6, session_expiry)
-     WHERE id = $7
-     RETURNING id, email, full_name, phone, zone, notifications, session_expiry, role, created_at`,
+         session_expiry = COALESCE($6, session_expiry),
+         avatar = COALESCE($7, avatar)
+     WHERE id = $8
+     RETURNING id, email, full_name, phone, zone, notifications, session_expiry, avatar, role, created_at`,
     [full_name, email, phone, zone,
      notifications !== undefined ? JSON.stringify(notifications) : undefined,
-     session_expiry, req.user.id]
+     session_expiry, avatar, req.user.id]
   );
 
   res.status(200).json({
@@ -152,7 +153,7 @@ const googleLogin = catchAsync(async (req, res, _next) => {
 
   // Check if user already exists in PostgreSQL
   let result = await pool.query(
-    'SELECT id, email, full_name, phone, zone, notifications, session_expiry, role, created_at FROM users WHERE email = $1',
+    'SELECT id, email, full_name, phone, zone, notifications, session_expiry, avatar, role, created_at FROM users WHERE email = $1',
     [email]
   );
 
@@ -162,10 +163,10 @@ const googleLogin = catchAsync(async (req, res, _next) => {
     // Register new user as CITIZEN with a dummy hash for Google OAuth users
     const dummyHash = '$2b$10$dummyGoogleOAuthPasswordHashHereWillNotBeUsedDirectly';
     const insertRes = await pool.query(
-      `INSERT INTO users (full_name, email, password_hash, role)
-       VALUES ($1, $2, $3, $4)
-       RETURNING id, email, full_name, phone, zone, notifications, session_expiry, role, created_at`,
-      [full_name || 'Google User', email, dummyHash, 'CITIZEN']
+      `INSERT INTO users (full_name, email, password_hash, avatar, role)
+       VALUES ($1, $2, $3, $4, $5)
+       RETURNING id, email, full_name, phone, zone, notifications, session_expiry, avatar, role, created_at`,
+      [full_name || 'Google User', email, picture || null, dummyHash, 'CITIZEN']
     );
     user = insertRes.rows[0];
   }
