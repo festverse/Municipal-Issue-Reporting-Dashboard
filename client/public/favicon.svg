@@ -6,8 +6,7 @@
       <stop offset="100%" stop-color="#7C3AED" />
     </linearGradient>
   </defs>
-  <rect width="512" height="512" rx="128" fill="url(#civicGrad)" />
-  <g fill="#FFFFFF">
+  <g fill="url(#civicGrad)">
     <!-- Pediment (Roof Triangle) -->
     <path d="M256 112L100 224h312L256 112z" />
     <!-- Architrave (Beam under roof) -->
