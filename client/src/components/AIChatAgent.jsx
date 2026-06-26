@@ -181,7 +181,7 @@ export default function AIChatAgent() {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="pointer-events-auto group flex items-center gap-3 px-5 py-3.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 hover:from-blue-700 hover:via-indigo-700 hover:to-violet-700 text-white rounded-full shadow-2xl hover:shadow-indigo-500/50 transition-all duration-300 transform hover:-translate-y-1 active:scale-95 border border-white/20"
+          className="pointer-events-auto group flex items-center gap-3 pl-3 pr-5 py-3.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 hover:from-blue-700 hover:via-indigo-700 hover:to-violet-700 text-white rounded-full shadow-2xl hover:shadow-indigo-500/50 transition-all duration-300 transform hover:-translate-y-1 active:scale-95 border border-white/20"
         >
           <div className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform">
             <MessageSquareCode className="w-4.5 h-4.5 text-blue-100 animate-pulse" />
