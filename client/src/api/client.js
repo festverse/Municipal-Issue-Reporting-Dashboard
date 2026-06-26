@@ -183,6 +183,15 @@ const getLocalChats = () => {
     }
     // Clean up any duplicate or buggy nodes created earlier where name is 'Citizen' or matches an existing rep
     chats = chats.filter(c => c.name !== 'Citizen' && !defaults.some(d => (d.rep.toLowerCase() === (c.name || '').toLowerCase() || d.name.toLowerCase() === (c.name || '').toLowerCase()) && c.id !== d.id));
+    
+    // Auto-heal existing nodes where engineerName was incorrectly saved as 'Citizen Explorer' or 'Citizen'
+    chats = chats.map(c => {
+      if (c.engineerName === 'Citizen Explorer' || c.engineerName === 'Citizen') {
+        return { ...c, engineerName: 'Priya Patel', engineerRole: 'Chief Municipal Engineer', engineerAvatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80' };
+      }
+      return c;
+    });
+
     localStorage.setItem('civic_real_chats', JSON.stringify(chats));
     return chats;
   } catch (e) { return [
@@ -265,8 +274,8 @@ export const startChatAPI = async (recipient, customUserRole = 'CITIZEN', custom
   } catch (e) {}
 
   const activeUserRole = currentUser?.role || (customUserRole !== 'CITIZEN' ? customUserRole : 'CITIZEN');
-  const activeUserName = currentUser?.name || (customUserName !== 'Citizen' ? customUserName : 'Citizen Explorer');
-  const activeUserAvatar = currentUser?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80';
+  const activeUserName = currentUser?.name || (customUserName !== 'Citizen' ? customUserName : (activeUserRole === 'ENGINEER' ? 'Priya Patel' : 'Rahul Sharma'));
+  const activeUserAvatar = currentUser?.avatar || (activeUserRole === 'ENGINEER' ? 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80' : 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80');
 
   const chats = getLocalChats();
   const recName = (recipient.name || '').toLowerCase().trim();

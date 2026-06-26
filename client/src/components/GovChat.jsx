@@ -53,10 +53,17 @@ export default function GovChat({ activeChatTarget }) {
   );
 
   const getChatDisplayInfo = (chat) => {
+    const currentUserName = user?.name || 'Rahul Sharma';
+    
     if (currentUserRole === 'ENGINEER') {
+      // Engineer viewing: show the Citizen's info
+      let citName = chat.citizenName || chat.name || 'Rahul Sharma';
+      if (citName === user?.name || citName === 'Priya Patel' || citName.includes('Department') || citName.includes('Board') || citName.includes('Bureau') || citName.includes('Division')) {
+        citName = chat.citizenName && chat.citizenName !== user?.name ? chat.citizenName : 'Rahul Sharma';
+      }
       return {
-        name: chat.citizenName || chat.name || 'Citizen Explorer',
-        rep: chat.citizenName || chat.rep || 'Citizen Reporter',
+        name: citName,
+        rep: citName,
         role: 'Civic Member',
         avatar: chat.citizenAvatar || chat.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80',
         online: chat.online !== undefined ? chat.online : true,
@@ -64,10 +71,24 @@ export default function GovChat({ activeChatTarget }) {
         lastMessage: chat.lastMessage || ''
       };
     } else {
+      // Citizen viewing: show the Engineer / Department info
+      let engName = chat.engineerName || chat.rep || 'Priya Patel';
+      if (engName === 'Citizen Explorer' || engName === 'Citizen' || engName === currentUserName) {
+        engName = 'Priya Patel';
+      }
+      let deptName = chat.name || 'Municipal Department';
+      if (deptName === currentUserName || deptName === 'Citizen Explorer' || deptName === 'Citizen' || deptName === 'Citizen Reporter (test...)') {
+        deptName = engName === 'Priya Patel' ? 'Priya Patel' : engName;
+      }
+      let role = chat.engineerRole || chat.role || 'Chief Municipal Engineer';
+      if (role.includes('Civic Member') || role.includes('Citizen')) {
+        role = 'Chief Municipal Engineer';
+      }
+
       return {
-        name: chat.name || 'Department Representative',
-        rep: chat.engineerName || chat.rep || 'Support Agent',
-        role: chat.engineerRole || chat.role || 'Municipal Rep',
+        name: deptName,
+        rep: engName,
+        role: role,
         avatar: chat.engineerAvatar || chat.avatar || 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80',
         online: chat.online !== undefined ? chat.online : true,
         unread: chat.unread || 0,
@@ -226,12 +247,16 @@ export default function GovChat({ activeChatTarget }) {
           <div className="flex-1 p-6 overflow-y-auto space-y-4 bg-slate-50/20 scrollbar-thin scrollbar-thumb-slate-200">
             {messages.map((msg) => {
               const isMine = msg.senderRole ? msg.senderRole === currentUserRole : msg.sender === 'me';
+              let text = msg.text || '';
+              if (text.includes('I am Citizen Explorer.')) {
+                text = text.replace('I am Citizen Explorer.', 'I am Priya Patel.');
+              }
               return (
                 <div key={msg.id} className={`flex ${isMine ? 'justify-end' : 'justify-start'}`}>
                   <div className={`max-w-[70%] p-4 rounded-2xl shadow-sm ${
                     isMine ? 'bg-blue-600 text-white rounded-br-none' : 'bg-slate-100 text-slate-800 rounded-bl-none'
                   }`}>
-                    <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.text}</p>
+                    <p className="text-sm leading-relaxed whitespace-pre-wrap">{text}</p>
                     <div className={`mt-2 flex items-center gap-1 text-[10px] ${isMine ? 'text-blue-100 justify-end' : 'text-slate-400 justify-start'}`}>
                       <span>{msg.time}</span>
                       {isMine && <CheckCheck className="w-3.5 h-3.5 text-blue-200" />}
