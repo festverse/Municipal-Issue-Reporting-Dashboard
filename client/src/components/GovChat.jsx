@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { MessageSquare, Send, Search, Phone, Video, Info, Sparkles, CheckCheck, ShieldCheck } from 'lucide-react';
+import { MessageSquare, Send, Search, Phone, Video, Info, Sparkles, CheckCheck, ShieldCheck, ArrowLeft } from 'lucide-react';
 import { fetchChats, fetchMessages, sendMessageAPI } from '../api/client';
 import { useAuth } from '../hooks/useAuth';
 
@@ -13,6 +13,7 @@ export default function GovChat({ activeChatTarget }) {
   const [inputText, setInputText] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [showMobileList, setShowMobileList] = useState(true);
 
   useEffect(() => {
     const loadChats = async () => {
@@ -167,7 +168,7 @@ export default function GovChat({ activeChatTarget }) {
       {/* Main Chat Interface */}
       <div className="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden grid grid-cols-1 xl:grid-cols-12 min-h-[600px]">
         {/* Contacts Sidebar */}
-        <div className="xl:col-span-4 border-b xl:border-b-0 xl:border-r border-slate-200/80 bg-slate-50/50 p-6 flex flex-col space-y-4">
+        <div className={`xl:col-span-4 border-b xl:border-b-0 xl:border-r border-slate-200/80 bg-slate-50/50 p-6 flex flex-col space-y-4 ${showMobileList ? 'block' : 'hidden xl:flex'}`}>
           <div className="flex items-center justify-between">
             <h3 className="text-base font-bold text-slate-900">Active Chat Nodes</h3>
             <span className="text-xs font-bold px-2.5 py-1 bg-blue-100 text-blue-700 rounded-full">{chats.length} Live</span>
@@ -190,7 +191,7 @@ export default function GovChat({ activeChatTarget }) {
               return (
                 <button
                   key={chat.id}
-                  onClick={() => setActiveChat(chat.id)}
+                  onClick={() => { setActiveChat(chat.id); setShowMobileList(false); }}
                   className={`w-full p-4 rounded-2xl text-left transition-all duration-200 flex items-center gap-4 border ${
                     activeChat === chat.id ? 'bg-white border-slate-200 shadow-md ring-1 ring-blue-500' : 'bg-transparent border-transparent hover:bg-slate-100/80'
                   }`}
@@ -224,10 +225,13 @@ export default function GovChat({ activeChatTarget }) {
         </div>
 
         {/* Chat Message Box */}
-        <div className="xl:col-span-8 flex flex-col bg-white min-h-[500px]">
+        <div className={`xl:col-span-8 flex flex-col bg-white min-h-[500px] ${!showMobileList ? 'flex' : 'hidden xl:flex'}`}>
           {/* Chat Header */}
           <div className="px-6 py-4 border-b border-slate-200/80 flex items-center justify-between bg-slate-50/50">
             <div className="flex items-center gap-4">
+              <button onClick={() => setShowMobileList(true)} className="xl:hidden p-2.5 bg-white hover:bg-slate-100 text-slate-600 hover:text-blue-600 rounded-xl border border-slate-200 transition-all shadow-sm active:scale-95">
+                <ArrowLeft className="w-4 h-4" />
+              </button>
               <img src={selectedDisp.avatar} alt={selectedDisp.name} className="w-12 h-12 rounded-2xl object-cover border border-slate-200 shadow-sm" />
               <div>
                 <h4 className="text-base font-bold text-slate-900">{selectedDisp.name}</h4>
