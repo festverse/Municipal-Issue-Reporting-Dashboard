@@ -196,6 +196,10 @@ body.dark-theme {
 }
 
 /* Base structural backgrounds */
+body.dark-theme .text-transparent {
+  color: transparent !important;
+}
+
 body.dark-theme .bg-white {
   background-color: #141e33 !important;
   color: #f8fafc !important;
