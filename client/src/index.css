@@ -216,10 +216,17 @@ body.dark-theme .bg-slate-200 {
   color: #e2e8f0 !important;
 }
 
-body.dark-theme .bg-slate-50\/50 {
-  background-color: rgba(11, 17, 32, 0.7) !important;
+body.dark-theme .bg-slate-50\/50,
+body.dark-theme .bg-slate-50\/60,
+body.dark-theme .bg-slate-50\/70,
+body.dark-theme .bg-slate-50\/80,
+body.dark-theme .bg-slate-50\/90 {
+  background-color: rgba(16, 26, 46, 0.7) !important;
 }
 
+body.dark-theme .bg-slate-100\/50,
+body.dark-theme .bg-slate-100\/60,
+body.dark-theme .bg-slate-100\/70,
 body.dark-theme .bg-slate-100\/80 {
   background-color: rgba(26, 37, 61, 0.8) !important;
 }
@@ -250,6 +257,22 @@ body.dark-theme .from-slate-50 {
   --tw-gradient-from: #0e1626 !important;
   --tw-gradient-to: #0e1626 !important;
   --tw-gradient-stops: #0e1626, #0e1626 !important;
+}
+
+body.dark-theme .from-amber-50,
+body.dark-theme .from-blue-50,
+body.dark-theme .from-emerald-50,
+body.dark-theme .from-violet-50,
+body.dark-theme .from-rose-50 {
+  background: #192133 !important;
+  background-color: #192133 !important;
+  --tw-gradient-from: #192133 !important;
+  --tw-gradient-to: #192133 !important;
+  --tw-gradient-stops: #192133, #192133 !important;
+}
+
+body.dark-theme .text-amber-900 {
+  color: #fcd34d !important;
 }
 
 body.dark-theme .to-blue-50\/50 {
