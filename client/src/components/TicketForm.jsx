@@ -318,9 +318,9 @@ export default function TicketForm() {
               <div className="absolute -right-6 -bottom-6 w-24 h-24 bg-white/10 rounded-full blur-xl pointer-events-none" />
               <h4 className="text-base font-bold mb-1">Heatmap</h4>
               <p className="text-xs text-blue-100 mb-4 leading-relaxed">Explore our map solutions</p>
-              <button onClick={() => setActiveTab('heatmap')} className="inline-block px-4 py-2 bg-white text-blue-600 hover:bg-slate-50 font-bold text-xs rounded-xl transition-all shadow-sm active:scale-95">
+              <Link to="/map-solutions" className="inline-block px-4 py-2 bg-white text-blue-600 hover:bg-slate-50 font-bold text-xs rounded-xl transition-all shadow-sm active:scale-95 text-center">
                 Read More
-              </button>
+              </Link>
             </div>
           </div>
         </div>

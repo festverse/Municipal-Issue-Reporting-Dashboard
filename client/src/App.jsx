@@ -14,6 +14,7 @@ import CityMap from './components/CityMap';
 import LegalPage from './components/LegalPage';
 import CommunityFeed from './components/CommunityFeed';
 import CivicRewards from './components/CivicRewards';
+import MapSolutions from './components/MapSolutions';
 
 function NotFound() {
   return (
@@ -41,6 +42,7 @@ function App() {
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/report" element={<TicketForm />} />
                 <Route path="/map" element={<CityMap />} />
+                <Route path="/map-solutions" element={<MapSolutions />} />
                 <Route path="/feed" element={<CommunityFeed />} />
                 <Route path="/rewards" element={<CivicRewards />} />
                 <Route path="/login" element={<Login />} />
