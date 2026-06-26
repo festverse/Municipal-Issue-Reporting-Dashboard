@@ -145,7 +145,7 @@ export default function CityMap() {
                     </button>
                     <Link
                       to={`/tickets/${ticket.id}`}
-                      className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 active:scale-95 transition-all rounded-xl text-xs font-bold text-white shadow-sm"
+                      className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 active:scale-95 transition-all rounded-xl text-xs font-bold !text-white shadow-sm"
                     >
                       Inspect →
                     </Link>

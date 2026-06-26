@@ -706,6 +706,22 @@ body.dark-theme .leaflet-container {
   background: #0b1120 !important;
 }
 
+/* Custom Leaflet Popup Overrides for Light & Dark Modes */
+.leaflet-popup-content-wrapper a.bg-blue-600 {
+  color: #ffffff !important;
+}
+
+body.dark-theme .leaflet-popup-content-wrapper,
+body.dark-theme .leaflet-popup-tip {
+  background-color: #1a253d !important;
+  border: 1px solid #27354f !important;
+  color: #f8fafc !important;
+}
+
+body.dark-theme .leaflet-popup-close-button {
+  color: #cbd5e1 !important;
+}
+
 body.dark-theme .glassmorphism {
   background: rgba(20, 30, 51, 0.85) !important;
   border-color: rgba(255, 255, 255, 0.1) !important;
