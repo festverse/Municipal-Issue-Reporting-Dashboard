@@ -600,12 +600,16 @@ body.dark-theme .glassmorphism {
 /* AI Speaker Sound Wave Animation */
 @keyframes wave-pulse-inner {
   0%, 100% { opacity: 0.3; transform: scaleX(0.8); transform-origin: 11px 12px; }
-  50% { opacity: 1; transform: scaleX(1.15); transform-origin: 11px 12px; }
+  50% { opacity: 1; transform: scaleX(1.05); transform-origin: 11px 12px; }
 }
 
 @keyframes wave-pulse-outer {
   0%, 100% { opacity: 0.2; transform: scaleX(0.85); transform-origin: 11px 12px; }
-  50% { opacity: 1; transform: scaleX(1.2); transform-origin: 11px 12px; }
+  50% { opacity: 1; transform: scaleX(1.05); transform-origin: 11px 12px; }
+}
+
+.animate-speaker-waves {
+  overflow: visible !important;
 }
 
 .animate-speaker-waves path:nth-child(2) {
