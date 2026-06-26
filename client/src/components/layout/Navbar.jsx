@@ -23,104 +23,112 @@ export default function Navbar() {
   const isEngineerOrAdmin = user && (user.role === 'ENGINEER' || user.role === 'ADMIN');
 
   return (
-    <nav className="fixed top-0 inset-x-0 z-50 backdrop-blur-xl bg-white/80 border-b border-slate-200 shadow-sm">
-      <div className="w-full px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between relative">
+    <>
+      <nav className="fixed top-0 inset-x-0 z-50 backdrop-blur-xl bg-white/80 border-b border-slate-200 shadow-sm">
+        <div className="w-full px-4 sm:px-6 lg:px-8">
+          <div className="flex h-16 items-center justify-between relative">
 
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
+            {/* Logo */}
+            <Link to="/" className="flex items-center gap-2 group">
 
-            <span className="text-xl font-logo font-extrabold text-slate-900 group-hover:opacity-90 transition-opacity">
-              Civic Portal
-            </span>
-          </Link>
+              <span className="text-xl font-logo font-extrabold text-slate-900 group-hover:opacity-90 transition-opacity">
+                Civic Portal
+              </span>
+            </Link>
 
-          {/* Desktop Links (Perfectly Centered) */}
-          <div className="hidden md:flex items-center gap-1 absolute left-1/2 -translate-x-1/2">
-            <NavLink to="/" end className={linkClass}>Home</NavLink>
-            <NavLink to="/report" className={linkClass}>Report Issue</NavLink>
-            <NavLink to="/map" className={linkClass}>Live Map</NavLink>
-            <NavLink to="/feed" className={linkClass}>Community Feed</NavLink>
-            <NavLink to="/rewards" className={linkClass}>Civic Rewards</NavLink>
-            {isEngineerOrAdmin && (
-              <NavLink to="/dashboard" className={linkClass}>Dashboard</NavLink>
-            )}
-            {user && (
-              <NavLink to="/analytics" className={linkClass}>Analytics</NavLink>
-            )}
-          </div>
-
-          {/* Desktop Auth */}
-          <div className="hidden md:flex items-center gap-3">
-            {user ? (
-              <div className="flex items-center gap-3">
-                <Link to="/rewards" className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-xl transition-all shadow-sm group">
-                  <span className="text-base">🏆</span>
-                  <span className="text-xs font-bold text-amber-800 group-hover:text-amber-900">
-                    {user.civic_credits !== undefined ? user.civic_credits : 150} Civic Credits
-                  </span>
-                </Link>
-                <div className="flex items-center gap-2">
-                  {user.avatar ? (
-                    <img src={user.avatar} alt={user.full_name || user.email} className="w-8 h-8 rounded-full object-cover border border-slate-200 shadow-sm" />
-                  ) : (
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center text-xs font-bold text-white">
-                      {(user.full_name || user.email || '?')[0].toUpperCase()}
-                    </div>
-                  )}
-                  <div className="hidden lg:block">
-                    <p className="text-sm font-medium text-slate-900 leading-none">{user.full_name || user.email}</p>
-                    <p className="text-xs text-slate-500 mt-0.5">{user.role}</p>
-                  </div>
-                </div>
-                <button
-                  onClick={handleLogout}
-                  className="text-sm text-slate-500 hover:text-rose-600 transition-colors px-3 py-1.5 rounded-lg hover:bg-rose-50"
-                >
-                  Logout
-                </button>
-              </div>
-            ) : (
-              <>
-                <NavLink to="/login" className={linkClass}>Login</NavLink>
-                <NavLink
-                  to="/register"
-                  className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-violet-600 rounded-lg hover:from-blue-500 hover:to-violet-500 transition-all hover:shadow-lg hover:shadow-blue-500/25"
-                >
-                  Register
-                </NavLink>
-              </>
-            )}
-          </div>
-
-          {/* Mobile Hamburger */}
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors"
-            aria-label="Toggle menu"
-          >
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              {mobileOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+            {/* Desktop Links (Perfectly Centered) */}
+            <div className="hidden md:flex items-center gap-1 absolute left-1/2 -translate-x-1/2">
+              <NavLink to="/" end className={linkClass}>Home</NavLink>
+              <NavLink to="/report" className={linkClass}>Report Issue</NavLink>
+              <NavLink to="/map" className={linkClass}>Live Map</NavLink>
+              <NavLink to="/feed" className={linkClass}>Community Feed</NavLink>
+              <NavLink to="/rewards" className={linkClass}>Civic Rewards</NavLink>
+              {isEngineerOrAdmin && (
+                <NavLink to="/dashboard" className={linkClass}>Dashboard</NavLink>
               )}
-            </svg>
-          </button>
+              {user && (
+                <NavLink to="/analytics" className={linkClass}>Analytics</NavLink>
+              )}
+            </div>
+
+            {/* Desktop Auth */}
+            <div className="hidden md:flex items-center gap-3">
+              {user ? (
+                <div className="flex items-center gap-3">
+                  <Link to="/rewards" className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-xl transition-all shadow-sm group">
+                    <span className="text-base">🏆</span>
+                    <span className="text-xs font-bold text-amber-800 group-hover:text-amber-900">
+                      {user.civic_credits !== undefined ? user.civic_credits : 150} Civic Credits
+                    </span>
+                  </Link>
+                  <div className="flex items-center gap-2">
+                    {user.avatar ? (
+                      <img src={user.avatar} alt={user.full_name || user.email} className="w-8 h-8 rounded-full object-cover border border-slate-200 shadow-sm" />
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center text-xs font-bold text-white">
+                        {(user.full_name || user.email || '?')[0].toUpperCase()}
+                      </div>
+                    )}
+                    <div className="hidden lg:block">
+                      <p className="text-sm font-medium text-slate-900 leading-none">{user.full_name || user.email}</p>
+                      <p className="text-xs text-slate-500 mt-0.5">{user.role}</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={handleLogout}
+                    className="text-sm text-slate-500 hover:text-rose-600 transition-colors px-3 py-1.5 rounded-lg hover:bg-rose-50"
+                  >
+                    Logout
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <NavLink to="/login" className={linkClass}>Login</NavLink>
+                  <NavLink
+                    to="/register"
+                    className="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-violet-600 rounded-lg hover:from-blue-500 hover:to-violet-50-custom transition-all hover:shadow-lg hover:shadow-blue-500/25"
+                  >
+                    Register
+                  </NavLink>
+                </>
+              )}
+            </div>
+
+            {/* Mobile Hamburger */}
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className="md:hidden p-2 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors"
+              aria-label="Toggle menu"
+            >
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                {mobileOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+          </div>
         </div>
-      </div>
+      </nav>
 
       {/* Mobile Drawer */}
       {mobileOpen && (
         <>
-          <div className="fixed inset-0 bg-slate-900/20 z-40 md:hidden" onClick={() => setMobileOpen(false)} />
-          <div className="fixed inset-y-0 left-0 w-64 z-50 md:hidden bg-white border-r border-slate-200 animate-slide-in-left p-6 flex flex-col shadow-xl">
-            <Link to="/" className="flex items-center gap-2 mb-8" onClick={() => setMobileOpen(false)}>
-
-              <span className="text-xl font-logo font-extrabold text-slate-900">
-                Civic Portal
-              </span>
-            </Link>
+          <div className="fixed inset-0 bg-slate-900/20 z-50 md:hidden" onClick={() => setMobileOpen(false)} />
+          <div className="fixed inset-y-0 left-0 w-64 h-screen z-50 md:hidden bg-white border-r border-slate-200 animate-slide-in-left p-6 flex flex-col shadow-2xl overflow-y-auto">
+            <div className="flex items-center justify-between mb-8">
+              <Link to="/" className="flex items-center gap-2" onClick={() => setMobileOpen(false)}>
+                <span className="text-xl font-logo font-extrabold text-slate-900">
+                  Civic Portal
+                </span>
+              </Link>
+              <button onClick={() => setMobileOpen(false)} className="p-2 text-slate-600 hover:text-slate-900 rounded-lg">
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
 
             <div className="flex flex-col gap-1 flex-1">
               <NavLink to="/" end className={linkClass} onClick={() => setMobileOpen(false)}>Home</NavLink>
@@ -174,6 +182,6 @@ export default function Navbar() {
           </div>
         </>
       )}
-    </nav>
+    </>
   );
 }
