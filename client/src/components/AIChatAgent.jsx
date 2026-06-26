@@ -230,13 +230,19 @@ export default function AIChatAgent() {
         cleanLine = cleanLine.trim().substring(2);
       }
 
-      // Parse bold text (**text**)
-      const parts = cleanLine.split(/(\*\*.*?\*\*)/g);
+      // Parse bold text (**text**) and emphasis (*text*)
+      const parts = cleanLine.split(/(\*\*.*?\*\*|\*.*?\*)/g);
       const renderedParts = parts.map((part, partIndex) => {
         if (part.startsWith('**') && part.endsWith('**')) {
           return (
             <strong key={partIndex} className={`font-bold ${isAi ? 'text-slate-900' : 'text-white'}`}>
               {part.slice(2, -2)}
+            </strong>
+          );
+        } else if (part.startsWith('*') && part.endsWith('*')) {
+          return (
+            <strong key={partIndex} className={`font-semibold ${isAi ? 'text-slate-900' : 'text-white'}`}>
+              {part.slice(1, -1)}
             </strong>
           );
         }
