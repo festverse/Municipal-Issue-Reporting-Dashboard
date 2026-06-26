@@ -267,11 +267,18 @@ export default function LegalPage() {
                 </div>
               )}
 
-              <div className="mt-12 pt-8 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+              <div className="mt-12 pt-8 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-4">
                 <span className="flex items-center gap-1.5 text-emerald-600 font-medium">
-                  <CheckCircle2 className="w-4 h-4" /> Official Verified Policy
+                  <CheckCircle2 className="w-4 h-4 flex-shrink-0" /> Official Verified Policy
                 </span>
                 <span>Document Version 4.2.1 • Certified by Municipal Counsel</span>
+              </div>
+
+              <div className="mt-8 p-6 bg-slate-50 border border-slate-200 rounded-3xl text-xs text-slate-600 space-y-2 shadow-sm">
+                <h4 className="font-bold text-slate-900">Academic & Portfolio Evaluation Notice</h4>
+                <p className="leading-relaxed">
+                  Copyright © 2026 <span className="font-bold text-blue-600">Utsav Vasava</span>. All rights reserved. This application and its full source code are published solely for evaluation by prospective employers, hiring managers, and clients. No license is granted to any entity to copy, download, modify, distribute, or commercialize this design or source code without explicit written permission from Utsav Vasava.
+                </p>
               </div>
             </div>
           </div>

@@ -546,7 +546,11 @@ export default function LandingPage() {
         </div>
 
         <div className="max-w-7xl mx-auto border-t border-slate-800 pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-          <p>© 2026 Civic Portal Enterprise. All rights reserved.</p>
+          <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-6">
+            <p>© 2026 Civic Portal Enterprise. All rights reserved.</p>
+            <span className="hidden sm:inline text-slate-700">•</span>
+            <p className="text-slate-400 font-medium">Designed & Developed by <span className="text-blue-400 font-bold">Utsav Vasava</span></p>
+          </div>
           <div className="flex gap-6">
             <span className="flex items-center gap-1.5"><Shield className="w-4 h-4 text-slate-500" /> End-to-End Verified</span>
             <span className="flex items-center gap-1.5"><Zap className="w-4 h-4 text-slate-500" /> AI Powered</span>
