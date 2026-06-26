@@ -38,14 +38,21 @@ export default function AIChatAgent() {
     const voices = window.speechSynthesis.getVoices();
     if (!voices || voices.length === 0) return null;
 
-    // Explicitly list premium natural male voices across Windows, macOS, Chrome, Edge, iOS, Android
+    // Explicitly prioritize premium natural, neural, and online cloud male voices first to eliminate robotic synthetic tones
     const maleVoiceKeywords = [
+      'Natural Male',
+      'Neural2-D',
+      'Neural2-B',
+      'Wavenet-D',
+      'Wavenet-B',
+      'Microsoft Brian Online (Natural)',
+      'Microsoft Guy Online (Natural)',
+      'Microsoft Andrew Online (Natural)',
+      'Microsoft Christopher Online (Natural)',
+      'Microsoft Eric Online (Natural)',
+      'Microsoft Steffen Online (Natural)',
       'Google UK English Male',
       'Google US English Male',
-      'Microsoft David',
-      'Microsoft Mark',
-      'Microsoft Brian',
-      'Microsoft George',
       'Daniel',
       'Oliver',
       'Arthur',
@@ -54,8 +61,10 @@ export default function AIChatAgent() {
       'Alex',
       'Fred',
       'Aaron',
-      'en-US-Wavenet-D',
-      'en-GB-Wavenet-B',
+      'Microsoft Brian',
+      'Microsoft George',
+      'Microsoft David', // Legacy synthetic fallback
+      'Microsoft Mark',  // Legacy synthetic fallback
       'Male',
       'male'
     ];
@@ -186,8 +195,8 @@ export default function AIChatAgent() {
       utterance.voice = selectedVoice;
     }
     
-    utterance.pitch = 0.95; // Slightly deeper, natural male resonance
-    utterance.rate = 1.05; // Smooth, natural human conversational pacing
+    utterance.pitch = 1.0; // Native studio-recorded natural pitch (prevents digital vocoder robotic distortion)
+    utterance.rate = 1.0; // Native conversational human pacing
 
     utterance.onstart = () => setIsSpeaking(true);
     utterance.onend = () => setIsSpeaking(false);
