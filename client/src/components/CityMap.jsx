@@ -66,7 +66,7 @@ export default function CityMap() {
   });
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] bg-slate-50 text-slate-900 animate-fade-in">
+    <div data-lenis-prevent="true" className="flex flex-col h-[calc(100vh-4rem)] bg-slate-50 text-slate-900 animate-fade-in">
       {/* Top Controls Overlay Bar */}
       <div className="bg-white/90 backdrop-blur-md border-b border-slate-200 p-4 flex flex-wrap items-center justify-between gap-4 z-20 shadow-sm">
         <div>

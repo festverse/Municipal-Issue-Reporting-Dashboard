@@ -247,11 +247,11 @@ export default function TicketForm() {
   const inputClass = "w-full px-4 py-3 bg-white border border-slate-300 rounded-xl text-slate-900 placeholder-slate-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all text-sm";
 
   return (
-    <div className="max-w-[1700px] w-full mx-auto py-6 px-4 h-[calc(100vh-5rem)] animate-fade-in-up">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-full overflow-hidden">
+    <div data-lenis-prevent="true" className="max-w-[1700px] w-full mx-auto py-6 px-4 h-[calc(100vh-5rem)] animate-fade-in-up">
+      <div data-lenis-prevent="true" className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-full overflow-hidden">
         
         {/* Column 1 (Left Sidebar) — Navigation Menu matching Panchayat screenshot */}
-        <div className="lg:col-span-3 xl:col-span-2 h-full overflow-y-auto pr-2 space-y-6 scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent">
+        <div data-lenis-prevent="true" className="lg:col-span-3 xl:col-span-2 h-full overflow-y-auto pr-2 space-y-6 scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent">
           <div className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-sm flex flex-col justify-between min-h-[calc(100%-1rem)] space-y-6">
             <div className="space-y-6">
               {/* Main Nav Links */}
