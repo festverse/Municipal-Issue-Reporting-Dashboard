@@ -33,10 +33,16 @@ A production-grade, full-stack web application that enables citizens to report m
 
 ## ✨ Key Features
 
+### Premium UI/UX & Mobile Experience
+- 🌕/🌑 **Ultra-Premium Dark Theme System** — Deep, tailored dark mode (`#0b1120`, `#141e33`) with flawless typography contrast, custom input focus states, and high-specificity gradient preservation.
+- 📱 **Advanced Mobile Responsiveness** — Mobile-first adaptive design featuring smooth horizontally scrollable tab navigation bars and dynamic split-view toggles with dedicated back navigation for complex multi-column interfaces.
+- ✨ **Flawless Micro-Interactions** — Refined hover state transitions, active pill buttons, custom styled scrollbars, and vibrant glassmorphism accents.
+
 ### Citizen Portal
-- 📍 **Interactive Geolocation Mapping** — Pinpoint exact issue locations on a dark-themed CartoDB map
-- 📝 **Rich Issue Reporting** — Categorized submissions with priority levels and zone selection
-- 🔔 **Real-time Feedback** — Toast notifications and form validation
+- 📍 **Interactive Geolocation Mapping** — Pinpoint exact issue locations on a live CartoDB map with dynamic status and priority filters
+- 📝 **Rich Issue Reporting** — Categorized submissions with priority levels, upvote tracking ("Affects me"), and zone selection
+- 🤖 **AI Support & Triage** — Live municipal department chat nodes and AI triage assistant for rapid support
+- 🔔 **Real-time Feedback** — Toast notifications, modal popups, and form validation
 
 ### Engineer Dashboard
 - 📊 **Analytics Overview** — Animated stat cards with live metrics and resolution time tracking
@@ -136,12 +142,17 @@ municipal-dashboard/
 │   │   │   ├── layout/          # Navbar, ProtectedRoute
 │   │   │   ├── Login.jsx        # JWT authentication
 │   │   │   ├── Register.jsx     # User registration
-│   │   │   ├── TicketForm.jsx   # Issue reporting with map
-│   │   │   ├── Dashboard.jsx    # Engineer management panel
+│   │   │   ├── LandingPage.jsx  # Spectacular landing & hero section
+│   │   │   ├── TicketForm.jsx   # Issue reporting with map & mobile tabs
 │   │   │   ├── TicketDetail.jsx # Full ticket view + timeline
+│   │   │   ├── Dashboard.jsx    # Engineer management panel
+│   │   │   ├── CityMap.jsx      # Interactive live issue map & filters
+│   │   │   ├── GovChat.jsx      # Real-time municipal chat & mobile toggle
+│   │   │   ├── AIChatAgent.jsx  # AI triage assistant
+│   │   │   ├── ThemeToggle.jsx  # Dark/Light mode switcher
 │   │   │   └── AnalyticsPanel.jsx # Visual analytics
 │   │   ├── App.jsx              # Routing & providers
-│   │   └── index.css            # Design system & animations
+│   │   └── index.css            # Design system, dark theme & animations
 │   └── .env.example             # Environment variable template
 ├── docker-compose.yml           # PostgreSQL + pgAdmin for local dev
 ├── .gitignore
