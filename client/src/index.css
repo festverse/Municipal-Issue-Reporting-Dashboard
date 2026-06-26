@@ -277,6 +277,26 @@ body.dark-theme .border-purple-200 {
   border-color: #27354f !important;
 }
 
+body.dark-theme .divide-slate-100,
+body.dark-theme .divide-slate-200,
+body.dark-theme .divide-slate-300 {
+  --tw-divide-color: #27354f !important;
+  border-color: #27354f !important;
+}
+
+body.dark-theme .divide-slate-100 > *,
+body.dark-theme .divide-slate-200 > *,
+body.dark-theme .divide-slate-300 > *,
+body.dark-theme .divide-y > *,
+body.dark-theme table tr,
+body.dark-theme table td,
+body.dark-theme table th,
+body.dark-theme thead tr {
+  --tw-divide-color: #27354f !important;
+  --tw-border-color: #27354f !important;
+  border-color: #27354f !important;
+}
+
 body.dark-theme .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
 body.dark-theme .divide-slate-200 > :not([hidden]) ~ :not([hidden]) {
   border-color: #27354f !important;
