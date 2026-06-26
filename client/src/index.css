@@ -408,6 +408,20 @@ body.dark-theme .bg-gradient-to-r.text-transparent {
 }
 
 /* Quick hover states for custom interactive cards */
+body.dark-theme .hover\:bg-white:hover,
+body.dark-theme .hover\:bg-white\/90:hover,
+body.dark-theme .hover\:bg-white\/80:hover,
+body.dark-theme .hover\:bg-white\/70:hover,
+body.dark-theme .hover\:bg-white\/60:hover,
+body.dark-theme .hover\:bg-white\/50:hover,
+body.dark-theme .hover\:bg-white\/40:hover,
+body.dark-theme .hover\:bg-white\/30:hover,
+body.dark-theme .hover\:bg-white\/20:hover,
+body.dark-theme .hover\:bg-white\/10:hover {
+  background-color: rgba(30, 41, 59, 0.8) !important;
+  color: #f8fafc !important;
+}
+
 body.dark-theme .hover\:bg-slate-50:hover,
 body.dark-theme .hover\:bg-slate-50\/50:hover,
 body.dark-theme .hover\:bg-slate-50\/60:hover,
