@@ -112,19 +112,7 @@ export const updateTicketStatus = (id, new_status, note = '') =>
 
 // ── AI & Community ──
 export const chatWithAiAPI = async (message, history = []) => {
-  try {
-    const res = await request(`${BASE_URL}/tickets/ai-chat`, {
-      method: 'POST',
-      body: JSON.stringify({ message, history })
-    });
-    if (res && res.data && res.data.reply) {
-      return res.data.reply;
-    }
-  } catch (err) {
-    console.warn('Backend /ai-chat unavailable or offline, checking for client-side VITE_GEMINI_API_KEY integration:', err);
-  }
-
-  // Direct Client-Side Gemini API Integration for Cloudflare Pages / Standalone Frontend
+  // 1. Direct Client-Side Gemini API Integration for Cloudflare Pages / Standalone Frontend
   const clientGeminiKey = import.meta.env.VITE_GEMINI_API_KEY;
   if (clientGeminiKey) {
     try {
@@ -161,11 +149,24 @@ Always be highly professional, empathetic, encouraging, and clear. Format answer
         return data.candidates[0].content.parts[0].text;
       }
     } catch (geminiErr) {
-      console.warn('Direct client-side Gemini API call failed, falling back to expert offline engine:', geminiErr);
+      console.warn('Direct client-side Gemini API call failed, attempting backend fallback:', geminiErr);
     }
   }
 
-  // Highly intelligent client-side expert AI fallback engine for static/Cloudflare Pages deployment
+  // 2. Try live backend server if client-side Gemini key is missing or failed
+  try {
+    const res = await request(`${BASE_URL}/tickets/ai-chat`, {
+      method: 'POST',
+      body: JSON.stringify({ message, history })
+    });
+    if (res && res.data && res.data.reply) {
+      return res.data.reply;
+    }
+  } catch (err) {
+    console.warn('Backend /ai-chat unavailable or offline, using highly intelligent client-side fallback AI Advisor engine:', err);
+  }
+
+  // 3. Highly intelligent client-side expert AI fallback engine for static/Cloudflare Pages deployment
   const msg = (message || '').toLowerCase();
   if (msg.includes('report') || msg.includes('ticket') || msg.includes('pothole') || msg.includes('leak') || msg.includes('submit')) {
     return `### 📋 Reporting & Rapid Triage Guide\n\nAs your Chief Municipal AI Advisor, here is how you can submit an infrastructure issue for instant AI dispatch:\n\n1. **Navigate to 'Report Issue'**: Click the button in the top navigation bar or sidebar.\n2. **Select a Preset or Custom Category**: Choose from common emergencies like *Severe Pothole Hazard*, *Main Pipe Water Leak*, *Streetlight Grid Outage*, or *Fallen Tree*.\n3. **AI Severity Triage**: As you type your title and description, our AI instantly calculates the hazard level (Low, Medium, High, Critical) and assigns it to the exact municipal department.\n4. **Attach Evidence**: Upload an image and verify your GPS coordinates on the Live Map.\n\n**💡 Expert Suggestion**: For active hazards like clean water pipe bursts or exposed wiring, include words like 'emergency' or 'safety hazard' to automatically elevate the priority flag for field engineering crews!`;
