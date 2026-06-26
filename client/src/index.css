@@ -216,6 +216,13 @@ body.dark-theme .bg-slate-200 {
   color: #e2e8f0 !important;
 }
 
+body.dark-theme .bg-slate-50\/10,
+body.dark-theme .bg-slate-50\/20,
+body.dark-theme .bg-slate-50\/30,
+body.dark-theme .bg-slate-50\/40 {
+  background-color: rgba(11, 17, 32, 0.6) !important;
+}
+
 body.dark-theme .bg-slate-50\/50,
 body.dark-theme .bg-slate-50\/60,
 body.dark-theme .bg-slate-50\/70,
@@ -224,11 +231,23 @@ body.dark-theme .bg-slate-50\/90 {
   background-color: rgba(16, 26, 46, 0.7) !important;
 }
 
+body.dark-theme .bg-slate-100\/10,
+body.dark-theme .bg-slate-100\/20,
+body.dark-theme .bg-slate-100\/30,
+body.dark-theme .bg-slate-100\/40 {
+  background-color: rgba(11, 17, 32, 0.6) !important;
+}
+
 body.dark-theme .bg-slate-100\/50,
 body.dark-theme .bg-slate-100\/60,
 body.dark-theme .bg-slate-100\/70,
 body.dark-theme .bg-slate-100\/80 {
   background-color: rgba(26, 37, 61, 0.8) !important;
+}
+
+body.dark-theme .focus\:bg-white:focus {
+  background-color: #101a2e !important;
+  color: #f8fafc !important;
 }
 
 body.dark-theme .bg-blue-50\/80 {
