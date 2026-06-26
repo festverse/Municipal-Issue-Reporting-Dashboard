@@ -436,6 +436,65 @@ body.dark-theme .bg-green-50 {
   color: #86efac !important;
 }
 
+/* Text color overrides for badges and toast popups in dark mode */
+body.dark-theme .text-emerald-800,
+body.dark-theme .text-emerald-700 {
+  color: #6ee7b7 !important;
+}
+
+body.dark-theme .text-rose-800,
+body.dark-theme .text-rose-700 {
+  color: #fda4af !important;
+}
+
+body.dark-theme .text-amber-800,
+body.dark-theme .text-amber-700,
+body.dark-theme .text-amber-600 {
+  color: #fcd34d !important;
+}
+
+body.dark-theme .text-blue-800,
+body.dark-theme .text-blue-700 {
+  color: #93c5fd !important;
+}
+
+body.dark-theme .text-violet-800,
+body.dark-theme .text-violet-700 {
+  color: #d8b4fe !important;
+}
+
+body.dark-theme .text-indigo-800,
+body.dark-theme .text-indigo-700 {
+  color: #a5b4fc !important;
+}
+
+/* Border overrides for badges and toast popups in dark mode */
+body.dark-theme .border-emerald-200,
+body.dark-theme .border-emerald-100 {
+  border-color: rgba(16, 185, 129, 0.3) !important;
+}
+
+body.dark-theme .border-rose-200,
+body.dark-theme .border-rose-100 {
+  border-color: rgba(244, 63, 94, 0.3) !important;
+}
+
+body.dark-theme .border-amber-200,
+body.dark-theme .border-amber-100,
+body.dark-theme .border-amber-100\/50 {
+  border-color: rgba(245, 158, 11, 0.3) !important;
+}
+
+body.dark-theme .border-blue-200,
+body.dark-theme .border-blue-100 {
+  border-color: rgba(59, 130, 246, 0.3) !important;
+}
+
+body.dark-theme .border-violet-200,
+body.dark-theme .border-violet-100 {
+  border-color: rgba(139, 92, 246, 0.3) !important;
+}
+
 /* Ensure Leaflet map blends elegantly in dark mode */
 body.dark-theme .leaflet-layer,
 body.dark-theme .leaflet-control-zoom-in,
