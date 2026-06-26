@@ -19,6 +19,7 @@ export default function AIChatAgent() {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const messagesEndRef = useRef(null);
   const recognitionRef = useRef(null);
+  const selectedVoiceRef = useRef(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -30,11 +31,80 @@ export default function AIChatAgent() {
     }
   }, [isOpen, messages, isLoading, isListening]);
 
+  const getBestMaleVoice = () => {
+    if (selectedVoiceRef.current) return selectedVoiceRef.current;
+    if (!window.speechSynthesis) return null;
+
+    const voices = window.speechSynthesis.getVoices();
+    if (!voices || voices.length === 0) return null;
+
+    // Explicitly list premium natural male voices across Windows, macOS, Chrome, Edge, iOS, Android
+    const maleVoiceKeywords = [
+      'Google UK English Male',
+      'Google US English Male',
+      'Microsoft David',
+      'Microsoft Mark',
+      'Microsoft Brian',
+      'Microsoft George',
+      'Daniel',
+      'Oliver',
+      'Arthur',
+      'James',
+      'Bradley',
+      'Alex',
+      'Fred',
+      'Aaron',
+      'en-US-Wavenet-D',
+      'en-GB-Wavenet-B',
+      'Male',
+      'male'
+    ];
+
+    // Explicitly EXCLUDE known female voices so it NEVER accidentally picks one
+    const femaleExclusions = ['zira', 'siri', 'female', 'hazel', 'samantha', 'victoria', 'karen', 'veena', 'tessa', 'ava', 'allison', 'susan', 'catherine', 'eva', 'grace', 'zoe'];
+
+    let bestVoice = null;
+
+    // Try to find exact match in premium male voices list
+    for (const keyword of maleVoiceKeywords) {
+      const found = voices.find(v => {
+        const name = v.name.toLowerCase();
+        if (femaleExclusions.some(f => name.includes(f))) return false;
+        return v.name.includes(keyword);
+      });
+      if (found) {
+        bestVoice = found;
+        break;
+      }
+    }
+
+    // Fallback: If no keyword match, find ANY voice that doesn't contain female names and is English
+    if (!bestVoice) {
+      bestVoice = voices.find(v => {
+        const name = v.name.toLowerCase();
+        if (femaleExclusions.some(f => name.includes(f))) return false;
+        return v.lang.startsWith('en');
+      });
+    }
+
+    // Last resort fallback
+    if (!bestVoice) {
+      bestVoice = voices[0];
+    }
+
+    if (bestVoice) {
+      selectedVoiceRef.current = bestVoice;
+    }
+
+    return bestVoice;
+  };
+
   // Initialize Speech Recognition on mount
   useEffect(() => {
     if (window.speechSynthesis) {
       window.speechSynthesis.onvoiceschanged = () => {
         window.speechSynthesis.getVoices();
+        getBestMaleVoice(); // Proactively cache and lock in the best male voice once loaded
       };
     }
 
@@ -110,34 +180,7 @@ export default function AIChatAgent() {
     if (!cleanText) return;
 
     const utterance = new SpeechSynthesisUtterance(cleanText);
-    
-    const voices = window.speechSynthesis.getVoices();
-    // Prioritize high-quality natural male voices
-    const preferredNames = [
-      'Google UK English Male', 
-      'Google US English Male', 
-      'Microsoft David', 
-      'Microsoft Mark', 
-      'Daniel', 
-      'Oliver', 
-      'Arthur', 
-      'James', 
-      'Bradley', 
-      'en-US-Wavenet-D', 
-      'en-GB-Wavenet-B'
-    ];
-    
-    let selectedVoice = null;
-    for (const name of preferredNames) {
-      const found = voices.find(v => v.name.includes(name));
-      if (found) {
-        selectedVoice = found;
-        break;
-      }
-    }
-    if (!selectedVoice) {
-      selectedVoice = voices.find(v => v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('david') || v.name.toLowerCase().includes('mark')) || voices.find(v => v.lang.startsWith('en')) || voices[0];
-    }
+    const selectedVoice = getBestMaleVoice();
 
     if (selectedVoice) {
       utterance.voice = selectedVoice;
