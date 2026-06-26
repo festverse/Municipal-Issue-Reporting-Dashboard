@@ -77,41 +77,33 @@ body {
   50%      { opacity: 0.6; }
 }
 
-@keyframes heroHeadlineAnim {
-  0% {
-    opacity: 0;
-    transform: translateY(40px) scale(0.92);
-    filter: blur(12px);
-  }
-  60% {
-    opacity: 0.9;
-    transform: translateY(-4px) scale(1.01);
-    filter: blur(0px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    filter: blur(0px);
-  }
+/* --- Hero Text Staggered Reveal --- */
+.hero-word-wrap {
+  display: inline-block;
+  overflow: hidden; /* This masks the sliding animation */
+  vertical-align: bottom;
+  padding-bottom: 0.15em; /* Increased slightly to prevent clipping */
+  margin-bottom: -0.15em; /* Compensates to keep the layout tight */
+  padding-right: 0.15em; /* Expands the hidden overflow box to the right */
+  margin-right: -0.15em;
 }
 
-@keyframes staggerRevealUp {
-  0% {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.hero-word {
+  display: inline-block;
+  transform: translateY(120%); /* Pushes text down outside the mask initially */
+  animation: slideUpWord 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.hero-word.word-1 { animation-delay: 0.1s; }
+.hero-word.word-2 { animation-delay: 0.25s; }
+.hero-word.word-3 { animation-delay: 0.4s; }
+.hero-word.word-4 { animation-delay: 0.55s; }
+
+@keyframes slideUpWord {
+  to { transform: translateY(0); }
 }
 
 /* ── Animation Utility Classes ── */
-.animate-stagger-1 { opacity: 0; animation: staggerRevealUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards; }
-.animate-stagger-2 { opacity: 0; animation: staggerRevealUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards; }
-.animate-stagger-3 { opacity: 0; animation: staggerRevealUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.7s forwards; }
-.animate-stagger-4 { opacity: 0; animation: staggerRevealUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 1.0s forwards; }
-.animate-hero-headline { animation: heroHeadlineAnim 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 .animate-fade-in-up    { animation: fadeInUp 0.4s ease-out forwards; }
 .animate-fade-in       { animation: fadeIn 0.3s ease-out forwards; }
 .animate-slide-in-right { animation: slideInRight 0.3s ease-out forwards; }

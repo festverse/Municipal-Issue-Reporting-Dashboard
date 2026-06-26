@@ -31,10 +31,10 @@ export default function LandingPage() {
           </div>
 
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-slate-900 tracking-tight leading-[1.15] mb-6 max-w-5xl mx-auto">
-            <span className="inline-block animate-stagger-1">Transforming Everyday Civic</span>{' '}
-            <span className="inline-block animate-stagger-2 bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 bg-clip-text text-transparent">Challenges</span><br />
-            <span className="inline-block animate-stagger-3">into Real-Time Community</span>{' '}
-            <span className="inline-block animate-stagger-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 bg-clip-text text-transparent">Solutions.</span>
+            <span className="hero-word-wrap"><span className="hero-word word-1">Transforming Everyday Civic</span></span>{' '}
+            <span className="hero-word-wrap"><span className="hero-word word-2 bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 bg-clip-text text-transparent">Challenges</span></span><br />
+            <span className="hero-word-wrap"><span className="hero-word word-3">into Real-Time Community</span></span>{' '}
+            <span className="hero-word-wrap"><span className="hero-word word-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 bg-clip-text text-transparent">Solutions.</span></span>
           </h1>
 
           <p className="text-slate-600 text-lg sm:text-xl leading-relaxed mb-10 max-w-3xl mx-auto animate-fade-in-up">
