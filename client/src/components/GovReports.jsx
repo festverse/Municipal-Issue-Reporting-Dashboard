@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { BarChart2, Download, Search, Filter, Calendar, Sparkles, PieChart, FileSpreadsheet, TrendingUp, CheckCircle2, Clock } from 'lucide-react';
+import { BarChart2, Download, Search, Filter, Calendar, Sparkles, PieChart, FileSpreadsheet, TrendingUp, CheckCircle2, Clock, MessageSquare } from 'lucide-react';
 
-export default function GovReports() {
+export default function GovReports({ onStartChat }) {
   const [filterStatus, setFilterStatus] = useState('ALL');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -141,12 +141,18 @@ export default function GovReports() {
                 </div>
 
                 <div className="flex sm:flex-col items-center sm:items-end justify-between w-full sm:w-auto pt-4 sm:pt-0 border-t border-slate-200/60 sm:border-0 gap-2">
-                  <span className={`text-xs font-bold px-3 py-1 rounded-full shadow-sm ${
-                    rep.status === 'Completed' ? 'bg-emerald-500 text-white' :
-                    rep.status === 'In Progress' ? 'bg-blue-500 text-white' : 'bg-amber-500 text-white'
-                  }`}>
-                    {rep.status}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <button onClick={() => onStartChat && onStartChat({ id: 9999, name: 'Citizen Reporter (' + rep.id + ')', role: 'Citizen Elite', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80' })} className="px-3 py-1 bg-blue-50 hover:bg-blue-100 text-blue-600 font-bold text-xs rounded-full flex items-center gap-1 transition-all shadow-sm active:scale-95">
+                      <MessageSquare className="w-3 h-3" />
+                      <span>Chat with Citizen</span>
+                    </button>
+                    <span className={`text-xs font-bold px-3 py-1 rounded-full shadow-sm ${
+                      rep.status === 'Completed' ? 'bg-emerald-500 text-white' :
+                      rep.status === 'In Progress' ? 'bg-blue-500 text-white' : 'bg-amber-500 text-white'
+                    }`}>
+                      {rep.status}
+                    </span>
+                  </div>
                   <span className="text-xs font-bold text-slate-500">SLA: {rep.sla}</span>
                 </div>
               </div>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { createTicket, fetchZones, fetchCategories, analyzeIssueAI } from '../api/client';
+import { createTicket, fetchZones, fetchCategories, analyzeIssueAI, startChatAPI } from '../api/client';
 import { useAuth } from '../hooks/useAuth';
 import { useToast } from './ui/Toast';
 import { Link } from 'react-router-dom';
@@ -41,6 +41,13 @@ export default function TicketForm() {
   const { user } = useAuth();
   const { showToast } = useToast();
   const [activeTab, setActiveTab] = useState(user?.role === 'ENGINEER' || user?.role === 'ADMIN' ? 'dashboard' : 'report');
+  const [activeChatTarget, setActiveChatTarget] = useState(null);
+
+  const handleStartChat = async (recipient) => {
+    const chat = await startChatAPI(recipient);
+    setActiveChatTarget(chat);
+    setActiveTab('chat');
+  };
   
   useEffect(() => {
     if (user) {
@@ -637,7 +644,7 @@ export default function TicketForm() {
         </div>
           </>
         ) : activeTab === 'dashboard' ? (
-          <GovDashboard />
+          <GovDashboard onStartChat={handleStartChat} />
         ) : activeTab === 'heatmap' ? (
           <GovHeatmap />
         ) : activeTab === 'departments' ? (
@@ -645,11 +652,11 @@ export default function TicketForm() {
         ) : activeTab === 'policy' ? (
           <GovPolicy />
         ) : activeTab === 'reports' ? (
-          <GovReports />
+          <GovReports onStartChat={handleStartChat} />
         ) : activeTab === 'connections' ? (
-          <GovConnections />
+          <GovConnections onStartChat={handleStartChat} />
         ) : activeTab === 'chat' ? (
-          <GovChat />
+          <GovChat activeChatTarget={activeChatTarget} />
         ) : activeTab === 'knowledge' ? (
           <GovKnowledgeBase />
         ) : (

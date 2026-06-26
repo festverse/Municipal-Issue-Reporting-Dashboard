@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Users, Search, Filter, ShieldCheck, Star, Award, MessageSquare, Plus, Sparkles, UserPlus } from 'lucide-react';
 
-export default function GovConnections() {
+export default function GovConnections({ onStartChat }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTier, setActiveTier] = useState('ALL');
 
@@ -126,10 +126,10 @@ export default function GovConnections() {
                 <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between">
                   <span className="text-xs text-slate-500 font-medium">{conn.mutual}</span>
                   <div className="flex items-center gap-2">
-                    <button className="p-2 bg-white hover:bg-slate-100 text-slate-600 hover:text-blue-600 rounded-xl border border-slate-200 transition-all shadow-sm active:scale-95" title="Start Chat">
+                    <button onClick={() => onStartChat && onStartChat({ id: conn.id + 1000, name: conn.name, role: conn.role, avatar: conn.avatar })} className="p-2 bg-white hover:bg-slate-100 text-slate-600 hover:text-blue-600 rounded-xl border border-slate-200 transition-all shadow-sm active:scale-95" title="Start Chat">
                       <MessageSquare className="w-4 h-4" />
                     </button>
-                    <button className="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl transition-all shadow-sm active:scale-95 flex items-center gap-1">
+                    <button onClick={() => onStartChat && onStartChat({ id: conn.id + 1000, name: conn.name, role: conn.role, avatar: conn.avatar })} className="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl transition-all shadow-sm active:scale-95 flex items-center gap-1">
                       <Plus className="w-3.5 h-3.5" />
                       <span>Connect</span>
                     </button>

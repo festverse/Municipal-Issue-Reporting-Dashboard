@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { LayoutDashboard, TrendingUp, Users, CheckCircle, Clock, AlertTriangle, Calendar, ArrowUpRight, Sparkles } from 'lucide-react';
+import { LayoutDashboard, TrendingUp, Users, CheckCircle, Clock, AlertTriangle, Calendar, ArrowUpRight, Sparkles, MessageSquare } from 'lucide-react';
 import { fetchTickets } from '../api/client';
 import { Link } from 'react-router-dom';
 
-export default function GovDashboard() {
+export default function GovDashboard({ onStartChat }) {
   const [timeRange, setTimeRange] = useState('7d');
   const [tickets, setTickets] = useState([]);
 
@@ -142,11 +142,17 @@ export default function GovDashboard() {
                       <Calendar className="w-3.5 h-3.5 text-slate-400" />
                       <span>{act.time}</span>
                     </div>
-                    {act.isDefault ? (
-                      <button className="text-blue-600 hover:text-blue-700 font-bold text-xs">Details →</button>
-                    ) : (
-                      <Link to={`/tickets/${act.id}`} className="text-blue-600 hover:text-blue-700 font-bold text-xs">Details →</Link>
-                    )}
+                    <div className="flex items-center gap-2">
+                      <button onClick={() => onStartChat && onStartChat({ id: 9999, name: 'Citizen Reporter (' + act.title.substring(0, 15) + '...)', role: 'Citizen Elite', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80' })} className="text-blue-600 hover:text-blue-700 font-bold text-xs flex items-center gap-1 bg-blue-50 px-2 py-1 rounded-lg">
+                        <MessageSquare className="w-3 h-3" />
+                        <span>Chat</span>
+                      </button>
+                      {act.isDefault ? (
+                        <button className="text-blue-600 hover:text-blue-700 font-bold text-xs">Details →</button>
+                      ) : (
+                        <Link to={`/tickets/${act.id}`} className="text-blue-600 hover:text-blue-700 font-bold text-xs">Details →</Link>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>

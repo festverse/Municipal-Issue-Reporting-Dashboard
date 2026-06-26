@@ -45,6 +45,30 @@ const testConnection = async () => {
       ADD COLUMN IF NOT EXISTS notifications VARCHAR(1000),
       ADD COLUMN IF NOT EXISTS session_expiry VARCHAR(50),
       ADD COLUMN IF NOT EXISTS avatar TEXT;
+
+      CREATE TABLE IF NOT EXISTS conversations (
+        id SERIAL PRIMARY KEY,
+        participant1_id INT,
+        participant2_id INT,
+        participant1_name VARCHAR(255),
+        participant2_name VARCHAR(255),
+        participant1_role VARCHAR(100),
+        participant2_role VARCHAR(100),
+        participant1_avatar TEXT,
+        participant2_avatar TEXT,
+        last_message TEXT,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE TABLE IF NOT EXISTS messages (
+        id SERIAL PRIMARY KEY,
+        conversation_id INT REFERENCES conversations(id) ON DELETE CASCADE,
+        sender_id INT,
+        sender_name VARCHAR(255),
+        sender_role VARCHAR(100),
+        text TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
     `);
     console.log('[DB] Connected successfully at', result.rows[0].now);
   } finally {

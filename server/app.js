@@ -30,6 +30,7 @@ const ticketRoutes = require('./routes/ticket.routes');
 const zoneRoutes = require('./routes/zone.routes');
 const categoryRoutes = require('./routes/category.routes');
 const analyticsRoutes = require('./routes/analytics.routes');
+const chatRoutes = require('./routes/chat.routes');
 
 // ── Create Express app ─────────────────────────────────────────────
 const app = express();
@@ -76,6 +77,7 @@ app.use('/api/tickets', ticketRoutes);
 app.use('/api/zones', zoneRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/analytics', analyticsRoutes);
+app.use('/api/chats', chatRoutes);
 
 // ── 404 catch-all for undefined routes ─────────────────────────────
 app.use((req, _res, next) => {

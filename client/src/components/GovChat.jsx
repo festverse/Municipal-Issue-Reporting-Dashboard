@@ -1,46 +1,79 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { MessageSquare, Send, Search, Phone, Video, Info, Sparkles, CheckCheck, ShieldCheck } from 'lucide-react';
+import { fetchChats, fetchMessages, sendMessageAPI } from '../api/client';
 
-export default function GovChat() {
+export default function GovChat({ activeChatTarget }) {
+  const [chats, setChats] = useState([]);
   const [activeChat, setActiveChat] = useState(1);
+  const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
 
-  const chats = [
-    { id: 1, name: 'Department of Transportation', rep: 'Officer Davis', role: 'Transit Dispatcher', unread: 0, avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80', online: true, lastMessage: 'The crew has been dispatched to Main Street.' },
-    { id: 2, name: 'Water & Sanitation Board', rep: 'Elena Rostova', role: 'Chief Sanitizer', unread: 2, avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80', online: true, lastMessage: 'We are monitoring the pipeline pressure now.' },
-    { id: 3, name: 'Parks & Recreation Division', rep: 'Marcus Sterling', role: 'Landscaping Lead', unread: 0, avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80', online: false, lastMessage: 'The broken playground swing will be replaced tomorrow.' },
-    { id: 4, name: 'Municipal Energy Bureau', rep: 'Thomas Chen', role: 'Microgrid Admin', unread: 0, avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80', online: true, lastMessage: 'Power restored across Zone 4 sectors.' },
-  ];
+  useEffect(() => {
+    const loadChats = async () => {
+      const data = await fetchChats();
+      setChats(data);
+      if (activeChatTarget && activeChatTarget.id) {
+        setActiveChat(activeChatTarget.id);
+      } else {
+        const storedActive = localStorage.getItem('civic_active_chat_id');
+        if (storedActive && data.some(c => c.id === parseInt(storedActive, 10))) {
+          setActiveChat(parseInt(storedActive, 10));
+        } else if (data.length > 0) {
+          setActiveChat(data[0].id);
+        }
+      }
+    };
+    loadChats();
+  }, [activeChatTarget]);
 
-  const [messages, setMessages] = useState({
-    1: [
-      { id: 101, sender: 'them', text: 'Hello! You have reached the Department of Transportation dispatch desk. How may I assist your civic inquiry today?', time: '10:14 AM' },
-      { id: 102, sender: 'me', text: 'Hi Officer Davis, I wanted to check the status of the pothole repair on Main Street reported yesterday.', time: '10:15 AM' },
-      { id: 103, sender: 'them', text: 'The crew has been dispatched to Main Street. We expect full asphalt curing by 4:00 PM today.', time: '10:16 AM' },
-    ],
-    2: [
-      { id: 201, sender: 'them', text: 'Greetings from Water & Sanitation. We received your water pressure alert.', time: '09:20 AM' },
-      { id: 202, sender: 'them', text: 'We are monitoring the pipeline pressure now.', time: '09:21 AM' },
-    ],
-    3: [
-      { id: 301, sender: 'them', text: 'The broken playground swing will be replaced tomorrow.', time: 'Yesterday' },
-    ],
-    4: [
-      { id: 401, sender: 'them', text: 'Power restored across Zone 4 sectors.', time: 'June 22' },
-    ]
-  });
+  useEffect(() => {
+    if (activeChat) {
+      localStorage.setItem('civic_active_chat_id', activeChat);
+      fetchMessages(activeChat).then(msgs => {
+        setMessages(msgs);
+      });
+    }
+  }, [activeChat]);
 
-  const selectedChat = chats.find(c => c.id === activeChat);
+  const selectedChat = chats.find(c => c.id === activeChat) || {
+    name: 'Department Representative', rep: 'Support Agent', role: 'Municipal Rep', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80', online: true
+  };
 
-  const handleSendMessage = (e) => {
+  const filteredChats = chats.filter(c => 
+    c.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    (c.rep && c.rep.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
+
+  const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!inputText.trim()) return;
-    const newMsg = { id: Date.now(), sender: 'me', text: inputText, time: 'Just now' };
-    setMessages(prev => ({
-      ...prev,
-      [activeChat]: [...(prev[activeChat] || []), newMsg]
-    }));
+    const text = inputText;
     setInputText('');
+
+    // Send my message
+    const newMsg = await sendMessageAPI(activeChat, text, 'me');
+    setMessages(prev => [...prev, newMsg]);
+
+    // Update chats sidebar lastMessage
+    setChats(prev => prev.map(c => c.id === activeChat ? { ...c, lastMessage: text } : c));
+
+    // Simulate real-time live typing and reply from the Engineer / Citizen
+    setIsTyping(true);
+    setTimeout(async () => {
+      setIsTyping(false);
+      const replies = [
+        `I've reviewed the details. Let me assign a field unit right now to collaborate with you on this.`,
+        `Thank you for bringing this up. I am checking our regional telemetry to fast-track this request.`,
+        `Understood perfectly! We are actively coordinating the repair schedule and will keep you updated here.`,
+        `Excellent initiative. Let's coordinate closely to ensure this issue is fully resolved to top safety standards.`
+      ];
+      const replyText = replies[Math.floor(Math.random() * replies.length)];
+      const replyMsg = await sendMessageAPI(activeChat, replyText, 'them');
+      setMessages(prev => [...prev, replyMsg]);
+      setChats(prev => prev.map(c => c.id === activeChat ? { ...c, lastMessage: replyText } : c));
+    }, 2500);
   };
 
   return (
@@ -68,20 +101,22 @@ export default function GovChat() {
         <div className="xl:col-span-4 border-b xl:border-b-0 xl:border-r border-slate-200/80 bg-slate-50/50 p-6 flex flex-col space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-base font-bold text-slate-900">Active Chat Nodes</h3>
-            <span className="text-xs font-bold px-2.5 py-1 bg-blue-100 text-blue-700 rounded-full">4 Live</span>
+            <span className="text-xs font-bold px-2.5 py-1 bg-blue-100 text-blue-700 rounded-full">{chats.length} Live</span>
           </div>
 
           <div className="relative w-full">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <input
               type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search department or agent..."
               className="w-full pl-9 pr-4 py-2 bg-white border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 text-xs outline-none focus:border-blue-500 transition-all shadow-sm"
             />
           </div>
 
           <div className="flex-1 space-y-2 overflow-y-auto px-1 py-1 -mx-1">
-            {chats.map((chat) => (
+            {filteredChats.map((chat) => (
               <button
                 key={chat.id}
                 onClick={() => setActiveChat(chat.id)}
@@ -146,7 +181,7 @@ export default function GovChat() {
 
           {/* Messages Viewport */}
           <div className="flex-1 p-6 overflow-y-auto space-y-4 bg-slate-50/20 scrollbar-thin scrollbar-thumb-slate-200">
-            {(messages[activeChat] || []).map((msg) => (
+            {messages.map((msg) => (
               <div key={msg.id} className={`flex ${msg.sender === 'me' ? 'justify-end' : 'justify-start'}`}>
                 <div className={`max-w-[70%] p-4 rounded-2xl shadow-sm ${
                   msg.sender === 'me' ? 'bg-blue-600 text-white rounded-br-none' : 'bg-slate-100 text-slate-800 rounded-bl-none'
@@ -159,6 +194,13 @@ export default function GovChat() {
                 </div>
               </div>
             ))}
+            {isTyping && (
+              <div className="flex justify-start">
+                <div className="bg-slate-100 text-slate-500 px-4 py-3 rounded-2xl rounded-bl-none text-xs flex items-center gap-2 animate-pulse">
+                  <span>{selectedChat.name} is typing...</span>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Message Input Box */}

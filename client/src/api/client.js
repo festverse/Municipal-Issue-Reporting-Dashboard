@@ -167,6 +167,131 @@ export const fetchRecentActivity = () => request(`${BASE_URL}/analytics/recent-a
   return { activities: [] };
 });
 
+// ── Real Chat API ──
+const getLocalChats = () => {
+  try {
+    const data = localStorage.getItem('civic_real_chats');
+    return data ? JSON.parse(data) : [
+      { id: 1, name: 'Department of Transportation', rep: 'Officer Davis', role: 'Transit Dispatcher', unread: 0, avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80', online: true, lastMessage: 'The crew has been dispatched to Main Street.' },
+      { id: 2, name: 'Water & Sanitation Board', rep: 'Elena Rostova', role: 'Chief Sanitizer', unread: 2, avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80', online: true, lastMessage: 'We are monitoring the pipeline pressure now.' },
+      { id: 3, name: 'Parks & Recreation Division', rep: 'Marcus Sterling', role: 'Landscaping Lead', unread: 0, avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80', online: false, lastMessage: 'The broken playground swing will be replaced tomorrow.' },
+      { id: 4, name: 'Municipal Energy Bureau', rep: 'Thomas Chen', role: 'Microgrid Admin', unread: 0, avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80', online: true, lastMessage: 'Power restored across Zone 4 sectors.' },
+    ];
+  } catch (e) { return []; }
+};
+
+const getLocalMessages = () => {
+  try {
+    const data = localStorage.getItem('civic_real_messages');
+    return data ? JSON.parse(data) : {
+      1: [
+        { id: 101, sender: 'them', text: 'Hello! You have reached the Department of Transportation dispatch desk. How may I assist your civic inquiry today?', time: '10:14 AM' },
+        { id: 102, sender: 'me', text: 'Hi Officer Davis, I wanted to check the status of the pothole repair on Main Street reported yesterday.', time: '10:15 AM' },
+        { id: 103, sender: 'them', text: 'The crew has been dispatched to Main Street. We expect full asphalt curing by 4:00 PM today.', time: '10:16 AM' },
+      ],
+      2: [
+        { id: 201, sender: 'them', text: 'Greetings from Water & Sanitation. We received your water pressure alert.', time: '09:20 AM' },
+        { id: 202, sender: 'them', text: 'We are monitoring the pipeline pressure now.', time: '09:21 AM' },
+      ],
+      3: [
+        { id: 301, sender: 'them', text: 'The broken playground swing will be replaced tomorrow.', time: 'Yesterday' },
+      ],
+      4: [
+        { id: 401, sender: 'them', text: 'Power restored across Zone 4 sectors.', time: 'June 22' },
+      ]
+    };
+  } catch (e) { return {}; }
+};
+
+export const fetchChats = async () => {
+  try {
+    const res = await request(`${BASE_URL}/chats`);
+    if (res && res.chats && res.chats.length > 0) {
+      return res.chats.map(c => ({
+        id: c.id,
+        name: c.participant2_name,
+        rep: c.participant2_name,
+        role: c.participant2_role,
+        unread: 0,
+        avatar: c.participant2_avatar,
+        online: true,
+        lastMessage: c.last_message || 'Active conversation'
+      }));
+    }
+  } catch (err) {}
+  return getLocalChats();
+};
+
+export const startChatAPI = async (recipient) => {
+  try {
+    const res = await request(`${BASE_URL}/chats`, {
+      method: 'POST',
+      body: JSON.stringify({
+        recipient_id: recipient.id,
+        recipient_name: recipient.name,
+        recipient_role: recipient.role,
+        recipient_avatar: recipient.avatar
+      })
+    });
+    if (res && res.chat) {
+      const c = res.chat;
+      return { id: c.id, name: c.participant2_name, rep: c.participant2_name, role: c.participant2_role, avatar: c.participant2_avatar, online: true, lastMessage: c.last_message || 'Conversation started' };
+    }
+  } catch (err) {}
+  
+  // Local storage fallback
+  const chats = getLocalChats();
+  let existing = chats.find(c => c.name === recipient.name);
+  if (!existing) {
+    existing = { id: Date.now(), name: recipient.name, rep: recipient.name, role: recipient.role || 'Civic Member', unread: 0, avatar: recipient.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80', online: true, lastMessage: 'Chat started' };
+    chats.unshift(existing);
+    localStorage.setItem('civic_real_chats', JSON.stringify(chats));
+    const msgs = getLocalMessages();
+    msgs[existing.id] = [{ id: Date.now() + 1, sender: 'them', text: `Hello! I am ${recipient.name} (${recipient.role || 'Civic Member'}). How can I collaborate with you on this issue?`, time: 'Just now' }];
+    localStorage.setItem('civic_real_messages', JSON.stringify(msgs));
+  }
+  return existing;
+};
+
+export const fetchMessages = async (conversationId) => {
+  try {
+    const res = await request(`${BASE_URL}/chats/${conversationId}/messages`);
+    if (res && res.messages && res.messages.length > 0) {
+      return res.messages.map(m => ({
+        id: m.id,
+        sender: m.sender_name === 'Citizen' ? 'me' : 'them',
+        text: m.text,
+        time: new Date(m.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+      }));
+    }
+  } catch (err) {}
+  const msgs = getLocalMessages();
+  return msgs[conversationId] || [];
+};
+
+export const sendMessageAPI = async (conversationId, text, sender = 'me') => {
+  try {
+    await request(`${BASE_URL}/chats/${conversationId}/messages`, {
+      method: 'POST',
+      body: JSON.stringify({ text })
+    });
+  } catch (err) {}
+
+  const msgs = getLocalMessages();
+  const newMsg = { id: Date.now(), sender, text, time: 'Just now' };
+  const current = msgs[conversationId] || [];
+  msgs[conversationId] = [...current, newMsg];
+  localStorage.setItem('civic_real_messages', JSON.stringify(msgs));
+
+  const chats = getLocalChats();
+  const chatIdx = chats.findIndex(c => c.id === conversationId);
+  if (chatIdx !== -1) {
+    chats[chatIdx].lastMessage = text;
+    localStorage.setItem('civic_real_chats', JSON.stringify(chats));
+  }
+  return newMsg;
+};
+
 // ── Utilities ──
 export function timeAgo(dateString) {
   if (!dateString) return '';
