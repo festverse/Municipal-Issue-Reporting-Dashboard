@@ -110,51 +110,51 @@ A production-grade, full-stack web application that enables citizens to report m
 
 ```
 municipal-dashboard/
-├── database/                    # Database design and initialization
-│   ├── schema.sql               # PostgreSQL DDL (Tables, ENUMs, Triggers, Indexes)
-│   └── seed.sql                 # Demo data (users, tickets, audit logs)
-├── server/                      # Node.js REST API
-│   ├── index.js                 # Entry point with graceful shutdown
-│   ├── app.js                   # Express app configuration & middleware
+├── database/                      # Database design and initialization
+│   ├── schema.sql                 # PostgreSQL DDL (Tables, ENUMs, Triggers, Indexes)
+│   └── seed.sql                   # Demo data (users, tickets, audit logs)
+├── server/                        # Node.js REST API
+│   ├── index.js                   # Entry point with graceful shutdown
+│   ├── app.js                     # Express app configuration & middleware
 │   ├── config/
-│   │   └── db.js                # PostgreSQL pool configuration
+│   │   └── db.js                  # PostgreSQL pool configuration
 │   ├── middleware/
-│   │   ├── auth.js              # JWT verification & role-based access
-│   │   ├── errorHandler.js      # Centralized error handling
-│   │   ├── validate.js          # Request validation (express-validator)
-│   │   └── requestLogger.js     # HTTP request logging
-│   ├── routes/                  # Route definitions with validation
-│   ├── controllers/             # Business logic handlers
-│   ├── services/                # Reusable service layer
-│   │   ├── auth.service.js      # JWT + bcrypt operations
-│   │   └── audit.service.js     # Audit trail logging
-│   ├── utils/                   # Shared utilities
-│   │   ├── AppError.js          # Custom error class
-│   │   └── catchAsync.js        # Async error wrapper
-│   └── .env.example             # Environment variable template
-├── client/                      # React (Vite) Frontend
+│   │   ├── auth.js                # JWT verification & role-based access
+│   │   ├── errorHandler.js        # Centralized error handling
+│   │   ├── validate.js            # Request validation (express-validator)
+│   │   └── requestLogger.js       # HTTP request logging
+│   ├── routes/                    # Route definitions with validation
+│   ├── controllers/               # Business logic handlers
+│   ├── services/                  # Reusable service layer
+│   │   ├── auth.service.js        # JWT + bcrypt operations
+│   │   └── audit.service.js       # Audit trail logging
+│   ├── utils/                     # Shared utilities
+│   │   ├── AppError.js            # Custom error class
+│   │   └── catchAsync.js          # Async error wrapper
+│   └── .env.example               # Environment variable template
+├── client/                        # React (Vite) Frontend
 │   ├── src/
-│   │   ├── api/client.js        # Centralized API client with JWT
-│   │   ├── context/             # React context (Auth, Toast)
-│   │   ├── hooks/               # Custom hooks
+│   │   ├── api/client.js          # Centralized API client with JWT
+│   │   ├── context/               # React context (Auth, Toast)
+│   │   ├── hooks/                 # Custom hooks
 │   │   ├── components/
-│   │   │   ├── ui/              # Reusable UI components
-│   │   │   ├── layout/          # Navbar, ProtectedRoute
-│   │   │   ├── Login.jsx        # JWT authentication
-│   │   │   ├── Register.jsx     # User registration
-│   │   │   ├── LandingPage.jsx  # Spectacular landing & hero section
-│   │   │   ├── TicketForm.jsx   # Issue reporting with map & mobile tabs
-│   │   │   ├── TicketDetail.jsx # Full ticket view + timeline
-│   │   │   ├── Dashboard.jsx    # Engineer management panel
-│   │   │   ├── CityMap.jsx      # Interactive live issue map & filters
-│   │   │   ├── GovChat.jsx      # Real-time municipal chat & mobile toggle
-│   │   │   ├── AIChatAgent.jsx  # AI triage assistant
-│   │   │   ├── ThemeToggle.jsx  # Dark/Light mode switcher
+│   │   │   ├── ui/                # Reusable UI components
+│   │   │   ├── layout/            # Navbar, ProtectedRoute
+│   │   │   ├── Login.jsx          # JWT authentication
+│   │   │   ├── Register.jsx       # User registration
+│   │   │   ├── LandingPage.jsx    # Spectacular landing & hero section
+│   │   │   ├── TicketForm.jsx     # Issue reporting with map & mobile tabs
+│   │   │   ├── TicketDetail.jsx   # Full ticket view + timeline
+│   │   │   ├── Dashboard.jsx      # Engineer management panel
+│   │   │   ├── CityMap.jsx        # Interactive live issue map & filters
+│   │   │   ├── GovChat.jsx        # Real-time municipal chat & mobile toggle
+│   │   │   ├── AIChatAgent.jsx    # AI triage assistant
+│   │   │   ├── ThemeToggle.jsx    # Dark/Light mode switcher
 │   │   │   └── AnalyticsPanel.jsx # Visual analytics
-│   │   ├── App.jsx              # Routing & providers
-│   │   └── index.css            # Design system, dark theme & animations
-│   └── .env.example             # Environment variable template
-├── docker-compose.yml           # PostgreSQL + pgAdmin for local dev
+│   │   ├── App.jsx                # Routing & providers
+│   │   └── index.css              # Design system, dark theme & animations
+│   └── .env.example               # Environment variable template
+├── docker-compose.yml             # PostgreSQL + pgAdmin for local dev
 ├── .gitignore
 └── README.md
 ```
