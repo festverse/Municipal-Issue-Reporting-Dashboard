@@ -402,6 +402,11 @@ body.dark-theme .bg-ai-gradient {
   color: #ffffff !important;
 }
 
+body.dark-theme .text-transparent,
+body.dark-theme .bg-gradient-to-r.text-transparent {
+  color: transparent !important;
+}
+
 /* Quick hover states for custom interactive cards */
 body.dark-theme .hover\:bg-slate-50:hover,
 body.dark-theme .hover\:bg-slate-50\/50:hover,
