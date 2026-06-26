@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { createTicket, fetchZones, fetchCategories, analyzeIssueAI, startChatAPI } from '../api/client';
@@ -6,6 +6,7 @@ import { useAuth } from '../hooks/useAuth';
 import { useToast } from './ui/Toast';
 import { Link } from 'react-router-dom';
 import { Lock, Zap, ArrowRight, Settings, Info, FileText, Sparkles, Bot, MapPin, Mic, Image, Phone, X, Check, Upload, LayoutDashboard, Map, Lightbulb, Building, BarChart2, Users, MessageSquare, HelpCircle, User } from 'lucide-react';
+import Lenis from 'lenis';
 
 import GovDashboard from './GovDashboard';
 import GovHeatmap from './GovHeatmap';
@@ -42,6 +43,59 @@ export default function TicketForm() {
   const { showToast } = useToast();
   const [activeTab, setActiveTab] = useState(user?.role === 'ENGINEER' || user?.role === 'ADMIN' ? 'dashboard' : 'report');
   const [activeChatTarget, setActiveChatTarget] = useState(null);
+
+  const sidebarRef = useRef(null);
+  const rightSidebarRef = useRef(null);
+
+  useEffect(() => {
+    let lenisLeft = null;
+    let lenisRight = null;
+    let animationFrameId = null;
+
+    const stopWheel = (e) => e.stopPropagation();
+
+    if (sidebarRef.current && sidebarRef.current.children[0]) {
+      sidebarRef.current.addEventListener('wheel', stopWheel, { passive: true });
+      lenisLeft = new Lenis({
+        wrapper: sidebarRef.current,
+        content: sidebarRef.current.children[0],
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        orientation: 'vertical',
+        gestureOrientation: 'vertical',
+        smoothWheel: true,
+      });
+    }
+
+    if (rightSidebarRef.current && rightSidebarRef.current.children[0]) {
+      rightSidebarRef.current.addEventListener('wheel', stopWheel, { passive: true });
+      lenisRight = new Lenis({
+        wrapper: rightSidebarRef.current,
+        content: rightSidebarRef.current.children[0],
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        orientation: 'vertical',
+        gestureOrientation: 'vertical',
+        smoothWheel: true,
+      });
+    }
+
+    function raf(time) {
+      if (lenisLeft) lenisLeft.raf(time);
+      if (lenisRight) lenisRight.raf(time);
+      animationFrameId = requestAnimationFrame(raf);
+    }
+
+    animationFrameId = requestAnimationFrame(raf);
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      if (lenisLeft) lenisLeft.destroy();
+      if (lenisRight) lenisRight.destroy();
+      if (sidebarRef.current) sidebarRef.current.removeEventListener('wheel', stopWheel);
+      if (rightSidebarRef.current) rightSidebarRef.current.removeEventListener('wheel', stopWheel);
+    };
+  }, [activeTab]);
 
   const handleStartChat = async (recipient) => {
     const chat = await startChatAPI(recipient);
@@ -251,7 +305,7 @@ export default function TicketForm() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-full">
         
         {/* Column 1 (Left Sidebar) — Navigation Menu matching Panchayat screenshot */}
-        <div data-lenis-prevent="true" className="lg:col-span-3 xl:col-span-2 sticky top-24 h-[calc(100vh-7rem)] overflow-y-auto pr-2 space-y-6 scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent self-start">
+        <div ref={sidebarRef} className="lg:col-span-3 xl:col-span-2 sticky top-24 h-[calc(100vh-7rem)] overflow-y-auto pr-2 space-y-6 scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent self-start">
           <div className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-sm flex flex-col justify-between min-h-[calc(100%-1rem)] space-y-6">
             <div className="space-y-6">
               {/* Main Nav Links */}
@@ -528,116 +582,118 @@ export default function TicketForm() {
         </div>
 
         {/* Column 3 (Right) — Options & Presets Panel */}
-        <div data-lenis-prevent="true" className="lg:col-span-3 xl:col-span-3 sticky top-24 h-[calc(100vh-7rem)] overflow-y-auto pr-2 space-y-6 scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent self-start">
-          {/* Card 1: Quick Civic Presets */}
-          <div className="ui-card bg-white p-5">
-            <h3 className="text-sm font-bold text-slate-900 mb-2 flex items-center gap-1.5">
-              <Zap className="w-4 h-4 text-amber-500" /> Quick Civic Presets
-            </h3>
-            <p className="text-xs text-slate-500 mb-4">Instantly populate common municipal reports with AI-calibrated settings.</p>
-            <div className="space-y-2">
-              {[
-                { label: 'Severe Pothole Hazard', title: 'Dangerous deep pothole causing traffic hazard', description: 'Large deep pothole in the middle of the active roadway. Poses immediate damage risk to vehicles and danger to cyclists.', priority: 'HIGH', catKeyword: 'road' },
-                { label: 'Main Pipe Water Leak', title: 'Major clean water pipe burst flooding the street', description: 'Underground water main burst causing continuous clean water flooding across the road surface and draining pressure.', priority: 'CRITICAL', catKeyword: 'water' },
-                { label: 'Streetlight Grid Outage', title: 'Complete block streetlight failure creating safety risk', description: 'Entire street block has lost street lighting. Area is completely dark after sunset, creating a significant pedestrian safety hazard.', priority: 'MEDIUM', catKeyword: 'electr' },
-                { label: 'Fallen Tree Obstruction', title: 'Fallen tree blocking public pathway/roadway', description: 'Large mature tree has fallen across the public right-of-way, completely blocking pedestrian and vehicular access.', priority: 'HIGH', catKeyword: 'park' },
-              ].map((preset, idx) => (
+        <div ref={rightSidebarRef} className="lg:col-span-3 xl:col-span-3 sticky top-24 h-[calc(100vh-7rem)] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent self-start">
+          <div className="space-y-6">
+            {/* Card 1: Quick Civic Presets */}
+            <div className="ui-card bg-white p-5">
+              <h3 className="text-sm font-bold text-slate-900 mb-2 flex items-center gap-1.5">
+                <Zap className="w-4 h-4 text-amber-500" /> Quick Civic Presets
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">Instantly populate common municipal reports with AI-calibrated settings.</p>
+              <div className="space-y-2">
+                {[
+                  { label: 'Severe Pothole Hazard', title: 'Dangerous deep pothole causing traffic hazard', description: 'Large deep pothole in the middle of the active roadway. Poses immediate damage risk to vehicles and danger to cyclists.', priority: 'HIGH', catKeyword: 'road' },
+                  { label: 'Main Pipe Water Leak', title: 'Major clean water pipe burst flooding the street', description: 'Underground water main burst causing continuous clean water flooding across the road surface and draining pressure.', priority: 'CRITICAL', catKeyword: 'water' },
+                  { label: 'Streetlight Grid Outage', title: 'Complete block streetlight failure creating safety risk', description: 'Entire street block has lost street lighting. Area is completely dark after sunset, creating a significant pedestrian safety hazard.', priority: 'MEDIUM', catKeyword: 'electr' },
+                  { label: 'Fallen Tree Obstruction', title: 'Fallen tree blocking public pathway/roadway', description: 'Large mature tree has fallen across the public right-of-way, completely blocking pedestrian and vehicular access.', priority: 'HIGH', catKeyword: 'park' },
+                ].map((preset, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => handlePreset(preset)}
+                    className="w-full text-left px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-blue-50/50 hover:border-blue-200 transition-all flex items-center justify-between group active:scale-95"
+                  >
+                    <div>
+                      <p className="text-xs font-semibold text-slate-800 group-hover:text-blue-700 transition-colors">{preset.label}</p>
+                      <p className="text-[10px] text-slate-400 mt-0.5">Priority: {preset.priority}</p>
+                    </div>
+                    <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-600 transition-colors" />
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Card 2: Report Settings & Overrides */}
+            <div className="ui-card bg-white p-5">
+              <h3 className="text-sm font-bold text-slate-900 mb-2 flex items-center gap-1.5">
+                <Settings className="w-4 h-4 text-blue-600" /> Report Options & Overrides
+              </h3>
+              <p className="text-xs text-slate-500 mb-4">Advanced filing controls and telemetry overrides.</p>
+              <div className="space-y-4">
+                
+                {/* Toggle 1: GPS */}
                 <button
-                  key={idx}
                   type="button"
-                  onClick={() => handlePreset(preset)}
-                  className="w-full text-left px-3 py-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-blue-50/50 hover:border-blue-200 transition-all flex items-center justify-between group active:scale-95"
+                  onClick={handleToggleGPS}
+                  className="w-full flex items-center justify-between text-left group"
                 >
                   <div>
-                    <p className="text-xs font-semibold text-slate-800 group-hover:text-blue-700 transition-colors">{preset.label}</p>
-                    <p className="text-[10px] text-slate-400 mt-0.5">Priority: {preset.priority}</p>
+                    <p className="text-xs font-semibold text-slate-800">High-Precision GPS</p>
+                    <p className="text-[10px] text-slate-400 mt-0.5">Acquire exact HTML5 device telemetry</p>
                   </div>
-                  <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-600 transition-colors" />
+                  <div className={`w-10 h-6 flex items-center rounded-full p-1 transition-colors ${gpsEnabled ? 'bg-blue-600' : 'bg-slate-300'}`}>
+                    <div className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform ${gpsEnabled ? 'translate-x-4' : 'translate-x-0'}`} />
+                  </div>
                 </button>
-              ))}
+
+                {/* Toggle 2: Urgent Threat */}
+                <button
+                  type="button"
+                  onClick={handleToggleUrgent}
+                  className="w-full flex items-center justify-between text-left group"
+                >
+                  <div>
+                    <p className="text-xs font-semibold text-slate-800">Urgent Safety Escalation</p>
+                    <p className="text-[10px] text-slate-400 mt-0.5">Flag as immediate public hazard</p>
+                  </div>
+                  <div className={`w-10 h-6 flex items-center rounded-full p-1 transition-colors ${urgentThreat ? 'bg-rose-600' : 'bg-slate-300'}`}>
+                    <div className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform ${urgentThreat ? 'translate-x-4' : 'translate-x-0'}`} />
+                  </div>
+                </button>
+
+                {/* Toggle 3: Anonymous */}
+                <button
+                  type="button"
+                  onClick={handleToggleAnonymous}
+                  className="w-full flex items-center justify-between text-left group"
+                >
+                  <div>
+                    <p className="text-xs font-semibold text-slate-800">Anonymous Filing</p>
+                    <p className="text-[10px] text-slate-400 mt-0.5">Protect citizen identity publicly</p>
+                  </div>
+                  <div className={`w-10 h-6 flex items-center rounded-full p-1 transition-colors ${isAnonymous ? 'bg-slate-800' : 'bg-slate-300'}`}>
+                    <div className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform ${isAnonymous ? 'translate-x-4' : 'translate-x-0'}`} />
+                  </div>
+                </button>
+
+              </div>
             </div>
-          </div>
 
-          {/* Card 2: Report Settings & Overrides */}
-          <div className="ui-card bg-white p-5">
-            <h3 className="text-sm font-bold text-slate-900 mb-2 flex items-center gap-1.5">
-              <Settings className="w-4 h-4 text-blue-600" /> Report Options & Overrides
-            </h3>
-            <p className="text-xs text-slate-500 mb-4">Advanced filing controls and telemetry overrides.</p>
-            <div className="space-y-4">
-              
-              {/* Toggle 1: GPS */}
-              <button
-                type="button"
-                onClick={handleToggleGPS}
-                className="w-full flex items-center justify-between text-left group"
-              >
-                <div>
-                  <p className="text-xs font-semibold text-slate-800">High-Precision GPS</p>
-                  <p className="text-[10px] text-slate-400 mt-0.5">Acquire exact HTML5 device telemetry</p>
+            {/* Card 3: AI Triage & SLA Guarantees */}
+            <div className="ui-card bg-white p-5 border-t-4 border-blue-600">
+              <h3 className="text-sm font-bold text-slate-900 mb-2 flex items-center gap-1.5">
+                <Info className="w-4 h-4 text-blue-600" /> Dispatch & SLA Guarantee
+              </h3>
+              <p className="text-xs text-slate-600 mb-3 leading-relaxed">
+                All reports are evaluated in real-time by the City AI Engine. Guaranteed municipal emergency dispatch resolution windows:
+              </p>
+              <div className="space-y-2 text-xs font-medium">
+                <div className="flex justify-between items-center py-1 border-b border-slate-100">
+                  <span className="flex items-center gap-1.5 text-rose-700 font-bold"><span className="w-2.5 h-2.5 rounded-full bg-rose-600" /> Critical Priority</span>
+                  <span className="text-slate-600">&lt; 24 Hours</span>
                 </div>
-                <div className={`w-10 h-6 flex items-center rounded-full p-1 transition-colors ${gpsEnabled ? 'bg-blue-600' : 'bg-slate-300'}`}>
-                  <div className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform ${gpsEnabled ? 'translate-x-4' : 'translate-x-0'}`} />
+                <div className="flex justify-between items-center py-1 border-b border-slate-100">
+                  <span className="flex items-center gap-1.5 text-amber-700 font-bold"><span className="w-2.5 h-2.5 rounded-full bg-amber-500" /> High Priority</span>
+                  <span className="text-slate-600">&lt; 48 Hours</span>
                 </div>
-              </button>
-
-              {/* Toggle 2: Urgent Threat */}
-              <button
-                type="button"
-                onClick={handleToggleUrgent}
-                className="w-full flex items-center justify-between text-left group"
-              >
-                <div>
-                  <p className="text-xs font-semibold text-slate-800">Urgent Safety Escalation</p>
-                  <p className="text-[10px] text-slate-400 mt-0.5">Flag as immediate public hazard</p>
+                <div className="flex justify-between items-center py-1 border-b border-slate-100">
+                  <span className="flex items-center gap-1.5 text-blue-700 font-bold"><span className="w-2.5 h-2.5 rounded-full bg-blue-600" /> Medium Priority</span>
+                  <span className="text-slate-600">&lt; 5 Days</span>
                 </div>
-                <div className={`w-10 h-6 flex items-center rounded-full p-1 transition-colors ${urgentThreat ? 'bg-rose-600' : 'bg-slate-300'}`}>
-                  <div className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform ${urgentThreat ? 'translate-x-4' : 'translate-x-0'}`} />
+                <div className="flex justify-between items-center py-1">
+                  <span className="flex items-center gap-1.5 text-slate-700 font-bold"><span className="w-2.5 h-2.5 rounded-full bg-slate-500" /> Low Priority</span>
+                  <span className="text-slate-600">&lt; 7 Days</span>
                 </div>
-              </button>
-
-              {/* Toggle 3: Anonymous */}
-              <button
-                type="button"
-                onClick={handleToggleAnonymous}
-                className="w-full flex items-center justify-between text-left group"
-              >
-                <div>
-                  <p className="text-xs font-semibold text-slate-800">Anonymous Filing</p>
-                  <p className="text-[10px] text-slate-400 mt-0.5">Protect citizen identity publicly</p>
-                </div>
-                <div className={`w-10 h-6 flex items-center rounded-full p-1 transition-colors ${isAnonymous ? 'bg-slate-800' : 'bg-slate-300'}`}>
-                  <div className={`bg-white w-4 h-4 rounded-full shadow-md transform transition-transform ${isAnonymous ? 'translate-x-4' : 'translate-x-0'}`} />
-                </div>
-              </button>
-
-            </div>
-          </div>
-
-          {/* Card 3: AI Triage & SLA Guarantees */}
-          <div className="ui-card bg-white p-5 border-t-4 border-blue-600">
-            <h3 className="text-sm font-bold text-slate-900 mb-2 flex items-center gap-1.5">
-              <Info className="w-4 h-4 text-blue-600" /> Dispatch & SLA Guarantee
-            </h3>
-            <p className="text-xs text-slate-600 mb-3 leading-relaxed">
-              All reports are evaluated in real-time by the City AI Engine. Guaranteed municipal emergency dispatch resolution windows:
-            </p>
-            <div className="space-y-2 text-xs font-medium">
-              <div className="flex justify-between items-center py-1 border-b border-slate-100">
-                <span className="flex items-center gap-1.5 text-rose-700 font-bold"><span className="w-2.5 h-2.5 rounded-full bg-rose-600" /> Critical Priority</span>
-                <span className="text-slate-600">&lt; 24 Hours</span>
-              </div>
-              <div className="flex justify-between items-center py-1 border-b border-slate-100">
-                <span className="flex items-center gap-1.5 text-amber-700 font-bold"><span className="w-2.5 h-2.5 rounded-full bg-amber-500" /> High Priority</span>
-                <span className="text-slate-600">&lt; 48 Hours</span>
-              </div>
-              <div className="flex justify-between items-center py-1 border-b border-slate-100">
-                <span className="flex items-center gap-1.5 text-blue-700 font-bold"><span className="w-2.5 h-2.5 rounded-full bg-blue-600" /> Medium Priority</span>
-                <span className="text-slate-600">&lt; 5 Days</span>
-              </div>
-              <div className="flex justify-between items-center py-1">
-                <span className="flex items-center gap-1.5 text-slate-700 font-bold"><span className="w-2.5 h-2.5 rounded-full bg-slate-500" /> Low Priority</span>
-                <span className="text-slate-600">&lt; 7 Days</span>
               </div>
             </div>
           </div>
