@@ -273,24 +273,24 @@ export default function AIChatAgent() {
       {isOpen && (
         <div 
           data-lenis-prevent="true"
-          className="pointer-events-auto w-full w-[350px] sm:w-[400px] h-[540px] bg-white rounded-3xl shadow-2xl border border-slate-200/80 flex flex-col mb-3 overflow-hidden animate-fade-in-up"
+          className="pointer-events-auto w-full w-[380px] sm:w-[440px] h-[540px] bg-white rounded-3xl shadow-2xl border border-slate-200/80 flex flex-col mb-3 overflow-hidden animate-fade-in-up"
         >
           {/* Top Header Banner */}
-          <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 p-4 text-white shadow-md relative overflow-hidden flex items-center justify-between flex-shrink-0">
+          <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 p-4 text-white shadow-md relative overflow-hidden flex items-center justify-between flex-shrink-0 gap-2">
             <div className="absolute -right-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-xl pointer-events-none" />
-            <div className="flex items-center gap-3 relative z-10">
-              <div className="w-10 h-10 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-inner">
+            <div className="flex items-center gap-2.5 relative z-10 min-w-0">
+              <div className="w-10 h-10 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-inner flex-shrink-0">
                 <Cpu className="w-5 h-5 text-blue-100 animate-pulse" />
               </div>
-              <div>
+              <div className="min-w-0">
                 <div className="flex items-center gap-1.5">
-                  <h3 className="text-sm font-black tracking-tight">Chief AI Municipal Advisor</h3>
-                  <Sparkles className="w-3.5 h-3.5 text-blue-200" />
+                  <h3 className="text-sm font-black tracking-tight truncate">Chief AI Municipal Advisor</h3>
+                  <Sparkles className="w-3.5 h-3.5 text-blue-200 flex-shrink-0" />
                 </div>
-                <p className="text-[11px] text-slate-100 font-medium">Senior Civic Tech & Engineering Expert</p>
+                <p className="text-[11px] text-slate-100 font-medium truncate">Senior Civic Tech & Engineering Expert</p>
               </div>
             </div>
-            <div className="flex items-center gap-1.5 relative z-10">
+            <div className="flex items-center gap-1.5 relative z-10 flex-shrink-0">
               <button
                 onClick={() => {
                   if (isSpeaking && window.speechSynthesis) window.speechSynthesis.cancel();
@@ -304,7 +304,7 @@ export default function AIChatAgent() {
                 title={voiceMode ? "AI Voice Active (Male Expert)" : "AI Voice Muted"}
               >
                 {voiceMode ? <Volume2 className={`w-3.5 h-3.5 ${isSpeaking ? 'animate-bounce text-emerald-300' : ''}`} /> : <VolumeX className="w-3.5 h-3.5" />}
-                <span>{voiceMode ? 'Voice ON' : 'Muted'}</span>
+                <span>{voiceMode ? 'Unmute' : 'Muted'}</span>
               </button>
               <button
                 onClick={() => {
