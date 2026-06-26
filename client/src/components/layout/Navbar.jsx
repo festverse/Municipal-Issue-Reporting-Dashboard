@@ -30,7 +30,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2.5 group">
             <img src="/favicon.svg" className="w-8 h-8 group-hover:scale-105 transition-transform" alt="Civic Portal Logo" />
-            <span className="text-xl font-logo font-extrabold text-slate-900 group-hover:opacity-90 transition-opacity">
+            <span className="text-xl font-logo font-extrabold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent group-hover:opacity-90 transition-opacity">
               Civic Portal
             </span>
           </Link>
