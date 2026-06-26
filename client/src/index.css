@@ -202,7 +202,7 @@ body.dark-theme .bg-white {
 }
 
 body.dark-theme .bg-slate-50 {
-  background-color: #0e1626 !important;
+  background-color: #0b1120 !important;
   color: #f8fafc !important;
 }
 
@@ -217,11 +217,30 @@ body.dark-theme .bg-slate-200 {
 }
 
 body.dark-theme .bg-slate-50\/50 {
-  background-color: rgba(14, 22, 38, 0.7) !important;
+  background-color: rgba(11, 17, 32, 0.7) !important;
 }
 
 body.dark-theme .bg-slate-100\/80 {
   background-color: rgba(26, 37, 61, 0.8) !important;
+}
+
+/* Translucent & Gradient overrides for Navbar and Hero Sections */
+body.dark-theme .from-white,
+body.dark-theme .bg-gradient-to-b {
+  background: #0b1120 !important;
+  background-color: #0b1120 !important;
+  --tw-gradient-from: #0b1120 !important;
+  --tw-gradient-to: #0b1120 !important;
+  --tw-gradient-stops: #0b1120, #0b1120 !important;
+}
+
+body.dark-theme .bg-white\/80,
+body.dark-theme .bg-white\/90,
+body.dark-theme .bg-white\/70,
+body.dark-theme .bg-white\/60,
+body.dark-theme .bg-white\/50 {
+  background-color: rgba(15, 23, 42, 0.85) !important;
+  color: #f8fafc !important;
 }
 
 /* Base text overrides */
