@@ -173,10 +173,10 @@ const getLocalChats = () => {
     const data = localStorage.getItem('civic_real_chats');
     let chats = data ? JSON.parse(data) : null;
     const defaults = [
-      { id: 1, name: 'Department of Transportation', rep: 'Officer Davis', role: 'Transit Dispatcher', unread: 0, avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80', online: true, lastMessage: 'The crew has been dispatched to Main Street.' },
-      { id: 2, name: 'Water & Sanitation Board', rep: 'Elena Rostova', role: 'Chief Sanitizer', unread: 2, avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80', online: true, lastMessage: 'We are monitoring the pipeline pressure now.' },
-      { id: 3, name: 'Parks & Recreation Division', rep: 'Marcus Sterling', role: 'Landscaping Lead', unread: 0, avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80', online: false, lastMessage: 'The broken playground swing will be replaced tomorrow.' },
-      { id: 4, name: 'Municipal Energy Bureau', rep: 'Thomas Chen', role: 'Microgrid Admin', unread: 0, avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80', online: true, lastMessage: 'Power restored across Zone 4 sectors.' },
+      { id: 1, name: 'Department of Transportation', rep: 'Officer Davis', role: 'Transit Dispatcher', unread: 0, avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80', citizenName: 'Citizen Explorer', engineerName: 'Officer Davis', engineerRole: 'Transit Dispatcher', citizenAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80', engineerAvatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80', online: true, lastMessage: 'The crew has been dispatched to Main Street.' },
+      { id: 2, name: 'Water & Sanitation Board', rep: 'Elena Rostova', role: 'Chief Sanitizer', unread: 2, avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80', citizenName: 'Citizen Explorer', engineerName: 'Elena Rostova', engineerRole: 'Chief Sanitizer', citizenAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80', engineerAvatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80', online: true, lastMessage: 'We are monitoring the pipeline pressure now.' },
+      { id: 3, name: 'Parks & Recreation Division', rep: 'Marcus Sterling', role: 'Landscaping Lead', unread: 0, avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80', citizenName: 'Citizen Explorer', engineerName: 'Marcus Sterling', engineerRole: 'Landscaping Lead', citizenAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80', engineerAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80', online: false, lastMessage: 'The broken playground swing will be replaced tomorrow.' },
+      { id: 4, name: 'Municipal Energy Bureau', rep: 'Thomas Chen', role: 'Microgrid Admin', unread: 0, avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80', citizenName: 'Citizen Explorer', engineerName: 'Thomas Chen', engineerRole: 'Microgrid Admin', citizenAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80', engineerAvatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80', online: true, lastMessage: 'Power restored across Zone 4 sectors.' },
     ];
     if (!chats || !Array.isArray(chats) || chats.length === 0) {
       return defaults;
@@ -186,10 +186,10 @@ const getLocalChats = () => {
     localStorage.setItem('civic_real_chats', JSON.stringify(chats));
     return chats;
   } catch (e) { return [
-    { id: 1, name: 'Department of Transportation', rep: 'Officer Davis', role: 'Transit Dispatcher', unread: 0, avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80', online: true, lastMessage: 'The crew has been dispatched to Main Street.' },
-    { id: 2, name: 'Water & Sanitation Board', rep: 'Elena Rostova', role: 'Chief Sanitizer', unread: 2, avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80', online: true, lastMessage: 'We are monitoring the pipeline pressure now.' },
-    { id: 3, name: 'Parks & Recreation Division', rep: 'Marcus Sterling', role: 'Landscaping Lead', unread: 0, avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80', online: false, lastMessage: 'The broken playground swing will be replaced tomorrow.' },
-    { id: 4, name: 'Municipal Energy Bureau', rep: 'Thomas Chen', role: 'Microgrid Admin', unread: 0, avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80', online: true, lastMessage: 'Power restored across Zone 4 sectors.' },
+    { id: 1, name: 'Department of Transportation', rep: 'Officer Davis', role: 'Transit Dispatcher', unread: 0, avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80', citizenName: 'Citizen Explorer', engineerName: 'Officer Davis', engineerRole: 'Transit Dispatcher', citizenAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80', engineerAvatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80', online: true, lastMessage: 'The crew has been dispatched to Main Street.' },
+    { id: 2, name: 'Water & Sanitation Board', rep: 'Elena Rostova', role: 'Chief Sanitizer', unread: 2, avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80', citizenName: 'Citizen Explorer', engineerName: 'Elena Rostova', engineerRole: 'Chief Sanitizer', citizenAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80', engineerAvatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80', online: true, lastMessage: 'We are monitoring the pipeline pressure now.' },
+    { id: 3, name: 'Parks & Recreation Division', rep: 'Marcus Sterling', role: 'Landscaping Lead', unread: 0, avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80', citizenName: 'Citizen Explorer', engineerName: 'Marcus Sterling', engineerRole: 'Landscaping Lead', citizenAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80', engineerAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80', online: false, lastMessage: 'The broken playground swing will be replaced tomorrow.' },
+    { id: 4, name: 'Municipal Energy Bureau', rep: 'Thomas Chen', role: 'Microgrid Admin', unread: 0, avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80', citizenName: 'Citizen Explorer', engineerName: 'Thomas Chen', engineerRole: 'Microgrid Admin', citizenAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80', engineerAvatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80', online: true, lastMessage: 'Power restored across Zone 4 sectors.' },
   ]; }
 };
 
@@ -198,19 +198,19 @@ const getLocalMessages = () => {
     const data = localStorage.getItem('civic_real_messages');
     return data ? JSON.parse(data) : {
       1: [
-        { id: 101, sender: 'them', text: 'Hello! You have reached the Department of Transportation dispatch desk. How may I assist your civic inquiry today?', time: '10:14 AM' },
-        { id: 102, sender: 'me', text: 'Hi Officer Davis, I wanted to check the status of the pothole repair on Main Street reported yesterday.', time: '10:15 AM' },
-        { id: 103, sender: 'them', text: 'The crew has been dispatched to Main Street. We expect full asphalt curing by 4:00 PM today.', time: '10:16 AM' },
+        { id: 101, senderRole: 'ENGINEER', text: 'Hello! You have reached the Department of Transportation dispatch desk. How may I assist your civic inquiry today?', time: '10:14 AM' },
+        { id: 102, senderRole: 'CITIZEN', text: 'Hi Officer Davis, I wanted to check the status of the pothole repair on Main Street reported yesterday.', time: '10:15 AM' },
+        { id: 103, senderRole: 'ENGINEER', text: 'The crew has been dispatched to Main Street. We expect full asphalt curing by 4:00 PM today.', time: '10:16 AM' },
       ],
       2: [
-        { id: 201, sender: 'them', text: 'Greetings from Water & Sanitation. We received your water pressure alert.', time: '09:20 AM' },
-        { id: 202, sender: 'them', text: 'We are monitoring the pipeline pressure now.', time: '09:21 AM' },
+        { id: 201, senderRole: 'ENGINEER', text: 'Greetings from Water & Sanitation. We received your water pressure alert.', time: '09:20 AM' },
+        { id: 202, senderRole: 'ENGINEER', text: 'We are monitoring the pipeline pressure now.', time: '09:21 AM' },
       ],
       3: [
-        { id: 301, sender: 'them', text: 'The broken playground swing will be replaced tomorrow.', time: 'Yesterday' },
+        { id: 301, senderRole: 'ENGINEER', text: 'The broken playground swing will be replaced tomorrow.', time: 'Yesterday' },
       ],
       4: [
-        { id: 401, sender: 'them', text: 'Power restored across Zone 4 sectors.', time: 'June 22' },
+        { id: 401, senderRole: 'ENGINEER', text: 'Power restored across Zone 4 sectors.', time: 'June 22' },
       ]
     };
   } catch (e) { return {}; }
@@ -227,6 +227,11 @@ export const fetchChats = async () => {
         role: c.participant2_role,
         unread: 0,
         avatar: c.participant2_avatar,
+        citizenName: c.participant1_name,
+        engineerName: c.participant2_name,
+        engineerRole: c.participant2_role,
+        citizenAvatar: c.participant1_avatar,
+        engineerAvatar: c.participant2_avatar,
         online: true,
         lastMessage: c.last_message || 'Active conversation'
       }));
@@ -235,7 +240,7 @@ export const fetchChats = async () => {
   return getLocalChats();
 };
 
-export const startChatAPI = async (recipient) => {
+export const startChatAPI = async (recipient, currentUserRole = 'CITIZEN', currentUserName = 'Citizen') => {
   try {
     const res = await request(`${BASE_URL}/chats`, {
       method: 'POST',
@@ -248,7 +253,7 @@ export const startChatAPI = async (recipient) => {
     });
     if (res && res.chat) {
       const c = res.chat;
-      return { id: c.id, name: c.participant2_name, rep: c.participant2_name, role: c.participant2_role, avatar: c.participant2_avatar, online: true, lastMessage: c.last_message || 'Conversation started' };
+      return { id: c.id, name: c.participant2_name, rep: c.participant2_name, role: c.participant2_role, avatar: c.participant2_avatar, citizenName: c.participant1_name, engineerName: c.participant2_name, engineerRole: c.participant2_role, citizenAvatar: c.participant1_avatar, engineerAvatar: c.participant2_avatar, online: true, lastMessage: c.last_message || 'Conversation started' };
     }
   } catch (err) {}
   
@@ -258,17 +263,39 @@ export const startChatAPI = async (recipient) => {
   let existing = chats.find(c => {
     const cName = (c.name || '').toLowerCase().trim();
     const cRep = (c.rep || '').toLowerCase().trim();
-    return cName === recName || cRep === recName || 
+    const cEng = (c.engineerName || '').toLowerCase().trim();
+    const cCit = (c.citizenName || '').toLowerCase().trim();
+    return cName === recName || cRep === recName || cEng === recName || cCit === recName ||
            (cRep && recName.includes(cRep)) || (cRep && cRep.includes(recName)) ||
            (cName && recName.includes(cName)) || (cName && cName.includes(recName));
   });
 
   if (!existing) {
-    existing = { id: Date.now(), name: recipient.name, rep: recipient.name, role: recipient.role || 'Civic Member', unread: 0, avatar: recipient.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80', online: true, lastMessage: 'Chat started' };
+    const isEng = currentUserRole === 'ENGINEER' || currentUserRole === 'ADMIN';
+    existing = { 
+      id: Date.now(), 
+      name: recipient.name, 
+      rep: recipient.name, 
+      role: recipient.role || (isEng ? 'Civic Member' : 'Municipal Rep'), 
+      unread: 0, 
+      avatar: recipient.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80', 
+      citizenName: isEng ? recipient.name : currentUserName,
+      engineerName: isEng ? currentUserName : recipient.name,
+      engineerRole: isEng ? 'Chief Municipal Engineer' : (recipient.role || 'Municipal Rep'),
+      citizenAvatar: isEng ? recipient.avatar : 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80',
+      engineerAvatar: isEng ? 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80' : recipient.avatar,
+      online: true, 
+      lastMessage: 'Chat started' 
+    };
     chats.unshift(existing);
     localStorage.setItem('civic_real_chats', JSON.stringify(chats));
     const msgs = getLocalMessages();
-    msgs[existing.id] = [{ id: Date.now() + 1, sender: 'them', text: `Hello! I am ${recipient.name} (${recipient.role || 'Civic Member'}). How can I collaborate with you on this issue?`, time: 'Just now' }];
+    msgs[existing.id] = [{ 
+      id: Date.now() + 1, 
+      senderRole: isEng ? 'CITIZEN' : 'ENGINEER', 
+      text: isEng ? `Hello Priya! I am ${recipient.name}. Thank you for looking into my reported issue.` : `Hello! I am ${recipient.name} (${recipient.role || 'Civic Member'}). How can I collaborate with you on this issue?`, 
+      time: 'Just now' 
+    }];
     localStorage.setItem('civic_real_messages', JSON.stringify(msgs));
   }
   return existing;
@@ -280,7 +307,7 @@ export const fetchMessages = async (conversationId) => {
     if (res && res.messages && res.messages.length > 0) {
       return res.messages.map(m => ({
         id: m.id,
-        sender: m.sender_name === 'Citizen' ? 'me' : 'them',
+        senderRole: m.sender_role || (m.sender_name === 'Citizen' ? 'CITIZEN' : 'ENGINEER'),
         text: m.text,
         time: new Date(m.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
       }));
@@ -290,7 +317,7 @@ export const fetchMessages = async (conversationId) => {
   return msgs[conversationId] || [];
 };
 
-export const sendMessageAPI = async (conversationId, text, sender = 'me') => {
+export const sendMessageAPI = async (conversationId, text, senderRole = 'CITIZEN') => {
   try {
     await request(`${BASE_URL}/chats/${conversationId}/messages`, {
       method: 'POST',
@@ -299,7 +326,7 @@ export const sendMessageAPI = async (conversationId, text, sender = 'me') => {
   } catch (err) {}
 
   const msgs = getLocalMessages();
-  const newMsg = { id: Date.now(), sender, text, time: 'Just now' };
+  const newMsg = { id: Date.now(), senderRole, text, time: 'Just now' };
   const current = msgs[conversationId] || [];
   msgs[conversationId] = [...current, newMsg];
   localStorage.setItem('civic_real_messages', JSON.stringify(msgs));

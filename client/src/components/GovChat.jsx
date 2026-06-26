@@ -1,8 +1,12 @@
 import { useState, useEffect } from 'react';
 import { MessageSquare, Send, Search, Phone, Video, Info, Sparkles, CheckCheck, ShieldCheck } from 'lucide-react';
 import { fetchChats, fetchMessages, sendMessageAPI } from '../api/client';
+import { useAuth } from '../hooks/useAuth';
 
 export default function GovChat({ activeChatTarget }) {
+  const { user } = useAuth();
+  const currentUserRole = user?.role === 'ENGINEER' || user?.role === 'ADMIN' ? 'ENGINEER' : 'CITIZEN';
+
   const [chats, setChats] = useState([]);
   const [activeChat, setActiveChat] = useState(1);
   const [messages, setMessages] = useState([]);
@@ -42,9 +46,35 @@ export default function GovChat({ activeChatTarget }) {
   };
 
   const filteredChats = chats.filter(c => 
-    c.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-    (c.rep && c.rep.toLowerCase().includes(searchQuery.toLowerCase()))
+    (c.name && c.name.toLowerCase().includes(searchQuery.toLowerCase())) || 
+    (c.rep && c.rep.toLowerCase().includes(searchQuery.toLowerCase())) ||
+    (c.citizenName && c.citizenName.toLowerCase().includes(searchQuery.toLowerCase())) ||
+    (c.engineerName && c.engineerName.toLowerCase().includes(searchQuery.toLowerCase()))
   );
+
+  const getChatDisplayInfo = (chat) => {
+    if (currentUserRole === 'ENGINEER') {
+      return {
+        name: chat.citizenName || chat.name || 'Citizen Explorer',
+        rep: chat.citizenName || chat.rep || 'Citizen Reporter',
+        role: 'Civic Member',
+        avatar: chat.citizenAvatar || chat.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80',
+        online: chat.online !== undefined ? chat.online : true,
+        unread: chat.unread || 0,
+        lastMessage: chat.lastMessage || ''
+      };
+    } else {
+      return {
+        name: chat.name || 'Department Representative',
+        rep: chat.engineerName || chat.rep || 'Support Agent',
+        role: chat.engineerRole || chat.role || 'Municipal Rep',
+        avatar: chat.engineerAvatar || chat.avatar || 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80',
+        online: chat.online !== undefined ? chat.online : true,
+        unread: chat.unread || 0,
+        lastMessage: chat.lastMessage || ''
+      };
+    }
+  };
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
@@ -52,29 +82,39 @@ export default function GovChat({ activeChatTarget }) {
     const text = inputText;
     setInputText('');
 
+    const myRole = currentUserRole;
+    const theirRole = currentUserRole === 'ENGINEER' ? 'CITIZEN' : 'ENGINEER';
+
     // Send my message
-    const newMsg = await sendMessageAPI(activeChat, text, 'me');
+    const newMsg = await sendMessageAPI(activeChat, text, myRole);
     setMessages(prev => [...prev, newMsg]);
 
     // Update chats sidebar lastMessage
     setChats(prev => prev.map(c => c.id === activeChat ? { ...c, lastMessage: text } : c));
 
-    // Simulate real-time live typing and reply from the Engineer / Citizen
+    // Simulate real-time live typing and reply from the other party
     setIsTyping(true);
     setTimeout(async () => {
       setIsTyping(false);
-      const replies = [
+      const replies = currentUserRole === 'ENGINEER' ? [
+        `Thank you Priya! I appreciate your quick response and dedication to fixing this.`,
+        `That sounds great. I will be available if the field unit needs any additional info or directions.`,
+        `Understood perfectly! Thank you for the update.`,
+        `Great initiative! I'm glad the municipal team is taking swift action.`
+      ] : [
         `I've reviewed the details. Let me assign a field unit right now to collaborate with you on this.`,
         `Thank you for bringing this up. I am checking our regional telemetry to fast-track this request.`,
         `Understood perfectly! We are actively coordinating the repair schedule and will keep you updated here.`,
         `Excellent initiative. Let's coordinate closely to ensure this issue is fully resolved to top safety standards.`
       ];
       const replyText = replies[Math.floor(Math.random() * replies.length)];
-      const replyMsg = await sendMessageAPI(activeChat, replyText, 'them');
+      const replyMsg = await sendMessageAPI(activeChat, replyText, theirRole);
       setMessages(prev => [...prev, replyMsg]);
       setChats(prev => prev.map(c => c.id === activeChat ? { ...c, lastMessage: replyText } : c));
     }, 2500);
   };
+
+  const selectedDisp = getChatDisplayInfo(selectedChat);
 
   return (
     <div className="lg:col-span-9 xl:col-span-10 h-full overflow-y-auto pr-2 space-y-6 scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent animate-fade-in">
@@ -116,38 +156,41 @@ export default function GovChat({ activeChatTarget }) {
           </div>
 
           <div className="flex-1 space-y-2 overflow-y-auto px-1 py-1 -mx-1">
-            {filteredChats.map((chat) => (
-              <button
-                key={chat.id}
-                onClick={() => setActiveChat(chat.id)}
-                className={`w-full p-4 rounded-2xl text-left transition-all duration-200 flex items-center gap-4 border ${
-                  activeChat === chat.id ? 'bg-white border-slate-200 shadow-md ring-1 ring-blue-500' : 'bg-transparent border-transparent hover:bg-slate-100/80'
-                }`}
-              >
-                <div className="relative flex-shrink-0">
-                  <img src={chat.avatar} alt={chat.name} className="w-12 h-12 rounded-2xl object-cover border border-slate-200 shadow-sm" />
-                  {chat.online && (
-                    <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white" />
-                  )}
-                </div>
-
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm font-bold text-slate-900 truncate">{chat.name}</span>
-                    {chat.unread > 0 && (
-                      <span className="px-2 py-0.5 bg-blue-600 text-white font-bold text-[10px] rounded-full shadow-sm">
-                        {chat.unread}
-                      </span>
+            {filteredChats.map((chat) => {
+              const disp = getChatDisplayInfo(chat);
+              return (
+                <button
+                  key={chat.id}
+                  onClick={() => setActiveChat(chat.id)}
+                  className={`w-full p-4 rounded-2xl text-left transition-all duration-200 flex items-center gap-4 border ${
+                    activeChat === chat.id ? 'bg-white border-slate-200 shadow-md ring-1 ring-blue-500' : 'bg-transparent border-transparent hover:bg-slate-100/80'
+                  }`}
+                >
+                  <div className="relative flex-shrink-0">
+                    <img src={disp.avatar} alt={disp.name} className="w-12 h-12 rounded-2xl object-cover border border-slate-200 shadow-sm" />
+                    {disp.online && (
+                      <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white" />
                     )}
                   </div>
-                  <div className="flex items-center gap-1 text-xs text-slate-500 font-medium mb-1">
-                    <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />
-                    <span>{chat.rep} ({chat.role})</span>
+
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-sm font-bold text-slate-900 truncate">{disp.name}</span>
+                      {disp.unread > 0 && (
+                        <span className="px-2 py-0.5 bg-blue-600 text-white font-bold text-[10px] rounded-full shadow-sm">
+                          {disp.unread}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-1 text-xs text-slate-500 font-medium mb-1">
+                      <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />
+                      <span>{disp.rep} ({disp.role})</span>
+                    </div>
+                    <p className="text-xs text-slate-400 truncate">{disp.lastMessage}</p>
                   </div>
-                  <p className="text-xs text-slate-400 truncate">{chat.lastMessage}</p>
-                </div>
-              </button>
-            ))}
+                </button>
+              );
+            })}
           </div>
         </div>
 
@@ -156,12 +199,12 @@ export default function GovChat({ activeChatTarget }) {
           {/* Chat Header */}
           <div className="px-6 py-4 border-b border-slate-200/80 flex items-center justify-between bg-slate-50/50">
             <div className="flex items-center gap-4">
-              <img src={selectedChat.avatar} alt={selectedChat.name} className="w-12 h-12 rounded-2xl object-cover border border-slate-200 shadow-sm" />
+              <img src={selectedDisp.avatar} alt={selectedDisp.name} className="w-12 h-12 rounded-2xl object-cover border border-slate-200 shadow-sm" />
               <div>
-                <h4 className="text-base font-bold text-slate-900">{selectedChat.name}</h4>
+                <h4 className="text-base font-bold text-slate-900">{selectedDisp.name}</h4>
                 <div className="flex items-center gap-2 text-xs text-slate-500">
-                  <span className={`w-2 h-2 rounded-full ${selectedChat.online ? 'bg-emerald-500' : 'bg-slate-300'}`} />
-                  <span>{selectedChat.rep} • {selectedChat.role}</span>
+                  <span className={`w-2 h-2 rounded-full ${selectedDisp.online ? 'bg-emerald-500' : 'bg-slate-300'}`} />
+                  <span>{selectedDisp.rep} • {selectedDisp.role}</span>
                 </div>
               </div>
             </div>
@@ -181,23 +224,26 @@ export default function GovChat({ activeChatTarget }) {
 
           {/* Messages Viewport */}
           <div className="flex-1 p-6 overflow-y-auto space-y-4 bg-slate-50/20 scrollbar-thin scrollbar-thumb-slate-200">
-            {messages.map((msg) => (
-              <div key={msg.id} className={`flex ${msg.sender === 'me' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[70%] p-4 rounded-2xl shadow-sm ${
-                  msg.sender === 'me' ? 'bg-blue-600 text-white rounded-br-none' : 'bg-slate-100 text-slate-800 rounded-bl-none'
-                }`}>
-                  <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.text}</p>
-                  <div className={`mt-2 flex items-center gap-1 text-[10px] ${msg.sender === 'me' ? 'text-blue-100 justify-end' : 'text-slate-400 justify-start'}`}>
-                    <span>{msg.time}</span>
-                    {msg.sender === 'me' && <CheckCheck className="w-3.5 h-3.5 text-blue-200" />}
+            {messages.map((msg) => {
+              const isMine = msg.senderRole ? msg.senderRole === currentUserRole : msg.sender === 'me';
+              return (
+                <div key={msg.id} className={`flex ${isMine ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`max-w-[70%] p-4 rounded-2xl shadow-sm ${
+                    isMine ? 'bg-blue-600 text-white rounded-br-none' : 'bg-slate-100 text-slate-800 rounded-bl-none'
+                  }`}>
+                    <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.text}</p>
+                    <div className={`mt-2 flex items-center gap-1 text-[10px] ${isMine ? 'text-blue-100 justify-end' : 'text-slate-400 justify-start'}`}>
+                      <span>{msg.time}</span>
+                      {isMine && <CheckCheck className="w-3.5 h-3.5 text-blue-200" />}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
             {isTyping && (
               <div className="flex justify-start">
                 <div className="bg-slate-100 text-slate-500 px-4 py-3 rounded-2xl rounded-bl-none text-xs flex items-center gap-2 animate-pulse">
-                  <span>{selectedChat.name} is typing...</span>
+                  <span>{selectedDisp.name} is typing...</span>
                 </div>
               </div>
             )}
@@ -209,7 +255,7 @@ export default function GovChat({ activeChatTarget }) {
               type="text"
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
-              placeholder={`Send message to ${selectedChat.name}...`}
+              placeholder={`Send message to ${selectedDisp.name}...`}
               className="flex-1 px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 placeholder-slate-400 text-sm outline-none focus:border-blue-500 focus:bg-white transition-all"
             />
             <button
