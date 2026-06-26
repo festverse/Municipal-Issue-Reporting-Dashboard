@@ -181,8 +181,8 @@ const getLocalChats = () => {
     if (!chats || !Array.isArray(chats) || chats.length === 0) {
       return defaults;
     }
-    // Clean up any duplicate nodes created earlier where name matches an existing rep or department
-    chats = chats.filter(c => !defaults.some(d => (d.rep.toLowerCase() === (c.name || '').toLowerCase() || d.name.toLowerCase() === (c.name || '').toLowerCase()) && c.id !== d.id));
+    // Clean up any duplicate or buggy nodes created earlier where name is 'Citizen' or matches an existing rep
+    chats = chats.filter(c => c.name !== 'Citizen' && !defaults.some(d => (d.rep.toLowerCase() === (c.name || '').toLowerCase() || d.name.toLowerCase() === (c.name || '').toLowerCase()) && c.id !== d.id));
     localStorage.setItem('civic_real_chats', JSON.stringify(chats));
     return chats;
   } catch (e) { return [
@@ -240,7 +240,7 @@ export const fetchChats = async () => {
   return getLocalChats();
 };
 
-export const startChatAPI = async (recipient, currentUserRole = 'CITIZEN', currentUserName = 'Citizen') => {
+export const startChatAPI = async (recipient, customUserRole = 'CITIZEN', customUserName = 'Citizen') => {
   try {
     const res = await request(`${BASE_URL}/chats`, {
       method: 'POST',
@@ -257,7 +257,17 @@ export const startChatAPI = async (recipient, currentUserRole = 'CITIZEN', curre
     }
   } catch (err) {}
   
-  // Local storage fallback
+  // Local storage fallback with universal user awareness
+  let currentUser = null;
+  try {
+    const storedUser = localStorage.getItem('civic_current_user');
+    if (storedUser) currentUser = JSON.parse(storedUser);
+  } catch (e) {}
+
+  const activeUserRole = currentUser?.role || (customUserRole !== 'CITIZEN' ? customUserRole : 'CITIZEN');
+  const activeUserName = currentUser?.name || (customUserName !== 'Citizen' ? customUserName : 'Citizen Explorer');
+  const activeUserAvatar = currentUser?.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80';
+
   const chats = getLocalChats();
   const recName = (recipient.name || '').toLowerCase().trim();
   let existing = chats.find(c => {
@@ -271,19 +281,20 @@ export const startChatAPI = async (recipient, currentUserRole = 'CITIZEN', curre
   });
 
   if (!existing) {
-    const isEng = currentUserRole === 'ENGINEER' || currentUserRole === 'ADMIN';
+    const isEng = activeUserRole === 'ENGINEER' || activeUserRole === 'ADMIN';
+    const recAvatar = recipient.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80';
     existing = { 
       id: Date.now(), 
       name: recipient.name, 
       rep: recipient.name, 
       role: recipient.role || (isEng ? 'Civic Member' : 'Municipal Rep'), 
       unread: 0, 
-      avatar: recipient.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80', 
-      citizenName: isEng ? recipient.name : currentUserName,
-      engineerName: isEng ? currentUserName : recipient.name,
-      engineerRole: isEng ? 'Chief Municipal Engineer' : (recipient.role || 'Municipal Rep'),
-      citizenAvatar: isEng ? recipient.avatar : 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80',
-      engineerAvatar: isEng ? 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80' : recipient.avatar,
+      avatar: recAvatar, 
+      citizenName: isEng ? recipient.name : activeUserName,
+      engineerName: isEng ? activeUserName : recipient.name,
+      engineerRole: isEng ? (currentUser?.designation || currentUser?.department || 'Chief Municipal Engineer') : (recipient.role || 'Municipal Rep'),
+      citizenAvatar: isEng ? recAvatar : activeUserAvatar,
+      engineerAvatar: isEng ? activeUserAvatar : recAvatar,
       online: true, 
       lastMessage: 'Chat started' 
     };
@@ -292,8 +303,8 @@ export const startChatAPI = async (recipient, currentUserRole = 'CITIZEN', curre
     const msgs = getLocalMessages();
     msgs[existing.id] = [{ 
       id: Date.now() + 1, 
-      senderRole: isEng ? 'CITIZEN' : 'ENGINEER', 
-      text: isEng ? `Hello Priya! I am ${recipient.name}. Thank you for looking into my reported issue.` : `Hello! I am ${recipient.name} (${recipient.role || 'Civic Member'}). How can I collaborate with you on this issue?`, 
+      senderRole: isEng ? 'ENGINEER' : 'CITIZEN', 
+      text: isEng ? `Hello ${recipient.name}! I am ${activeUserName}. I am reviewing your reported issue and will collaborate with you here.` : `Hello! I am ${activeUserName}. How can I collaborate with you on this issue?`, 
       time: 'Just now' 
     }];
     localStorage.setItem('civic_real_messages', JSON.stringify(msgs));
