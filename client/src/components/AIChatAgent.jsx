@@ -181,16 +181,16 @@ export default function AIChatAgent() {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="pointer-events-auto group flex items-center gap-2.5 px-4 py-2.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 hover:from-blue-700 hover:via-indigo-700 hover:to-violet-700 text-white rounded-full shadow-lg hover:shadow-indigo-500/40 transition-all duration-300 transform hover:-translate-y-0.5 active:scale-95 border border-white/20"
+          className="pointer-events-auto group flex items-center gap-3 px-5 py-3.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 hover:from-blue-700 hover:via-indigo-700 hover:to-violet-700 text-white rounded-full shadow-2xl hover:shadow-indigo-500/50 transition-all duration-300 transform hover:-translate-y-1 active:scale-95 border border-white/20"
         >
-          <div className="w-7 h-7 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform">
-            <MessageSquareCode className="w-4 h-4 text-blue-100 animate-pulse" />
+          <div className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shadow-inner group-hover:scale-110 transition-transform">
+            <MessageSquareCode className="w-4.5 h-4.5 text-blue-100 animate-pulse" />
           </div>
           <div className="text-left">
-            <p className="text-[9px] text-blue-100 uppercase tracking-wider font-black leading-none mb-0.5">AI Advisor</p>
-            <p className="text-[11px] font-black tracking-tight leading-none">Chat with AI</p>
+            <p className="text-[10px] text-blue-100 uppercase tracking-widest font-black leading-none mb-1">AI Advisor</p>
+            <p className="text-xs font-black tracking-tight leading-none">Chat with AI Expert</p>
           </div>
-          <Sparkles className="w-3.5 h-3.5 text-blue-200 ml-0.5 opacity-80 group-hover:opacity-100 group-hover:rotate-12 transition-all" />
+          <Sparkles className="w-4 h-4 text-blue-200 ml-1 opacity-80 group-hover:opacity-100 group-hover:rotate-12 transition-all" />
         </button>
       )}
     </div>
