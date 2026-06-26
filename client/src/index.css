@@ -260,7 +260,20 @@ body.dark-theme .border-slate-100,
 body.dark-theme .border-slate-200,
 body.dark-theme .border-slate-300,
 body.dark-theme .border-slate-200\/80,
-body.dark-theme .border-slate-200\/60 {
+body.dark-theme .border-slate-200\/60,
+body.dark-theme .border-rose-100,
+body.dark-theme .border-amber-100,
+body.dark-theme .border-amber-100\/50,
+body.dark-theme .border-blue-100,
+body.dark-theme .border-emerald-100,
+body.dark-theme .border-violet-100,
+body.dark-theme .border-purple-100,
+body.dark-theme .border-rose-200,
+body.dark-theme .border-amber-200,
+body.dark-theme .border-blue-200,
+body.dark-theme .border-emerald-200,
+body.dark-theme .border-violet-200,
+body.dark-theme .border-purple-200 {
   border-color: #27354f !important;
 }
 
