@@ -30,7 +30,7 @@ export default function LandingPage() {
             <span>Next-Generation Civic Engagement Platform</span>
           </div>
 
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-slate-900 tracking-tight leading-[1.15] mb-6 max-w-5xl mx-auto animate-fade-in-up">
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold text-slate-900 tracking-tight leading-[1.15] mb-6 max-w-5xl mx-auto animate-hero-headline">
             Transforming Everyday Civic <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 bg-clip-text text-transparent">Challenges</span><br />into Real-Time Community <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 bg-clip-text text-transparent">Solutions.</span>
           </h1>
 
