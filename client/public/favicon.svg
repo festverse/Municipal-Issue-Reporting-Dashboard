@@ -7,5 +7,17 @@
     </linearGradient>
   </defs>
   <rect width="512" height="512" rx="128" fill="url(#civicGrad)" />
-  <path fill="#FFFFFF" d="M256 96c-88.37 0-160 71.63-160 160 0 42.14 16.32 80.51 43 10.11L256 416l117-50.89c26.68-28.6 43-66.97 43-109.11 0-88.37-71.63-160-160-160zm0 48c61.86 0 112 50.14 112 112 0 30.08-11.83 57.45-31.06 77.67L256 371l-80.94-37.33C155.83 313.45 144 286.08 144 256c0-61.86 50.14-112 112-112zm-48 64v104h32V248h32v64h32V208h-96z" />
+  <g fill="#FFFFFF">
+    <!-- Pediment (Roof Triangle) -->
+    <path d="M256 112L100 224h312L256 112z" />
+    <!-- Architrave (Beam under roof) -->
+    <rect x="112" y="236" width="288" height="24" rx="6" />
+    <!-- Pillars (4 Pillars) -->
+    <rect x="128" y="272" width="32" height="112" rx="6" />
+    <rect x="202" y="272" width="32" height="112" rx="6" />
+    <rect x="278" y="272" width="32" height="112" rx="6" />
+    <rect x="352" y="272" width="32" height="112" rx="6" />
+    <!-- Base / Foundation -->
+    <rect x="112" y="396" width="288" height="28" rx="8" />
+  </g>
 </svg>
