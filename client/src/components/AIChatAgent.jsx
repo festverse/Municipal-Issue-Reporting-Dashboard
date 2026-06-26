@@ -63,6 +63,69 @@ export default function AIChatAgent() {
     }, 1500);
   };
 
+  const renderMessageText = (text, isAi) => {
+    if (!text) return null;
+    const lines = text.split('\n');
+    return lines.map((line, lineIndex) => {
+      if (!line.trim()) return <div key={lineIndex} className="h-2" />;
+
+      // Check for headers
+      if (line.startsWith('### ')) {
+        return (
+          <h4 key={lineIndex} className={`font-bold text-sm sm:text-base mb-2 border-b pb-1 ${isAi ? 'text-slate-900 border-slate-100' : 'text-white border-blue-500'}`}>
+            {line.replace('### ', '')}
+          </h4>
+        );
+      }
+      if (line.startsWith('## ')) {
+        return (
+          <h3 key={lineIndex} className={`font-extrabold text-base sm:text-lg mb-2 border-b pb-1 ${isAi ? 'text-slate-900 border-slate-100' : 'text-white border-blue-500'}`}>
+            {line.replace('## ', '')}
+          </h3>
+        );
+      }
+
+      // Check for bullet points
+      let isBullet = false;
+      let cleanLine = line;
+      if (cleanLine.trim().startsWith('* ')) {
+        isBullet = true;
+        cleanLine = cleanLine.trim().substring(2);
+      } else if (cleanLine.trim().startsWith('- ')) {
+        isBullet = true;
+        cleanLine = cleanLine.trim().substring(2);
+      }
+
+      // Parse bold text (**text**)
+      const parts = cleanLine.split(/(\*\*.*?\*\*)/g);
+      const renderedParts = parts.map((part, partIndex) => {
+        if (part.startsWith('**') && part.endsWith('**')) {
+          return (
+            <strong key={partIndex} className={`font-bold ${isAi ? 'text-slate-900' : 'text-white'}`}>
+              {part.slice(2, -2)}
+            </strong>
+          );
+        }
+        return part;
+      });
+
+      if (isBullet) {
+        return (
+          <div key={lineIndex} className="flex items-start gap-2 my-1 pl-2">
+            <span className={`font-bold select-none ${isAi ? 'text-blue-500' : 'text-blue-200'}`}>•</span>
+            <div className="flex-1">{renderedParts}</div>
+          </div>
+        );
+      }
+
+      return (
+        <div key={lineIndex} className="my-1 leading-relaxed">
+          {renderedParts}
+        </div>
+      );
+    });
+  };
+
   const quickPrompts = [
     "How do I report a severe pothole?",
     "How do Civic Rewards & Credits work?",
@@ -116,8 +179,8 @@ export default function AIChatAgent() {
                   <div className={`max-w-[85%] p-3.5 rounded-2xl shadow-sm ${
                     isAi ? 'bg-white border border-slate-200/80 text-slate-800 rounded-bl-none' : 'bg-blue-600 text-white rounded-br-none'
                   }`}>
-                    <div className="space-y-2 leading-relaxed whitespace-pre-wrap text-xs sm:text-sm">
-                      {msg.text}
+                    <div className="space-y-2 leading-relaxed text-xs sm:text-sm">
+                      {renderMessageText(msg.text, isAi)}
                     </div>
                     <div className={`mt-1.5 flex items-center gap-1 text-[10px] ${isAi ? 'text-slate-400 justify-start' : 'text-blue-100 justify-end'}`}>
                       <span>{msg.time}</span>
