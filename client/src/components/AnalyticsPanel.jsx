@@ -223,7 +223,7 @@ export default function AnalyticsPanel() {
         {activity.length === 0 ? (
           <p className="text-sm text-slate-500">No recent activity.</p>
         ) : (
-          <div className="divide-y divide-slate-100 max-h-[400px] overflow-y-scroll pr-2 pt-1">
+          <div data-lenis-prevent="true" className="divide-y divide-slate-100 max-h-[400px] overflow-y-scroll pr-2 pt-1">
             {activity.map((a, i) => (
               <div key={i} className="flex items-start gap-3 py-3">
                 <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-xs flex-shrink-0 border border-blue-100 text-blue-700">
