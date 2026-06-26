@@ -62,14 +62,14 @@ export default function GovChat({ activeChatTarget }) {
     } catch (e) {}
 
     if (currentUserRole === 'ENGINEER') {
-      // Engineer viewing: show the Citizen's info
-      let citName = chat.citizenName || chat.name || 'Rahul Sharma';
+      // Engineer viewing: show the original node name attached to the account, communicating with Citizen (Rahul Sharma)
+      let citName = chat.citizenName || 'Rahul Sharma';
       if (citName === user?.name || citName === 'Priya Patel' || citName.includes('Department') || citName.includes('Board') || citName.includes('Bureau') || citName.includes('Division')) {
-        citName = chat.citizenName && chat.citizenName !== user?.name ? chat.citizenName : 'Rahul Sharma';
+        citName = 'Rahul Sharma';
       }
       const avatar = universalAvatars[citName] || universalAvatars['CITIZEN'] || chat.citizenAvatar || chat.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80';
       return {
-        name: citName,
+        name: chat.name || citName,
         rep: citName,
         role: 'Civic Member',
         avatar: avatar,
@@ -78,7 +78,7 @@ export default function GovChat({ activeChatTarget }) {
         lastMessage: chat.lastMessage || ''
       };
     } else {
-      // Citizen viewing: show the Engineer / Department info
+      // Citizen viewing: show the original node name attached to the account, communicating with Engineer (Priya Patel)
       let engName = chat.engineerName || chat.rep || 'Priya Patel';
       if (engName === 'Citizen Explorer' || engName === 'Citizen' || engName === currentUserName) {
         engName = 'Priya Patel';
@@ -94,7 +94,7 @@ export default function GovChat({ activeChatTarget }) {
 
       const avatar = universalAvatars[engName] || universalAvatars[deptName] || universalAvatars['ENGINEER'] || chat.engineerAvatar || chat.avatar || 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80';
       return {
-        name: deptName,
+        name: chat.name || deptName,
         rep: engName,
         role: role,
         avatar: avatar,
