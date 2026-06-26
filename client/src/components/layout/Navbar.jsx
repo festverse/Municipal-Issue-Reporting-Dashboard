@@ -61,9 +61,13 @@ export default function Navbar() {
                   </span>
                 </Link>
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center text-xs font-bold text-white">
-                    {(user.full_name || user.email || '?')[0].toUpperCase()}
-                  </div>
+                  {user.avatar ? (
+                    <img src={user.avatar} alt={user.full_name || user.email} className="w-8 h-8 rounded-full object-cover border border-slate-200 shadow-sm" />
+                  ) : (
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center text-xs font-bold text-white">
+                      {(user.full_name || user.email || '?')[0].toUpperCase()}
+                    </div>
+                  )}
                   <div className="hidden lg:block">
                     <p className="text-sm font-medium text-slate-900 leading-none">{user.full_name || user.email}</p>
                     <p className="text-xs text-slate-500 mt-0.5">{user.role}</p>
@@ -142,9 +146,13 @@ export default function Navbar() {
                     </span>
                   </Link>
                   <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center text-xs font-bold text-white">
-                      {(user.full_name || user.email || '?')[0].toUpperCase()}
-                    </div>
+                    {user.avatar ? (
+                      <img src={user.avatar} alt={user.full_name || user.email} className="w-8 h-8 rounded-full object-cover border border-slate-200 shadow-sm" />
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-violet-500 flex items-center justify-center text-xs font-bold text-white">
+                        {(user.full_name || user.email || '?')[0].toUpperCase()}
+                      </div>
+                    )}
                     <div>
                       <p className="text-sm font-medium text-slate-900">{user.full_name || user.email}</p>
                       <p className="text-xs text-slate-500">{user.role}</p>

@@ -53,19 +53,26 @@ export default function GovChat({ activeChatTarget }) {
   );
 
   const getChatDisplayInfo = (chat) => {
-    const currentUserName = user?.name || 'Rahul Sharma';
+    const currentUserName = user?.full_name || user?.name || 'Rahul Sharma';
     
+    let universalAvatars = {};
+    try {
+      const stored = localStorage.getItem('civic_avatars');
+      if (stored) universalAvatars = JSON.parse(stored);
+    } catch (e) {}
+
     if (currentUserRole === 'ENGINEER') {
       // Engineer viewing: show the Citizen's info
       let citName = chat.citizenName || chat.name || 'Rahul Sharma';
       if (citName === user?.name || citName === 'Priya Patel' || citName.includes('Department') || citName.includes('Board') || citName.includes('Bureau') || citName.includes('Division')) {
         citName = chat.citizenName && chat.citizenName !== user?.name ? chat.citizenName : 'Rahul Sharma';
       }
+      const avatar = universalAvatars[citName] || universalAvatars['CITIZEN'] || chat.citizenAvatar || chat.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80';
       return {
         name: citName,
         rep: citName,
         role: 'Civic Member',
-        avatar: chat.citizenAvatar || chat.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80',
+        avatar: avatar,
         online: chat.online !== undefined ? chat.online : true,
         unread: chat.unread || 0,
         lastMessage: chat.lastMessage || ''
@@ -85,11 +92,12 @@ export default function GovChat({ activeChatTarget }) {
         role = 'Chief Municipal Engineer';
       }
 
+      const avatar = universalAvatars[engName] || universalAvatars[deptName] || universalAvatars['ENGINEER'] || chat.engineerAvatar || chat.avatar || 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80';
       return {
         name: deptName,
         rep: engName,
         role: role,
-        avatar: chat.engineerAvatar || chat.avatar || 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80',
+        avatar: avatar,
         online: chat.online !== undefined ? chat.online : true,
         unread: chat.unread || 0,
         lastMessage: chat.lastMessage || ''
