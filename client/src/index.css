@@ -380,12 +380,31 @@ body.dark-theme .bg-ai-gradient {
 }
 
 /* Quick hover states for custom interactive cards */
-body.dark-theme .hover\:bg-slate-50:hover {
+body.dark-theme .hover\:bg-slate-50:hover,
+body.dark-theme .hover\:bg-slate-50\/50:hover,
+body.dark-theme .hover\:bg-slate-50\/60:hover,
+body.dark-theme .hover\:bg-slate-50\/70:hover,
+body.dark-theme .hover\:bg-slate-50\/80:hover,
+body.dark-theme .hover\:bg-slate-50\/90:hover {
   background-color: #1a253d !important;
 }
 
-body.dark-theme .hover\:bg-slate-100:hover {
+body.dark-theme .hover\:bg-slate-100:hover,
+body.dark-theme .hover\:bg-slate-100\/50:hover,
+body.dark-theme .hover\:bg-slate-100\/60:hover,
+body.dark-theme .hover\:bg-slate-100\/70:hover,
+body.dark-theme .hover\:bg-slate-100\/80:hover,
+body.dark-theme .hover\:bg-slate-100\/90:hover {
   background-color: #23314f !important;
+}
+
+body.dark-theme .hover\:bg-slate-200:hover,
+body.dark-theme .hover\:bg-slate-200\/50:hover,
+body.dark-theme .hover\:bg-slate-200\/60:hover,
+body.dark-theme .hover\:bg-slate-200\/70:hover,
+body.dark-theme .hover\:bg-slate-200\/80:hover,
+body.dark-theme .hover\:bg-slate-200\/90:hover {
+  background-color: #2a3a5e !important;
 }
 
 body.dark-theme .hover\:bg-blue-50:hover,
