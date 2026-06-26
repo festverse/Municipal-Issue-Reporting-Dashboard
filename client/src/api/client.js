@@ -171,13 +171,26 @@ export const fetchRecentActivity = () => request(`${BASE_URL}/analytics/recent-a
 const getLocalChats = () => {
   try {
     const data = localStorage.getItem('civic_real_chats');
-    return data ? JSON.parse(data) : [
+    let chats = data ? JSON.parse(data) : null;
+    const defaults = [
       { id: 1, name: 'Department of Transportation', rep: 'Officer Davis', role: 'Transit Dispatcher', unread: 0, avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80', online: true, lastMessage: 'The crew has been dispatched to Main Street.' },
       { id: 2, name: 'Water & Sanitation Board', rep: 'Elena Rostova', role: 'Chief Sanitizer', unread: 2, avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80', online: true, lastMessage: 'We are monitoring the pipeline pressure now.' },
       { id: 3, name: 'Parks & Recreation Division', rep: 'Marcus Sterling', role: 'Landscaping Lead', unread: 0, avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80', online: false, lastMessage: 'The broken playground swing will be replaced tomorrow.' },
       { id: 4, name: 'Municipal Energy Bureau', rep: 'Thomas Chen', role: 'Microgrid Admin', unread: 0, avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80', online: true, lastMessage: 'Power restored across Zone 4 sectors.' },
     ];
-  } catch (e) { return []; }
+    if (!chats || !Array.isArray(chats) || chats.length === 0) {
+      return defaults;
+    }
+    // Clean up any duplicate nodes created earlier where name matches an existing rep or department
+    chats = chats.filter(c => !defaults.some(d => (d.rep.toLowerCase() === (c.name || '').toLowerCase() || d.name.toLowerCase() === (c.name || '').toLowerCase()) && c.id !== d.id));
+    localStorage.setItem('civic_real_chats', JSON.stringify(chats));
+    return chats;
+  } catch (e) { return [
+    { id: 1, name: 'Department of Transportation', rep: 'Officer Davis', role: 'Transit Dispatcher', unread: 0, avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80', online: true, lastMessage: 'The crew has been dispatched to Main Street.' },
+    { id: 2, name: 'Water & Sanitation Board', rep: 'Elena Rostova', role: 'Chief Sanitizer', unread: 2, avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80', online: true, lastMessage: 'We are monitoring the pipeline pressure now.' },
+    { id: 3, name: 'Parks & Recreation Division', rep: 'Marcus Sterling', role: 'Landscaping Lead', unread: 0, avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80', online: false, lastMessage: 'The broken playground swing will be replaced tomorrow.' },
+    { id: 4, name: 'Municipal Energy Bureau', rep: 'Thomas Chen', role: 'Microgrid Admin', unread: 0, avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80', online: true, lastMessage: 'Power restored across Zone 4 sectors.' },
+  ]; }
 };
 
 const getLocalMessages = () => {
@@ -241,7 +254,15 @@ export const startChatAPI = async (recipient) => {
   
   // Local storage fallback
   const chats = getLocalChats();
-  let existing = chats.find(c => c.name === recipient.name);
+  const recName = (recipient.name || '').toLowerCase().trim();
+  let existing = chats.find(c => {
+    const cName = (c.name || '').toLowerCase().trim();
+    const cRep = (c.rep || '').toLowerCase().trim();
+    return cName === recName || cRep === recName || 
+           (cRep && recName.includes(cRep)) || (cRep && cRep.includes(recName)) ||
+           (cName && recName.includes(cName)) || (cName && cName.includes(recName));
+  });
+
   if (!existing) {
     existing = { id: Date.now(), name: recipient.name, rep: recipient.name, role: recipient.role || 'Civic Member', unread: 0, avatar: recipient.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80', online: true, lastMessage: 'Chat started' };
     chats.unshift(existing);
