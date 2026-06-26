@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Bot, X, Send, Sparkles, Minus, MessageSquareCode, CheckCheck, Cpu } from 'lucide-react';
+import { Bot, X, Send, Sparkles, Minus, MessageSquareCode, CheckCheck, Cpu, Mic, MicOff, Volume2, VolumeX } from 'lucide-react';
 import { chatWithAiAPI } from '../api/client';
 
 export default function AIChatAgent() {
@@ -14,7 +14,11 @@ export default function AIChatAgent() {
   ]);
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [voiceMode, setVoiceMode] = useState(true);
+  const [isSpeaking, setIsSpeaking] = useState(false);
   const messagesEndRef = useRef(null);
+  const recognitionRef = useRef(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -24,13 +28,139 @@ export default function AIChatAgent() {
     if (isOpen) {
       scrollToBottom();
     }
-  }, [isOpen, messages, isLoading]);
+  }, [isOpen, messages, isLoading, isListening]);
+
+  // Initialize Speech Recognition on mount
+  useEffect(() => {
+    if (window.speechSynthesis) {
+      window.speechSynthesis.onvoiceschanged = () => {
+        window.speechSynthesis.getVoices();
+      };
+    }
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      const recognition = new SpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = 'en-US';
+
+      recognition.onstart = () => {
+        setIsListening(true);
+      };
+
+      recognition.onend = () => {
+        setIsListening(false);
+      };
+
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        setInputText(transcript);
+        setIsListening(false);
+        handleSend(transcript);
+      };
+
+      recognition.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+        setIsListening(false);
+      };
+
+      recognitionRef.current = recognition;
+    }
+  }, [messages]);
+
+  const toggleListening = () => {
+    if (!recognitionRef.current) {
+      alert('Speech recognition is not supported in this browser. Please try Google Chrome, Microsoft Edge, or Safari.');
+      return;
+    }
+
+    if (isListening) {
+      recognitionRef.current.stop();
+      setIsListening(false);
+    } else {
+      try {
+        if (isSpeaking && window.speechSynthesis) {
+          window.speechSynthesis.cancel();
+        }
+        recognitionRef.current.start();
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  };
+
+  const cleanTextForSpeech = (text) => {
+    if (!text) return '';
+    return text
+      .replace(/#+\s/g, '') // remove header hashes
+      .replace(/\*\*/g, '') // remove bold asterisks
+      .replace(/\*/g, '') // remove bullet asterisks
+      .replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g, '') // remove emojis
+      .replace(/\s+/g, ' ') // normalize whitespace
+      .trim();
+  };
+
+  const speakText = (text) => {
+    if (!window.speechSynthesis || !voiceMode) return;
+
+    window.speechSynthesis.cancel(); // Stop any ongoing speech
+
+    const cleanText = cleanTextForSpeech(text);
+    if (!cleanText) return;
+
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    
+    const voices = window.speechSynthesis.getVoices();
+    // Prioritize high-quality natural male voices
+    const preferredNames = [
+      'Google UK English Male', 
+      'Google US English Male', 
+      'Microsoft David', 
+      'Microsoft Mark', 
+      'Daniel', 
+      'Oliver', 
+      'Arthur', 
+      'James', 
+      'Bradley', 
+      'en-US-Wavenet-D', 
+      'en-GB-Wavenet-B'
+    ];
+    
+    let selectedVoice = null;
+    for (const name of preferredNames) {
+      const found = voices.find(v => v.name.includes(name));
+      if (found) {
+        selectedVoice = found;
+        break;
+      }
+    }
+    if (!selectedVoice) {
+      selectedVoice = voices.find(v => v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('david') || v.name.toLowerCase().includes('mark')) || voices.find(v => v.lang.startsWith('en')) || voices[0];
+    }
+
+    if (selectedVoice) {
+      utterance.voice = selectedVoice;
+    }
+    
+    utterance.pitch = 0.95; // Slightly deeper, natural male resonance
+    utterance.rate = 1.05; // Smooth, natural human conversational pacing
+
+    utterance.onstart = () => setIsSpeaking(true);
+    utterance.onend = () => setIsSpeaking(false);
+    utterance.onerror = () => setIsSpeaking(false);
+
+    window.speechSynthesis.speak(utterance);
+  };
 
   const handleSend = async (textToSend) => {
     const text = textToSend || inputText;
     if (!text.trim()) return;
 
     if (!textToSend) setInputText('');
+    if (isSpeaking && window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+    }
 
     const userMsg = {
       id: Date.now(),
@@ -60,6 +190,10 @@ export default function AIChatAgent() {
           time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         }
       ]);
+
+      if (voiceMode) {
+        speakText(replyText);
+      }
     }, 1500);
   };
 
@@ -139,7 +273,7 @@ export default function AIChatAgent() {
       {isOpen && (
         <div 
           data-lenis-prevent="true"
-          className="pointer-events-auto w-full w-[350px] sm:w-[400px] h-[520px] bg-white rounded-3xl shadow-2xl border border-slate-200/80 flex flex-col mb-3 overflow-hidden animate-fade-in-up"
+          className="pointer-events-auto w-full w-[350px] sm:w-[400px] h-[540px] bg-white rounded-3xl shadow-2xl border border-slate-200/80 flex flex-col mb-3 overflow-hidden animate-fade-in-up"
         >
           {/* Top Header Banner */}
           <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 p-4 text-white shadow-md relative overflow-hidden flex items-center justify-between flex-shrink-0">
@@ -156,10 +290,28 @@ export default function AIChatAgent() {
                 <p className="text-[11px] text-slate-100 font-medium">Senior Civic Tech & Engineering Expert</p>
               </div>
             </div>
-            <div className="flex items-center gap-1 relative z-10">
+            <div className="flex items-center gap-1.5 relative z-10">
               <button
-                onClick={() => setIsOpen(false)}
-                className="p-2 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all backdrop-blur-md border border-white/10 active:scale-95 shadow-sm"
+                onClick={() => {
+                  if (isSpeaking && window.speechSynthesis) window.speechSynthesis.cancel();
+                  setVoiceMode(!voiceMode);
+                }}
+                className={`flex items-center gap-1 px-2.5 py-1.5 rounded-xl transition-all backdrop-blur-md border text-[11px] font-bold shadow-sm active:scale-95 ${
+                  voiceMode 
+                    ? 'bg-emerald-500/20 text-emerald-100 border-emerald-400/30 hover:bg-emerald-500/30' 
+                    : 'bg-white/10 text-slate-200 border-white/10 hover:bg-white/20'
+                }`}
+                title={voiceMode ? "AI Voice Active (Male Expert)" : "AI Voice Muted"}
+              >
+                {voiceMode ? <Volume2 className={`w-3.5 h-3.5 ${isSpeaking ? 'animate-bounce text-emerald-300' : ''}`} /> : <VolumeX className="w-3.5 h-3.5" />}
+                <span>{voiceMode ? 'Voice ON' : 'Muted'}</span>
+              </button>
+              <button
+                onClick={() => {
+                  if (isSpeaking && window.speechSynthesis) window.speechSynthesis.cancel();
+                  setIsOpen(false);
+                }}
+                className="p-1.5 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all backdrop-blur-md border border-white/10 active:scale-95 shadow-sm"
                 title="Minimize AI Advisor"
               >
                 <Minus className="w-4 h-4" />
@@ -217,16 +369,41 @@ export default function AIChatAgent() {
             ))}
           </div>
 
-          {/* Message Input Box */}
+          {/* Listening Status Banner */}
+          {isListening && (
+            <div className="px-4 py-2 bg-rose-500/10 border-t border-rose-200 flex items-center justify-between gap-3 flex-shrink-0 animate-pulse pointer-events-auto">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-rose-600 animate-ping" />
+                <span className="text-xs font-bold text-rose-700">Listening to your voice... Speak now</span>
+              </div>
+              <button onClick={toggleListening} className="text-[10px] font-bold text-rose-600 hover:text-rose-800 underline cursor-pointer">
+                Cancel
+              </button>
+            </div>
+          )}
+
+          {/* Message Input Box with Microphone Button */}
           <form
             onSubmit={(e) => { e.preventDefault(); handleSend(); }}
-            className="p-3 border-t border-slate-200/80 bg-white flex items-center gap-2.5 flex-shrink-0 pointer-events-auto"
+            className="p-3 border-t border-slate-200/80 bg-white flex items-center gap-2 flex-shrink-0 pointer-events-auto"
           >
+            <button
+              type="button"
+              onClick={toggleListening}
+              className={`p-2.5 rounded-2xl border transition-all shadow-sm active:scale-95 flex items-center justify-center flex-shrink-0 ${
+                isListening
+                  ? 'bg-rose-600 border-rose-600 text-white animate-pulse shadow-rose-500/30 shadow-md'
+                  : 'bg-slate-100 border-slate-200 text-slate-700 hover:bg-slate-200 hover:text-blue-600'
+              }`}
+              title={isListening ? "Stop Listening" : "Talk with Voice"}
+            >
+              {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+            </button>
             <input
               type="text"
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
-              placeholder="Ask AI Advisor anything..."
+              placeholder={isListening ? "Listening..." : "Ask AI Advisor anything..."}
               className="flex-1 px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-2xl text-slate-900 placeholder-slate-400 text-xs font-medium outline-none focus:border-blue-500 focus:bg-white transition-all shadow-inner"
             />
             <button
