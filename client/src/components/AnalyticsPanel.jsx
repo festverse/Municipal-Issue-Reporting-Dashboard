@@ -218,12 +218,12 @@ export default function AnalyticsPanel() {
       </div>
 
       {/* Recent Activity */}
-      <div className="ui-card p-6 animate-fade-in-up bg-white flex flex-col" style={{ animationDelay: '400ms', animationFillMode: 'both' }}>
-        <h3 className="text-sm font-semibold text-slate-900 mb-4 flex-shrink-0">Recent Activity</h3>
+      <div className="ui-card p-6 animate-fade-in-up bg-white" style={{ animationDelay: '400ms', animationFillMode: 'both' }}>
+        <h3 className="text-sm font-semibold text-slate-900 mb-4">Recent Activity</h3>
         {activity.length === 0 ? (
           <p className="text-sm text-slate-500">No recent activity.</p>
         ) : (
-          <div className="divide-y divide-slate-100 max-h-[450px] overflow-y-auto overscroll-contain touch-pan-y pr-2 pt-1 scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent block w-full">
+          <div className="divide-y divide-slate-100 max-h-[400px] overflow-y-scroll pr-2 pt-1">
             {activity.map((a, i) => (
               <div key={i} className="flex items-start gap-3 py-3">
                 <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-xs flex-shrink-0 border border-blue-100 text-blue-700">
