@@ -18,6 +18,7 @@ import CommunityFeed from './components/CommunityFeed';
 import CivicRewards from './components/CivicRewards';
 import MapSolutions from './components/MapSolutions';
 import AIChatAgent from './components/AIChatAgent';
+import ThemeToggle from './components/ThemeToggle';
 
 function NotFound() {
   return (
@@ -98,6 +99,7 @@ function App() {
               </Routes>
             </div>
             <AIChatAgent />
+            <ThemeToggle />
           </div>
         </ToastProvider>
       </AuthProvider>

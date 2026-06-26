@@ -253,7 +253,7 @@ export default function AIChatAgent() {
             <p className="text-[10px] text-blue-100 uppercase tracking-widest font-black leading-none mb-1">AI Advisor</p>
             <p className="text-xs font-black tracking-tight leading-none">Chat with AI Expert</p>
           </div>
-          <Sparkles className="w-4.5 h-4.5 text-blue-200 ml-1.5 opacity-80 group-hover:opacity-100 group-hover:scale-125 group-hover:text-yellow-300 group-hover:animate-spin transition-all duration-500 ease-out" />
+          <Sparkles className="w-4 h-4 text-blue-200 ml-1 opacity-80 group-hover:opacity-100 group-hover:rotate-12 transition-all" />
         </button>
       )}
     </div>
