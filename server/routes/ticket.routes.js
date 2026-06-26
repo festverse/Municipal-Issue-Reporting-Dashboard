@@ -96,6 +96,7 @@ router.patch(
 
 router.post('/analyze', protect, ticketController.analyzeIssueAI);
 router.post('/ai-note', protect, restrictTo('ENGINEER', 'ADMIN'), ticketController.generateAINote);
+router.post('/ai-chat', ticketController.chatWithAI);
 
 router.post('/:id/upvote', protect, getByIdValidation, ticketController.toggleUpvote);
 router.post('/:id/comments', protect, getByIdValidation, ticketController.addComment);

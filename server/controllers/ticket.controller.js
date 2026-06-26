@@ -430,6 +430,15 @@ const getComments = catchAsync(async (req, res, _next) => {
   });
 });
 
+const chatWithAI = catchAsync(async (req, res, _next) => {
+  const { message, history } = req.body;
+  const reply = await aiService.chatWithAI(message || '', history || []);
+  res.status(200).json({
+    status: 'success',
+    data: { reply }
+  });
+});
+
 module.exports = {
   createTicket,
   getTickets,
@@ -439,5 +448,6 @@ module.exports = {
   generateAINote,
   toggleUpvote,
   addComment,
-  getComments
+  getComments,
+  chatWithAI
 };

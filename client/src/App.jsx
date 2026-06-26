@@ -17,6 +17,7 @@ import LegalPage from './components/LegalPage';
 import CommunityFeed from './components/CommunityFeed';
 import CivicRewards from './components/CivicRewards';
 import MapSolutions from './components/MapSolutions';
+import AIChatAgent from './components/AIChatAgent';
 
 function NotFound() {
   return (
@@ -96,6 +97,7 @@ function App() {
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </div>
+            <AIChatAgent />
           </div>
         </ToastProvider>
       </AuthProvider>
