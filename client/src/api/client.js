@@ -121,7 +121,48 @@ export const chatWithAiAPI = async (message, history = []) => {
       return res.data.reply;
     }
   } catch (err) {
-    console.warn('Backend /ai-chat unavailable or offline, using highly intelligent client-side fallback AI Advisor engine:', err);
+    console.warn('Backend /ai-chat unavailable or offline, checking for client-side VITE_GEMINI_API_KEY integration:', err);
+  }
+
+  // Direct Client-Side Gemini API Integration for Cloudflare Pages / Standalone Frontend
+  const clientGeminiKey = import.meta.env.VITE_GEMINI_API_KEY;
+  if (clientGeminiKey) {
+    try {
+      const systemPrompt = `You are the Chief Municipal AI Advisor and Senior Civic Engineering Expert for the Civic Portal. 
+Your role is to assist citizens and municipal engineers with expert guidance, infrastructure diagnostics, reporting workflows, and civic engagement suggestions.
+Key knowledge about Civic Portal:
+1. Report Issue: Users can submit tickets with location, images, category (Pothole, Streetlight, Water Leak, Drainage, Fallen Tree, Traffic Signal, Garbage, Footpath), and priority. AI automatically analyzes severity.
+2. Live Map & Telemetry: Real-time spatial tracking of incident radars, GPS nodes, and municipal heatmaps.
+3. Community Feed & Upvotes: Citizens can upvote tickets and add comments to foster transparent community collaboration.
+4. Civic Rewards & Credits: Users earn credits (e.g. +10, +20) for reporting verified issues, upvoting, and participating, unlocking badges (Civic Explorer, Sentinel, Defender, Elite Champion).
+5. Government Departments & Policy: Direct communication with municipal representatives (Transportation, Water & Sanitation, Parks & Rec, Energy Bureau).
+Always be highly professional, empathetic, encouraging, and clear. Format answers beautifully with clear headings, bullet points, and actionable engineering/civic advice.`;
+
+      const formattedHistory = history.map(h => ({
+        role: h.role === 'user' ? 'user' : 'model',
+        parts: [{ text: h.parts?.[0]?.text || h.text || '' }]
+      }));
+
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${clientGeminiKey}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          systemInstruction: {
+            parts: [{ text: systemPrompt }]
+          },
+          contents: [
+            ...formattedHistory,
+            { role: 'user', parts: [{ text: message }] }
+          ]
+        })
+      });
+      const data = await res.json();
+      if (data && data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
+        return data.candidates[0].content.parts[0].text;
+      }
+    } catch (geminiErr) {
+      console.warn('Direct client-side Gemini API call failed, falling back to expert offline engine:', geminiErr);
+    }
   }
 
   // Highly intelligent client-side expert AI fallback engine for static/Cloudflare Pages deployment
