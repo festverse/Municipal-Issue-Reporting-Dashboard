@@ -91,13 +91,13 @@ body {
 .hero-word {
   display: inline-block;
   transform: translateY(120%); /* Pushes text down outside the mask initially */
-  animation: slideUpWord 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation: slideUpWord 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .hero-word.word-1 { animation-delay: 0.1s; }
-.hero-word.word-2 { animation-delay: 0.25s; }
-.hero-word.word-3 { animation-delay: 0.4s; }
-.hero-word.word-4 { animation-delay: 0.55s; }
+.hero-word.word-2 { animation-delay: 0.35s; }
+.hero-word.word-3 { animation-delay: 0.6s; }
+.hero-word.word-4 { animation-delay: 0.85s; }
 
 @keyframes slideUpWord {
   to { transform: translateY(0); }
