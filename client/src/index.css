@@ -224,7 +224,17 @@ body.dark-theme .bg-slate-100\/80 {
   background-color: rgba(26, 37, 61, 0.8) !important;
 }
 
-/* Translucent & Gradient overrides for Navbar and Hero Sections */
+body.dark-theme .bg-blue-50\/80 {
+  background-color: rgba(37, 99, 235, 0.2) !important;
+}
+body.dark-theme .bg-blue-50\/80 .text-blue-700 {
+  color: #60a5fa !important;
+}
+body.dark-theme .bg-blue-50\/80 .text-slate-500 {
+  color: #cbd5e1 !important;
+}
+
+/* Translucent & Gradient overrides for Navbar, Hero, and Auth Sections */
 body.dark-theme .from-white,
 body.dark-theme .bg-gradient-to-b {
   background: #0b1120 !important;
@@ -232,6 +242,20 @@ body.dark-theme .bg-gradient-to-b {
   --tw-gradient-from: #0b1120 !important;
   --tw-gradient-to: #0b1120 !important;
   --tw-gradient-stops: #0b1120, #0b1120 !important;
+}
+
+body.dark-theme .from-slate-50 {
+  background: #0e1626 !important;
+  background-color: #0e1626 !important;
+  --tw-gradient-from: #0e1626 !important;
+  --tw-gradient-to: #0e1626 !important;
+  --tw-gradient-stops: #0e1626, #0e1626 !important;
+}
+
+body.dark-theme .to-blue-50\/50 {
+  background: #0e1626 !important;
+  background-color: #0e1626 !important;
+  --tw-gradient-to: #0e1626 !important;
 }
 
 body.dark-theme .bg-white\/80,
