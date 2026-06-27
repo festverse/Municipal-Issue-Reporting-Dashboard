@@ -151,8 +151,8 @@ export default function Register() {
       </div>
 
       {/* Right Column — Pristine White Form Container */}
-      <div className="auth-form-area lg:w-1/2 flex items-center justify-center p-8 sm:p-12 lg:p-16 bg-white relative z-20">
-        <div className="w-full max-w-md animate-fade-in-up">
+      <div className="auth-form-area lg:w-1/2 flex flex-col justify-center p-8 sm:p-12 lg:p-16 bg-white relative z-20">
+        <div className="w-full max-w-md mx-auto animate-fade-in-up">
           
           {/* Header */}
           <div className="mb-8">

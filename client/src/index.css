@@ -32,22 +32,18 @@ body {
 }
 
 /* ── Auth Form Cursor Fix ── */
-.auth-form-area,
-.auth-form-area * {
-  cursor: default !important;
-  -webkit-user-select: none !important;
-  user-select: none !important;
+.auth-form-area {
+  cursor: default;
 }
 .auth-form-area input,
 .auth-form-area textarea,
 .auth-form-area select {
   cursor: text !important;
-  -webkit-user-select: text !important;
-  user-select: text !important;
 }
 .auth-form-area button,
 .auth-form-area a,
-.auth-form-area [role="button"] {
+.auth-form-area [role="button"],
+.auth-form-area button * {
   cursor: pointer !important;
 }
 .auth-form-area button:disabled {
