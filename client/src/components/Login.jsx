@@ -141,22 +141,22 @@ export default function Login() {
       </div>
 
       {/* Right Column — Pristine White Form Container */}
-      <div className="lg:w-1/2 flex items-center justify-center p-8 sm:p-12 lg:p-16 bg-white relative z-20 pointer-events-auto">
-        <div className="w-full max-w-md animate-fade-in-up relative z-20 pointer-events-auto">
+      <div className="lg:w-1/2 flex items-center justify-center p-8 sm:p-12 lg:p-16 bg-white relative z-20 pointer-events-auto cursor-default select-none">
+        <div className="w-full max-w-md animate-fade-in-up relative z-20 pointer-events-auto cursor-default select-none">
           
           {/* Header */}
-          <div className="mb-8">
-            <h2 className="text-3xl font-bold text-slate-900 tracking-tight">Welcome Back</h2>
-            <p className="text-slate-500 text-sm mt-1.5">Sign in to access your civic dashboard and community feeds.</p>
+          <div className="mb-8 cursor-default select-none">
+            <h2 className="text-3xl font-bold text-slate-900 tracking-tight cursor-default select-none">Welcome Back</h2>
+            <p className="text-slate-500 text-sm mt-1.5 cursor-default select-none">Sign in to access your civic dashboard and community feeds.</p>
           </div>
 
           {/* Demo Credentials for Recruiters */}
-          <div className="mb-8 p-5 bg-gradient-to-br from-slate-50 to-blue-50/50 border border-slate-200/80 rounded-2xl shadow-sm relative z-20 pointer-events-auto select-none">
-            <h3 className="text-xs font-bold text-slate-600 uppercase tracking-wider mb-3 flex items-center gap-1.5 select-none">
-              <Rocket className="w-4 h-4 text-blue-600" />
-              <span>Recruiter Demo Accounts</span>
+          <div className="mb-8 p-5 bg-gradient-to-br from-slate-50 to-blue-50/50 border border-slate-200/80 rounded-2xl shadow-sm relative z-20 pointer-events-auto cursor-default select-none">
+            <h3 className="text-xs font-bold text-slate-600 uppercase tracking-wider mb-3 flex items-center gap-1.5 cursor-default select-none">
+              <Rocket className="w-4 h-4 text-blue-600 pointer-events-none" />
+              <span className="pointer-events-none select-none">Recruiter Demo Accounts</span>
             </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 cursor-default select-none">
               <button 
                 type="button" 
                 onClick={() => { setEmail('engineer@demo.com'); setPassword('engineer123'); }}
@@ -178,18 +178,18 @@ export default function Login() {
 
           {/* Error */}
           {error && (
-            <div className="mb-6 p-4 bg-rose-50 border border-rose-200 rounded-2xl animate-fade-in flex items-center gap-3">
-              <AlertTriangle className="w-5 h-5 text-rose-600 flex-shrink-0" />
-              <p className="text-rose-700 text-sm font-medium">{error}</p>
+            <div className="mb-6 p-4 bg-rose-50 border border-rose-200 rounded-2xl animate-fade-in flex items-center gap-3 cursor-default select-none">
+              <AlertTriangle className="w-5 h-5 text-rose-600 flex-shrink-0 pointer-events-none" />
+              <p className="text-rose-700 text-sm font-medium cursor-default select-none">{error}</p>
             </div>
           )}
 
           {/* Google Login Role Selection */}
-          <div className="mb-4 bg-slate-50 border border-slate-200 rounded-2xl p-4 shadow-sm relative z-20 pointer-events-auto select-none">
-            <h3 className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-3 text-center select-none">
+          <div className="mb-4 bg-slate-50 border border-slate-200 rounded-2xl p-4 shadow-sm relative z-20 pointer-events-auto cursor-default select-none">
+            <h3 className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-3 text-center cursor-default select-none">
               Select Role for Google Sign In
             </h3>
-            <div className="grid grid-cols-2 gap-2.5 relative z-20 pointer-events-auto">
+            <div className="grid grid-cols-2 gap-2.5 relative z-20 pointer-events-auto cursor-default select-none">
               <button
                 type="button"
                 onClick={() => setGoogleRole('CITIZEN')}
@@ -233,19 +233,19 @@ export default function Login() {
             <span className="pointer-events-none select-none">Continue with Google ({googleRole === 'CITIZEN' ? 'Citizen' : 'Engineer'})</span>
           </button>
 
-          <div className="flex items-center my-6">
-            <div className="flex-1 border-t border-slate-200"></div>
-            <span className="px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Or continue with email</span>
-            <div className="flex-1 border-t border-slate-200"></div>
+          <div className="flex items-center my-6 cursor-default select-none">
+            <div className="flex-1 border-t border-slate-200 pointer-events-none"></div>
+            <span className="px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider pointer-events-none select-none">Or continue with email</span>
+            <div className="flex-1 border-t border-slate-200 pointer-events-none"></div>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-5">
+          <form onSubmit={handleLogin} className="space-y-5 cursor-default select-none">
             {/* Email */}
-            <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1.5">Email Address</label>
+            <div className="cursor-default select-none">
+              <label className="block text-sm font-semibold text-slate-700 mb-1.5 cursor-default select-none">Email Address</label>
               <div className="relative">
-                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400">
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" /></svg>
+                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+                  <svg className="w-5 h-5 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" /></svg>
                 </span>
                 <input
                   type="email"
@@ -253,17 +253,17 @@ export default function Login() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   placeholder="you@example.com"
-                  className="w-full pl-11 pr-4 py-3.5 bg-slate-50/50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-sm font-medium"
+                  className="w-full pl-11 pr-4 py-3.5 bg-slate-50/50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-sm font-medium cursor-text select-text"
                 />
               </div>
             </div>
 
             {/* Password */}
-            <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1.5">Password</label>
+            <div className="cursor-default select-none">
+              <label className="block text-sm font-semibold text-slate-700 mb-1.5 cursor-default select-none">Password</label>
               <div className="relative">
-                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400">
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" /></svg>
+                <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none">
+                  <svg className="w-5 h-5 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" /></svg>
                 </span>
                 <input
                   type="password"
@@ -271,7 +271,7 @@ export default function Login() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   placeholder="••••••••"
-                  className="w-full pl-11 pr-4 py-3.5 bg-slate-50/50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-sm font-medium"
+                  className="w-full pl-11 pr-4 py-3.5 bg-slate-50/50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-sm font-medium cursor-text select-text"
                 />
               </div>
             </div>
@@ -280,22 +280,22 @@ export default function Login() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3.5 text-sm font-bold text-white bg-gradient-to-r from-blue-600 to-violet-600 rounded-xl hover:from-blue-500 hover:to-violet-500 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-blue-500/25 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 mt-2"
+              className="w-full py-3.5 text-sm font-bold text-white bg-gradient-to-r from-blue-600 to-violet-600 rounded-xl hover:from-blue-500 hover:to-violet-500 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-blue-500/25 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 mt-2 cursor-pointer select-none"
             >
               {isLoading ? (
-                <span className="flex items-center justify-center gap-2">
-                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full" style={{ animation: 'spin-ring 0.6s linear infinite' }} />
+                <span className="flex items-center justify-center gap-2 pointer-events-none select-none">
+                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full pointer-events-none" style={{ animation: 'spin-ring 0.6s linear infinite' }} />
                   Signing in...
                 </span>
               ) : (
-                'Sign In to Portal'
+                <span className="pointer-events-none select-none">Sign In to Portal</span>
               )}
             </button>
           </form>
 
-          <p className="text-center text-sm text-slate-500 mt-8">
+          <p className="text-center text-sm text-slate-500 mt-8 cursor-default select-none">
             Don't have an account?{' '}
-            <Link to="/register" className="text-blue-600 hover:text-blue-700 font-bold transition-colors underline underline-offset-4">
+            <Link to="/register" className="text-blue-600 hover:text-blue-700 font-bold transition-colors underline underline-offset-4 cursor-pointer select-none">
               Create one now
             </Link>
           </p>

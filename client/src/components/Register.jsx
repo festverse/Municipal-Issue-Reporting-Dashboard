@@ -151,28 +151,28 @@ export default function Register() {
       </div>
 
       {/* Right Column — Pristine White Form Container */}
-      <div className="lg:w-1/2 flex items-center justify-center p-8 sm:p-12 lg:p-16 bg-white relative z-20 pointer-events-auto">
-        <div className="w-full max-w-md animate-fade-in-up relative z-20 pointer-events-auto">
+      <div className="lg:w-1/2 flex items-center justify-center p-8 sm:p-12 lg:p-16 bg-white relative z-20 pointer-events-auto cursor-default select-none">
+        <div className="w-full max-w-md animate-fade-in-up relative z-20 pointer-events-auto cursor-default select-none">
           
           {/* Header */}
-          <div className="mb-8">
-            <h2 className="text-3xl font-bold text-slate-900 tracking-tight">Create Account</h2>
-            <p className="text-slate-500 text-sm mt-1.5">Join the civic platform community to start reporting & resolving.</p>
+          <div className="mb-8 cursor-default select-none">
+            <h2 className="text-3xl font-bold text-slate-900 tracking-tight cursor-default select-none">Create Account</h2>
+            <p className="text-slate-500 text-sm mt-1.5 cursor-default select-none">Join the civic platform community to start reporting & resolving.</p>
           </div>
 
           {error && (
-            <div className="mb-6 p-4 bg-rose-50 border border-rose-200 rounded-2xl animate-fade-in flex items-center gap-3">
-              <AlertTriangle className="w-5 h-5 text-rose-600 flex-shrink-0" />
-              <p className="text-rose-700 text-sm font-medium">{error}</p>
+            <div className="mb-6 p-4 bg-rose-50 border border-rose-200 rounded-2xl animate-fade-in flex items-center gap-3 cursor-default select-none">
+              <AlertTriangle className="w-5 h-5 text-rose-600 flex-shrink-0 pointer-events-none" />
+              <p className="text-rose-700 text-sm font-medium cursor-default select-none">{error}</p>
             </div>
           )}
 
           {/* Google Login Role Selection */}
-          <div className="mb-4 bg-slate-50 border border-slate-200 rounded-2xl p-4 shadow-sm relative z-20 pointer-events-auto select-none">
-            <h3 className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-3 text-center select-none">
+          <div className="mb-4 bg-slate-50 border border-slate-200 rounded-2xl p-4 shadow-sm relative z-20 pointer-events-auto cursor-default select-none">
+            <h3 className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-3 text-center cursor-default select-none">
               Select Role for Google Sign In
             </h3>
-            <div className="grid grid-cols-2 gap-2.5 relative z-20 pointer-events-auto">
+            <div className="grid grid-cols-2 gap-2.5 relative z-20 pointer-events-auto cursor-default select-none">
               <button
                 type="button"
                 onClick={() => setGoogleRole('CITIZEN')}
@@ -216,82 +216,82 @@ export default function Register() {
             <span className="pointer-events-none select-none">Continue with Google ({googleRole === 'CITIZEN' ? 'Citizen' : 'Engineer'})</span>
           </button>
 
-          <div className="flex items-center my-6">
-            <div className="flex-1 border-t border-slate-200"></div>
-            <span className="px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">Or register with email</span>
-            <div className="flex-1 border-t border-slate-200"></div>
+          <div className="flex items-center my-6 cursor-default select-none">
+            <div className="flex-1 border-t border-slate-200 pointer-events-none"></div>
+            <span className="px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider pointer-events-none select-none">Or register with email</span>
+            <div className="flex-1 border-t border-slate-200 pointer-events-none"></div>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-5 cursor-default select-none">
             {/* Full Name */}
-            <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1.5">Full Name</label>
+            <div className="cursor-default select-none">
+              <label className="block text-sm font-semibold text-slate-700 mb-1.5 cursor-default select-none">Full Name</label>
               <input
                 type="text"
                 value={form.full_name}
                 onChange={update('full_name')}
                 required
                 placeholder="Jane Doe"
-                className="w-full px-4 py-3.5 bg-slate-50/50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-sm font-medium"
+                className="w-full px-4 py-3.5 bg-slate-50/50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-sm font-medium cursor-text select-text"
               />
             </div>
 
             {/* Email */}
-            <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-1.5">Email Address</label>
+            <div className="cursor-default select-none">
+              <label className="block text-sm font-semibold text-slate-700 mb-1.5 cursor-default select-none">Email Address</label>
               <input
                 type="email"
                 value={form.email}
                 onChange={update('email')}
                 required
                 placeholder="you@example.com"
-                className="w-full px-4 py-3.5 bg-slate-50/50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-sm font-medium"
+                className="w-full px-4 py-3.5 bg-slate-50/50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-sm font-medium cursor-text select-text"
               />
             </div>
 
             {/* Password */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-1.5">Password</label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 cursor-default select-none">
+              <div className="cursor-default select-none">
+                <label className="block text-sm font-semibold text-slate-700 mb-1.5 cursor-default select-none">Password</label>
                 <input
                   type="password"
                   value={form.password}
                   onChange={update('password')}
                   required
                   placeholder="••••••••"
-                  className="w-full px-4 py-3.5 bg-slate-50/50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-sm font-medium"
+                  className="w-full px-4 py-3.5 bg-slate-50/50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-sm font-medium cursor-text select-text"
                 />
               </div>
-              <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-1.5">Confirm</label>
+              <div className="cursor-default select-none">
+                <label className="block text-sm font-semibold text-slate-700 mb-1.5 cursor-default select-none">Confirm</label>
                 <input
                   type="password"
                   value={form.confirm}
                   onChange={update('confirm')}
                   required
                   placeholder="••••••••"
-                  className="w-full px-4 py-3.5 bg-slate-50/50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-sm font-medium"
+                  className="w-full px-4 py-3.5 bg-slate-50/50 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-sm font-medium cursor-text select-text"
                 />
               </div>
             </div>
 
             {/* Role */}
-            <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">I am a...</label>
-              <div className="grid grid-cols-2 gap-3">
+            <div className="cursor-default select-none">
+              <label className="block text-sm font-semibold text-slate-700 mb-2 cursor-default select-none">I am a...</label>
+              <div className="grid grid-cols-2 gap-3 cursor-default select-none">
                 {roles.map((r) => (
                   <button
                     key={r.value}
                     type="button"
                     onClick={() => setForm({ ...form, role: r.value })}
-                    className={`p-3.5 rounded-2xl border text-left transition-all active:scale-95 ${
+                    className={`p-3.5 rounded-2xl border text-left transition-all active:scale-95 cursor-pointer select-none ${
                       form.role === r.value
                         ? 'border-blue-500 bg-blue-50/80 ring-2 ring-blue-500/20 shadow-sm'
                         : 'border-slate-200 bg-white hover:border-slate-300'
                     }`}
                   >
-                    <p className={`text-sm font-bold ${form.role === r.value ? 'text-blue-700' : 'text-slate-700'}`}>{r.label}</p>
-                    <p className="text-xs text-slate-500 mt-0.5 leading-relaxed">{r.desc}</p>
+                    <p className={`text-sm font-bold pointer-events-none select-none ${form.role === r.value ? 'text-blue-700' : 'text-slate-700'}`}>{r.label}</p>
+                    <p className="text-xs text-slate-500 mt-0.5 leading-relaxed pointer-events-none select-none">{r.desc}</p>
                   </button>
                 ))}
               </div>
@@ -301,22 +301,22 @@ export default function Register() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3.5 text-sm font-bold text-white bg-gradient-to-r from-blue-600 to-violet-600 rounded-xl hover:from-blue-500 hover:to-violet-500 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-blue-500/25 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 mt-2"
+              className="w-full py-3.5 text-sm font-bold text-white bg-gradient-to-r from-blue-600 to-violet-600 rounded-xl hover:from-blue-500 hover:to-violet-500 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-blue-500/25 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 mt-2 cursor-pointer select-none"
             >
               {isLoading ? (
-                <span className="flex items-center justify-center gap-2">
-                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full" style={{ animation: 'spin-ring 0.6s linear infinite' }} />
+                <span className="flex items-center justify-center gap-2 pointer-events-none select-none">
+                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full pointer-events-none" style={{ animation: 'spin-ring 0.6s linear infinite' }} />
                   Creating account...
                 </span>
               ) : (
-                'Create Account'
+                <span className="pointer-events-none select-none">Create Account</span>
               )}
             </button>
           </form>
 
-          <p className="text-center text-sm text-slate-500 mt-8">
+          <p className="text-center text-sm text-slate-500 mt-8 cursor-default select-none">
             Already have an account?{' '}
-            <Link to="/login" className="text-blue-600 hover:text-blue-700 font-bold transition-colors underline underline-offset-4">
+            <Link to="/login" className="text-blue-600 hover:text-blue-700 font-bold transition-colors underline underline-offset-4 cursor-pointer select-none">
               Sign in to Portal
             </Link>
           </p>
