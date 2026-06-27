@@ -14,6 +14,7 @@
 const { pool } = require('../config/db');
 const auditService = require('../services/audit.service');
 const aiService = require('../services/ai.service');
+const emailService = require('../services/email.service');
 const AppError = require('../utils/AppError');
 const catchAsync = require('../utils/catchAsync');
 
@@ -36,24 +37,42 @@ const createTicket = catchAsync(async (req, res, _next) => {
   try {
     await client.query('BEGIN');
 
+    // Get citizen details for email notification
+    const citizenRes = await client.query('SELECT email, full_name FROM users WHERE id = $1', [citizen_id]);
+    const citizen = citizenRes.rows[0];
+
     let slaInterval = '7 days';
     if (priority === 'CRITICAL') slaInterval = '24 hours';
     else if (priority === 'HIGH') slaInterval = '3 days';
     else if (priority === 'MEDIUM') slaInterval = '7 days';
     else if (priority === 'LOW') slaInterval = '14 days';
 
+    // Query all engineers in the system for broadcast and round-robin selection
+    const engineersRes = await client.query(`SELECT id, email, full_name FROM users WHERE role IN ('ENGINEER', 'GOV_OFFICIAL')`);
+    const engineers = engineersRes.rows;
+
+    let assignedEngineerId = null;
+    let assignmentStatus = 'PENDING';
+
+    if (engineers.length > 0) {
+      // Pick the first engineer as initial assignee (round-robin / candidate selection)
+      assignedEngineerId = engineers[0].id;
+    } else {
+      assignmentStatus = 'UNASSIGNED';
+    }
+
     const insertQuery = `
       INSERT INTO tickets (
         citizen_id, category_id, zone_id, title, description,
-        latitude, longitude, priority, media_url, sla_due_at
+        latitude, longitude, priority, media_url, sla_due_at, assigned_engineer_id, assignment_status
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, NOW() + INTERVAL '${slaInterval}')
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, NOW() + INTERVAL '${slaInterval}', $10, $11)
       RETURNING *;
     `;
 
     const values = [
       citizen_id, category_id, zone_id, title, description,
-      latitude, longitude, priority, media_url || null,
+      latitude, longitude, priority, media_url || null, assignedEngineerId, assignmentStatus
     ];
 
     const result = await client.query(insertQuery, values);
@@ -72,9 +91,26 @@ const createTicket = catchAsync(async (req, res, _next) => {
 
     await client.query('COMMIT');
 
+    // ── Execute Async Email Notifications ──
+    if (citizen && citizen.email) {
+      emailService.sendCitizenReportSubmittedEmail(citizen.email);
+    }
+
+    // Broadcast to all engineers
+    for (const eng of engineers) {
+      if (eng.email) {
+        emailService.sendEngineerBroadcastEmail(eng.email, newTicket);
+      }
+    }
+
+    // Send direct assignment offer to the primary selected engineer
+    if (engineers.length > 0 && engineers[0].email) {
+      emailService.sendEngineerAssignmentOfferEmail(engineers[0].email, newTicket);
+    }
+
     res.status(201).json({
       status: 'success',
-      message: 'Ticket successfully created',
+      message: 'Ticket successfully created and email alerts dispatched',
       ticket: newTicket,
     });
   } catch (err) {
@@ -158,6 +194,7 @@ const getTickets = catchAsync(async (req, res, _next) => {
     SELECT
       t.id, t.title, t.description, t.status, t.priority,
       t.latitude, t.longitude, t.media_url, t.upvotes_count, t.sla_due_at, t.sla_breached,
+      t.assigned_engineer_id, t.assignment_status, t.declined_engineer_ids,
       t.created_at, t.updated_at,
       z.zone_name,
       c.name        AS category_name,
@@ -439,6 +476,205 @@ const chatWithAI = catchAsync(async (req, res, _next) => {
   });
 });
 
+/* ------------------------------------------------------------------ */
+/*  Engineer Assignment & Completion Controllers                       */
+/* ------------------------------------------------------------------ */
+
+const acceptAssignment = catchAsync(async (req, res, _next) => {
+  const { id: ticket_id } = req.params;
+  const user_id = req.user.id;
+
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+
+    const updateRes = await client.query(
+      `UPDATE tickets
+       SET assignment_status = 'ACCEPTED', status = 'IN_PROGRESS', assigned_engineer_id = $1, updated_at = NOW()
+       WHERE id = $2
+       RETURNING *;`,
+      [user_id, ticket_id]
+    );
+
+    if (updateRes.rowCount === 0) {
+      await client.query('ROLLBACK');
+      throw new AppError('Ticket not found.', 404);
+    }
+
+    const updatedTicket = updateRes.rows[0];
+
+    await auditService.logActivity(
+      client,
+      ticket_id,
+      user_id,
+      'STATUS_CHANGE',
+      'OPEN',
+      'IN_PROGRESS',
+      'Engineer accepted assignment'
+    );
+
+    await client.query('COMMIT');
+
+    // Send Email #2 to citizen
+    const citRes = await pool.query('SELECT email FROM users WHERE id = $1', [updatedTicket.citizen_id]);
+    const engRes = await pool.query('SELECT email FROM users WHERE id = $1', [user_id]);
+    if (citRes.rowCount > 0 && engRes.rowCount > 0) {
+      emailService.sendCitizenEngineerAssignedEmail(citRes.rows[0].email, engRes.rows[0].email, updatedTicket);
+    }
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Assignment accepted successfully',
+      ticket: updatedTicket
+    });
+  } catch (error) {
+    await client.query('ROLLBACK');
+    throw error;
+  } finally {
+    client.release();
+  }
+});
+
+const declineAssignment = catchAsync(async (req, res, _next) => {
+  const { id: ticket_id } = req.params;
+  const user_id = req.user.id;
+
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+
+    // Add current user to declined_engineer_ids
+    const ticketRes = await client.query(
+      `UPDATE tickets
+       SET declined_engineer_ids = array_append(declined_engineer_ids, $1::uuid), updated_at = NOW()
+       WHERE id = $2
+       RETURNING *;`,
+      [user_id, ticket_id]
+    );
+
+    if (ticketRes.rowCount === 0) {
+      await client.query('ROLLBACK');
+      throw new AppError('Ticket not found.', 404);
+    }
+
+    let ticket = ticketRes.rows[0];
+
+    // Find next available engineer who hasn't declined
+    const nextEngRes = await client.query(
+      `SELECT id, email FROM users
+       WHERE role IN ('ENGINEER', 'GOV_OFFICIAL')
+         AND NOT (id = ANY($1::uuid[]))
+       LIMIT 1;`,
+      [ticket.declined_engineer_ids]
+    );
+
+    if (nextEngRes.rowCount > 0) {
+      const nextEng = nextEngRes.rows[0];
+      const reassignRes = await client.query(
+        `UPDATE tickets
+         SET assigned_engineer_id = $1, assignment_status = 'PENDING', updated_at = NOW()
+         WHERE id = $2
+         RETURNING *;`,
+        [nextEng.id, ticket_id]
+      );
+      ticket = reassignRes.rows[0];
+
+      // Send assignment offer email to the newly selected engineer
+      if (nextEng.email) {
+        emailService.sendEngineerAssignmentOfferEmail(nextEng.email, ticket);
+      }
+    } else {
+      // No more engineers available
+      const unassignRes = await client.query(
+        `UPDATE tickets
+         SET assigned_engineer_id = NULL, assignment_status = 'DECLINED', updated_at = NOW()
+         WHERE id = $1
+         RETURNING *;`,
+        [ticket_id]
+      );
+      ticket = unassignRes.rows[0];
+    }
+
+    await auditService.logActivity(
+      client,
+      ticket_id,
+      user_id,
+      'STATUS_CHANGE',
+      ticket.status,
+      ticket.status,
+      'Engineer declined assignment'
+    );
+
+    await client.query('COMMIT');
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Assignment declined and reassignment processed',
+      ticket
+    });
+  } catch (error) {
+    await client.query('ROLLBACK');
+    throw error;
+  } finally {
+    client.release();
+  }
+});
+
+const completeIssue = catchAsync(async (req, res, _next) => {
+  const { id: ticket_id } = req.params;
+  const user_id = req.user.id;
+
+  const client = await pool.connect();
+  try {
+    await client.query('BEGIN');
+
+    const updateRes = await client.query(
+      `UPDATE tickets
+       SET status = 'RESOLVED', assignment_status = 'COMPLETED', updated_at = NOW()
+       WHERE id = $1
+       RETURNING *;`,
+      [ticket_id]
+    );
+
+    if (updateRes.rowCount === 0) {
+      await client.query('ROLLBACK');
+      throw new AppError('Ticket not found.', 404);
+    }
+
+    const updatedTicket = updateRes.rows[0];
+
+    await auditService.logActivity(
+      client,
+      ticket_id,
+      user_id,
+      'STATUS_CHANGE',
+      'IN_PROGRESS',
+      'RESOLVED',
+      'Engineer completed and verified issue'
+    );
+
+    await client.query('COMMIT');
+
+    // Send Email #3 to citizen
+    const citRes = await pool.query('SELECT email FROM users WHERE id = $1', [updatedTicket.citizen_id]);
+    const engRes = await pool.query('SELECT email FROM users WHERE id = $1', [user_id]);
+    if (citRes.rowCount > 0 && engRes.rowCount > 0) {
+      emailService.sendCitizenIssueResolvedEmail(citRes.rows[0].email, engRes.rows[0].email, updatedTicket);
+    }
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Issue marked as completed successfully',
+      ticket: updatedTicket
+    });
+  } catch (error) {
+    await client.query('ROLLBACK');
+    throw error;
+  } finally {
+    client.release();
+  }
+});
+
 module.exports = {
   createTicket,
   getTickets,
@@ -449,5 +685,8 @@ module.exports = {
   toggleUpvote,
   addComment,
   getComments,
-  chatWithAI
+  chatWithAI,
+  acceptAssignment,
+  declineAssignment,
+  completeIssue
 };

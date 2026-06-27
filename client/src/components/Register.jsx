@@ -2,13 +2,14 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { useToast } from './ui/Toast';
-import { Rocket, Shield, MessageSquare, Clock, ShieldCheck, AlertTriangle } from 'lucide-react';
+import { Rocket, Shield, MessageSquare, Clock, ShieldCheck, AlertTriangle, User, Wrench } from 'lucide-react';
 import { useGoogleLogin } from '@react-oauth/google';
 
 export default function Register() {
   const [form, setForm] = useState({ full_name: '', email: '', password: '', confirm: '', role: 'CITIZEN' });
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [googleRole, setGoogleRole] = useState('CITIZEN');
   const { register, loginWithGoogle } = useAuth();
   const { showToast } = useToast();
   const navigate = useNavigate();
@@ -50,7 +51,8 @@ export default function Register() {
         const data = await loginWithGoogle({
           email: userInfo.email || 'google.citizen@civicportal.org',
           full_name: userInfo.name || 'Google Citizen Explorer',
-          picture: userInfo.picture || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80'
+          picture: userInfo.picture || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80',
+          role: googleRole
         });
         showToast(`Welcome, ${userInfo.name || 'Citizen'}!`, 'success');
         if (data.user?.role === 'CITIZEN') {
@@ -59,7 +61,7 @@ export default function Register() {
           navigate('/dashboard');
         }
       } catch (err) {
-        setError('Failed to fetch Google profile. Please try জেট again.');
+        setError('Failed to fetch Google profile. Please try again.');
       } finally {
         setIsLoading(false);
       }
@@ -165,6 +167,39 @@ export default function Register() {
             </div>
           )}
 
+          {/* Google Login Role Selection */}
+          <div className="mb-4 bg-slate-50 border border-slate-200 rounded-2xl p-4 shadow-sm">
+            <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-3 text-center">
+              Select Role for Google Sign In
+            </label>
+            <div className="grid grid-cols-2 gap-2.5">
+              <button
+                type="button"
+                onClick={() => setGoogleRole('CITIZEN')}
+                className={`py-2.5 px-3 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1.5 ${
+                  googleRole === 'CITIZEN'
+                    ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25 scale-[1.02]'
+                    : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 hover:border-slate-300'
+                }`}
+              >
+                <User className="w-4 h-4" />
+                <span>Citizen Account</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setGoogleRole('ENGINEER')}
+                className={`py-2.5 px-3 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1.5 ${
+                  googleRole === 'ENGINEER'
+                    ? 'bg-violet-600 text-white shadow-lg shadow-violet-500/25 scale-[1.02]'
+                    : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 hover:border-slate-300'
+                }`}
+              >
+                <Wrench className="w-4 h-4" />
+                <span>Engineer Account</span>
+              </button>
+            </div>
+          </div>
+
           {/* Continue with Google / Supabase Button */}
           <button
             type="button"
@@ -178,7 +213,7 @@ export default function Register() {
               <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
               <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
             </svg>
-            <span>Continue with Google</span>
+            <span>Continue with Google ({googleRole === 'CITIZEN' ? 'Citizen' : 'Engineer'})</span>
           </button>
 
           <div className="flex items-center my-6">

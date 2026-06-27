@@ -2,13 +2,13 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { fetchTicketById, updateTicketStatus, toggleUpvoteTicket, addTicketComment, timeAgo, startChatAPI } from '../api/client';
+import { fetchTicketById, updateTicketStatus, toggleUpvoteTicket, addTicketComment, timeAgo, startChatAPI, acceptTicketAssignment, declineTicketAssignment, completeTicketIssue } from '../api/client';
 import { useAuth } from '../hooks/useAuth';
 import { useToast } from './ui/Toast';
 import StatusBadge from './ui/StatusBadge';
 import PriorityBadge from './ui/PriorityBadge';
 import LoadingSpinner from './ui/LoadingSpinner';
-import { ThumbsUp, MapPin, MessageSquare, RefreshCw, Sparkles, User, Pin } from 'lucide-react';
+import { ThumbsUp, MapPin, MessageSquare, RefreshCw, Sparkles, User, Pin, CheckCircle2, XCircle, UserCheck } from 'lucide-react';
 
 import L from 'leaflet';
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
@@ -71,6 +71,45 @@ export default function TicketDetail() {
       await updateTicketStatus(id, newStatus, note);
       showToast('Status updated!', 'success');
       setNote('');
+      await loadTicket();
+    } catch (err) {
+      showToast(err.message, 'error');
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  const handleAcceptAssignment = async () => {
+    setUpdating(true);
+    try {
+      await acceptTicketAssignment(id);
+      showToast('Assignment accepted successfully!', 'success');
+      await loadTicket();
+    } catch (err) {
+      showToast(err.message, 'error');
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  const handleDeclineAssignment = async () => {
+    setUpdating(true);
+    try {
+      await declineTicketAssignment(id);
+      showToast('Assignment declined and reassigned!', 'success');
+      await loadTicket();
+    } catch (err) {
+      showToast(err.message, 'error');
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  const handleCompleteIssue = async () => {
+    setUpdating(true);
+    try {
+      await completeTicketIssue(id);
+      showToast('Issue marked as resolved & verified!', 'success');
       await loadTicket();
     } catch (err) {
       showToast(err.message, 'error');
@@ -187,6 +226,17 @@ export default function TicketDetail() {
                 <StatusBadge status={ticket.status} />
               </div>
               <div>
+                <p className="text-xs text-slate-500 uppercase tracking-wider mb-1">Assignment</p>
+                <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold ${
+                  ticket.assignment_status === 'ACCEPTED' ? 'bg-indigo-50 text-indigo-700 border border-indigo-200' :
+                  ticket.assignment_status === 'COMPLETED' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' :
+                  ticket.assignment_status === 'DECLINED' ? 'bg-amber-50 text-amber-700 border border-amber-200' :
+                  'bg-blue-50 text-blue-700 border border-blue-200'
+                }`}>
+                  {ticket.assignment_status || 'UNASSIGNED'}
+                </span>
+              </div>
+              <div>
                 <p className="text-xs text-slate-500 uppercase tracking-wider mb-1">Priority</p>
                 <PriorityBadge priority={ticket.priority} />
               </div>
@@ -287,6 +337,55 @@ export default function TicketDetail() {
 
         {/* Right Column — 1/3 */}
         <div className="space-y-6">
+          {/* Engineer Assignment Actions */}
+          {isEngineer && (
+            <div className="ui-card bg-gradient-to-br from-slate-900 to-indigo-950 text-white p-5 shadow-xl">
+              <h3 className="text-sm font-bold text-white mb-2 flex items-center gap-2">
+                <UserCheck className="w-4 h-4 text-indigo-400" />
+                <span>Engineer Assignment Panel</span>
+              </h3>
+              <p className="text-xs text-slate-300 mb-4 leading-relaxed">
+                {ticket.assignment_status === 'ACCEPTED' 
+                  ? 'You have accepted this issue. Mark as completed once field repairs are verified.'
+                  : ticket.assignment_status === 'COMPLETED'
+                  ? 'This issue has been successfully resolved and completed.'
+                  : 'You have been assigned to this issue via round-robin dispatch. Do you accept this assignment?'}
+              </p>
+              
+              {ticket.assignment_status !== 'ACCEPTED' && ticket.assignment_status !== 'COMPLETED' && (
+                <div className="grid grid-cols-2 gap-2.5">
+                  <button
+                    onClick={handleAcceptAssignment}
+                    disabled={updating}
+                    className="flex items-center justify-center gap-1.5 py-2.5 px-3 bg-blue-600 hover:bg-blue-500 active:scale-95 text-white font-bold text-xs rounded-xl shadow-md shadow-blue-500/20 transition-all disabled:opacity-50"
+                  >
+                    <CheckCircle2 className="w-4 h-4" />
+                    <span>Accept</span>
+                  </button>
+                  <button
+                    onClick={handleDeclineAssignment}
+                    disabled={updating}
+                    className="flex items-center justify-center gap-1.5 py-2.5 px-3 bg-white/10 hover:bg-white/20 active:scale-95 text-rose-200 font-bold text-xs rounded-xl border border-white/10 transition-all disabled:opacity-50"
+                  >
+                    <XCircle className="w-4 h-4" />
+                    <span>Decline</span>
+                  </button>
+                </div>
+              )}
+
+              {ticket.assignment_status === 'ACCEPTED' && (
+                <button
+                  onClick={handleCompleteIssue}
+                  disabled={updating}
+                  className="w-full flex items-center justify-center gap-2 py-3 bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-white font-bold text-xs rounded-xl shadow-lg shadow-emerald-500/25 transition-all disabled:opacity-50"
+                >
+                  <CheckCircle2 className="w-4 h-4" />
+                  <span>Verify & Complete Issue</span>
+                </button>
+              )}
+            </div>
+          )}
+
           {/* Status Update (for engineers) */}
           {isEngineer && transitions.length > 0 && (
             <div className="ui-card bg-white p-5">

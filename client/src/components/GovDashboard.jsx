@@ -16,10 +16,10 @@ export default function GovDashboard({ onStartChat }) {
   }, []);
 
   const defaultActivities = [
-    { id: 'def-1', title: 'Major Pothole Repair Completed', department: 'Department of Transportation', time: '2 hours ago', image: 'https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=600&q=80', status: 'Completed', isDefault: true },
-    { id: 'def-2', title: 'Solar Streetlight Grid Inspection', department: 'Energy & Power Division', time: '5 hours ago', image: 'https://images.unsplash.com/photo-1498084393753-b411b2d26b34?auto=format&fit=crop&w=600&q=80', status: 'In Progress', isDefault: true },
-    { id: 'def-3', title: 'Downtown Water Main Flushing', department: 'Water & Sanitation Board', time: '1 day ago', image: 'https://picsum.photos/id/1029/600/400', status: 'Completed', isDefault: true },
-    { id: 'def-4', title: 'Community Park Landscaping Upgrade', department: 'Parks & Recreation', time: '2 days ago', image: 'https://images.unsplash.com/photo-1527689368864-3a821dbccc34?auto=format&fit=crop&w=600&q=80', status: 'Assigned', isDefault: true },
+    { id: 'def-1', title: 'Major Pothole Repair Completed', department: 'Department of Transportation', time: '2 hours ago', image: 'https://images.unsplash.com/photo-1519501025264-65ba15a82390?auto=format&fit=crop&w=600&q=80', status: 'Completed', assignment_status: 'COMPLETED', isDefault: true },
+    { id: 'def-2', title: 'Solar Streetlight Grid Inspection', department: 'Energy & Power Division', time: '5 hours ago', image: 'https://images.unsplash.com/photo-1498084393753-b411b2d26b34?auto=format&fit=crop&w=600&q=80', status: 'In Progress', assignment_status: 'ACCEPTED', isDefault: true },
+    { id: 'def-3', title: 'Downtown Water Main Flushing', department: 'Water & Sanitation Board', time: '1 day ago', image: 'https://picsum.photos/id/1029/600/400', status: 'Completed', assignment_status: 'COMPLETED', isDefault: true },
+    { id: 'def-4', title: 'Community Park Landscaping Upgrade', department: 'Parks & Recreation', time: '2 days ago', image: 'https://images.unsplash.com/photo-1527689368864-3a821dbccc34?auto=format&fit=crop&w=600&q=80', status: 'Assigned', assignment_status: 'PENDING', isDefault: true },
   ];
 
   const recentActivities = [
@@ -30,6 +30,7 @@ export default function GovDashboard({ onStartChat }) {
       time: new Date(t.created_at).toLocaleDateString() + ' ' + new Date(t.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}),
       image: t.media_url || 'https://picsum.photos/id/1029/600/400',
       status: t.status === 'RESOLVED' ? 'Completed' : t.status === 'IN_PROGRESS' ? 'In Progress' : 'Assigned',
+      assignment_status: t.assignment_status || 'PENDING',
       isDefault: false
     })),
     ...defaultActivities
@@ -48,7 +49,7 @@ export default function GovDashboard({ onStartChat }) {
   ];
 
   return (
-    <div className="lg:col-span-9 xl:col-span-10 h-full overflow-y-auto pr-2 space-y-6 scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent animate-fade-in">
+    <div className="lg:col-span-9 xl:col-span-10 w-full space-y-6 animate-fade-in">
       {/* Top Banner */}
       <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 rounded-3xl p-8 text-white shadow-xl relative overflow-hidden">
         <div className="absolute -right-10 -bottom-10 w-60 h-60 bg-white/10 rounded-full blur-2xl pointer-events-none" />
@@ -123,12 +124,20 @@ export default function GovDashboard({ onStartChat }) {
               <div key={act.id} className="bg-slate-50 rounded-2xl overflow-hidden border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col">
                 <div className="h-48 w-full overflow-hidden relative group">
                   <img src={act.image} alt={act.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                  <div className="absolute top-3 right-3">
+                  <div className="absolute top-3 right-3 flex flex-col items-end gap-1">
                     <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full shadow-sm ${
                       act.status === 'Completed' ? 'bg-emerald-500 text-white' :
                       act.status === 'In Progress' ? 'bg-blue-500 text-white' : 'bg-amber-500 text-white'
                     }`}>
                       {act.status}
+                    </span>
+                    <span className={`text-[9px] font-extrabold px-2 py-0.5 rounded-full shadow-sm uppercase ${
+                      act.assignment_status === 'ACCEPTED' ? 'bg-indigo-600 text-white' :
+                      act.assignment_status === 'COMPLETED' ? 'bg-emerald-600 text-white' :
+                      act.assignment_status === 'DECLINED' ? 'bg-rose-600 text-white' :
+                      'bg-blue-600 text-white'
+                    }`}>
+                      Dispatch: {act.assignment_status}
                     </span>
                   </div>
                 </div>

@@ -35,6 +35,10 @@ export const getProfile = async () => {
   } catch (err) {
     const token = localStorage.getItem('token');
     if (token === 'google_oauth_mock_jwt_token_valid_session') {
+      const storedUser = localStorage.getItem('civic_current_user');
+      if (storedUser) {
+        return { status: 'success', user: JSON.parse(storedUser) };
+      }
       return {
         status: 'success',
         user: {
@@ -78,7 +82,7 @@ export const loginWithGoogleAPI = async (body) => {
         id: 'google-user-1',
         email: body.email || 'google.citizen@civicportal.org',
         full_name: body.full_name || 'Google Citizen Explorer',
-        role: 'CITIZEN',
+        role: body.role || 'CITIZEN',
         phone: '+1 (555) 019-2834',
         zone: 'Downtown Commercial Core',
         notifications: 'Email, SMS',
@@ -109,6 +113,33 @@ export const updateTicketStatus = (id, new_status, note = '') =>
     method: 'PATCH',
     body: JSON.stringify({ new_status, note }),
   });
+
+export const acceptTicketAssignment = async (id) => {
+  try {
+    return await request(`${BASE_URL}/tickets/${id}/accept-assignment`, { method: 'POST' });
+  } catch (err) {
+    console.warn('Backend unavailable, using client-side mock for acceptTicketAssignment:', err);
+    return { status: 'success', ticket: { id, assignment_status: 'ACCEPTED', status: 'IN_PROGRESS' } };
+  }
+};
+
+export const declineTicketAssignment = async (id) => {
+  try {
+    return await request(`${BASE_URL}/tickets/${id}/decline-assignment`, { method: 'POST' });
+  } catch (err) {
+    console.warn('Backend unavailable, using client-side mock for declineTicketAssignment:', err);
+    return { status: 'success', ticket: { id, assignment_status: 'DECLINED', assigned_engineer_id: null } };
+  }
+};
+
+export const completeTicketIssue = async (id) => {
+  try {
+    return await request(`${BASE_URL}/tickets/${id}/complete-issue`, { method: 'POST' });
+  } catch (err) {
+    console.warn('Backend unavailable, using client-side mock for completeTicketIssue:', err);
+    return { status: 'success', ticket: { id, assignment_status: 'COMPLETED', status: 'RESOLVED' } };
+  }
+};
 
 // ── AI & Community ──
 export const chatWithAiAPI = async (message, history = []) => {

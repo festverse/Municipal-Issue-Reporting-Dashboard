@@ -35,13 +35,13 @@ export default function LegalPage() {
         <div className="absolute -left-20 -bottom-20 w-96 h-96 bg-violet-500/10 rounded-full blur-3xl pointer-events-none" />
         
         <div className="max-w-7xl mx-auto relative z-10">
-          <div className="flex flex-wrap items-center gap-6 mb-8">
+          <div className="flex flex-wrap items-center gap-12 sm:gap-16 mb-8">
             <Link to="/" className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors">
               <ArrowLeft className="w-4 h-4" />
               <span>Back to Home</span>
             </Link>
 
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-semibold text-blue-200 shadow-inner">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-semibold text-blue-200 shadow-inner ml-2 sm:ml-4">
               <Sparkles className="w-4 h-4 text-blue-300" />
               <span>Official Legal & Governance Portal</span>
             </div>

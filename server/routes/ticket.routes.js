@@ -102,4 +102,10 @@ router.post('/:id/upvote', protect, getByIdValidation, ticketController.toggleUp
 router.post('/:id/comments', protect, getByIdValidation, ticketController.addComment);
 router.get('/:id/comments', getByIdValidation, ticketController.getComments);
 
+// ── Engineer Assignment Workflow Routes ────────────────────────────
+
+router.post('/:id/accept-assignment', protect, restrictTo('ENGINEER', 'ADMIN'), getByIdValidation, ticketController.acceptAssignment);
+router.post('/:id/decline-assignment', protect, restrictTo('ENGINEER', 'ADMIN'), getByIdValidation, ticketController.declineAssignment);
+router.post('/:id/complete-issue', protect, restrictTo('ENGINEER', 'ADMIN'), getByIdValidation, ticketController.completeIssue);
+
 module.exports = router;

@@ -146,10 +146,12 @@ const updateProfile = catchAsync(async (req, res, _next) => {
  * Authenticate or register user via Google OAuth / Supabase.
  */
 const googleLogin = catchAsync(async (req, res, _next) => {
-  const { email, full_name, picture } = req.body;
+  const { email, full_name, picture, role } = req.body;
   if (!email) {
     return res.status(400).json({ status: 'error', message: 'Email is required from Google auth.' });
   }
+
+  const requestedRole = (role === 'ENGINEER' || role === 'GOV_OFFICIAL') ? 'ENGINEER' : (role || 'CITIZEN');
 
   // Check if user already exists in PostgreSQL
   let result = await pool.query(
@@ -160,15 +162,22 @@ const googleLogin = catchAsync(async (req, res, _next) => {
   let user = result.rows[0];
 
   if (!user) {
-    // Register new user as CITIZEN with a dummy hash for Google OAuth users
+    // Register new user with the requested role with a dummy hash for Google OAuth users
     const dummyHash = '$2b$10$dummyGoogleOAuthPasswordHashHereWillNotBeUsedDirectly';
     const insertRes = await pool.query(
       `INSERT INTO users (full_name, email, password_hash, avatar, role)
        VALUES ($1, $2, $3, $4, $5)
        RETURNING id, email, full_name, phone, zone, notifications, session_expiry, avatar, role, created_at`,
-      [full_name || 'Google User', email, picture || null, dummyHash, 'CITIZEN']
+      [full_name || 'Google User', email, picture || null, dummyHash, requestedRole]
     );
     user = insertRes.rows[0];
+  } else if (role && user.role !== requestedRole) {
+    // Update existing user role if explicitly toggled in the UI (excellent for testing workflows)
+    const updateRes = await pool.query(
+      'UPDATE users SET role = $1 WHERE id = $2 RETURNING id, email, full_name, phone, zone, notifications, session_expiry, avatar, role, created_at',
+      [requestedRole, user.id]
+    );
+    user = updateRes.rows[0];
   }
 
   // Generate custom JWT token for seamless integration with existing auth middleware

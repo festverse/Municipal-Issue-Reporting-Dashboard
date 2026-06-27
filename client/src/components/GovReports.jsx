@@ -19,7 +19,7 @@ export default function GovReports({ onStartChat }) {
   });
 
   return (
-    <div className="lg:col-span-9 xl:col-span-10 h-full overflow-y-auto pr-2 space-y-6 scrollbar-thin scrollbar-thumb-slate-200 scrollbar-track-transparent animate-fade-in">
+    <div className="lg:col-span-9 xl:col-span-10 w-full space-y-6 animate-fade-in">
       {/* Top Banner */}
       <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 rounded-3xl p-8 text-white shadow-xl relative overflow-hidden">
         <div className="absolute -right-10 -bottom-10 w-60 h-60 bg-white/10 rounded-full blur-2xl pointer-events-none" />

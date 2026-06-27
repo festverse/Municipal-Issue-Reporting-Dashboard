@@ -457,14 +457,16 @@ body.dark-theme .hover\:bg-blue-50\/50:hover {
 body.dark-theme .bg-blue-50,
 body.dark-theme .bg-blue-100,
 body.dark-theme .bg-blue-200 {
-  background-color: rgba(37, 99, 235, 0.2) !important;
+  background-color: rgba(37, 99, 235, 0.25) !important;
+  border: 1px solid rgba(59, 130, 246, 0.4) !important;
   color: #93c5fd !important;
 }
 
 body.dark-theme .bg-emerald-50,
 body.dark-theme .bg-emerald-100,
 body.dark-theme .bg-emerald-200 {
-  background-color: rgba(16, 185, 129, 0.2) !important;
+  background-color: rgba(16, 185, 129, 0.25) !important;
+  border: 1px solid rgba(52, 211, 153, 0.4) !important;
   color: #6ee7b7 !important;
 }
 
@@ -473,28 +475,32 @@ body.dark-theme .bg-amber-50\/50,
 body.dark-theme .bg-amber-100,
 body.dark-theme .bg-amber-100\/50,
 body.dark-theme .bg-amber-200 {
-  background-color: rgba(245, 158, 11, 0.2) !important;
+  background-color: rgba(245, 158, 11, 0.25) !important;
+  border: 1px solid rgba(251, 191, 36, 0.4) !important;
   color: #fcd34d !important;
 }
 
 body.dark-theme .bg-rose-50,
 body.dark-theme .bg-rose-100,
 body.dark-theme .bg-rose-200 {
-  background-color: rgba(244, 63, 94, 0.2) !important;
+  background-color: rgba(244, 63, 94, 0.25) !important;
+  border: 1px solid rgba(251, 113, 133, 0.4) !important;
   color: #fda4af !important;
 }
 
 body.dark-theme .bg-purple-50,
 body.dark-theme .bg-purple-100,
 body.dark-theme .bg-purple-200 {
-  background-color: rgba(168, 85, 247, 0.2) !important;
+  background-color: rgba(168, 85, 247, 0.25) !important;
+  border: 1px solid rgba(192, 132, 252, 0.4) !important;
   color: #d8b4fe !important;
 }
 
 body.dark-theme .bg-violet-50,
 body.dark-theme .bg-violet-100,
 body.dark-theme .bg-violet-200 {
-  background-color: rgba(139, 92, 246, 0.2) !important;
+  background-color: rgba(139, 92, 246, 0.25) !important;
+  border: 1px solid rgba(167, 139, 250, 0.4) !important;
   color: #c4b5fd !important;
 }
 
@@ -713,13 +719,37 @@ body.dark-theme .leaflet-container {
 
 body.dark-theme .leaflet-popup-content-wrapper,
 body.dark-theme .leaflet-popup-tip {
-  background-color: #1a253d !important;
-  border: 1px solid #27354f !important;
+  background-color: #0f172a !important;
+  border: 1px solid #334155 !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.8), 0 10px 10px -5px rgba(0, 0, 0, 0.6) !important;
   color: #f8fafc !important;
 }
 
-body.dark-theme .leaflet-popup-close-button {
+body.dark-theme .leaflet-popup-content-wrapper .bg-slate-100 {
+  background-color: #1e293b !important;
+  border-color: #334155 !important;
+  color: #f8fafc !important;
+}
+
+body.dark-theme .leaflet-popup-content-wrapper .bg-slate-100:hover {
+  background-color: #334155 !important;
+}
+
+body.dark-theme .leaflet-popup-content-wrapper h3 {
+  color: #ffffff !important;
+}
+
+body.dark-theme .leaflet-popup-content-wrapper p {
   color: #cbd5e1 !important;
+}
+
+body.dark-theme .leaflet-popup-close-button {
+  color: #94a3b8 !important;
+  padding: 4px !important;
+}
+
+body.dark-theme .leaflet-popup-close-button:hover {
+  color: #ffffff !important;
 }
 
 body.dark-theme .glassmorphism {

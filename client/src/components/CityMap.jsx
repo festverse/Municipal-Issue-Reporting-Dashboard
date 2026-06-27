@@ -138,16 +138,17 @@ export default function CityMap() {
                   <div className="pt-2.5 border-t border-slate-100 flex items-center justify-between gap-2">
                     <button
                       onClick={() => handleUpvote(ticket.id)}
-                      className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 active:scale-95 transition-all rounded-xl text-xs font-bold text-slate-700 shadow-sm"
+                      className="flex items-center gap-1.5 px-3 py-2 bg-slate-100 hover:bg-slate-200 active:scale-95 transition-all rounded-xl text-xs font-bold text-slate-700 shadow-sm border border-slate-200/60"
                     >
                       <ThumbsUp className="w-4 h-4 text-blue-600" />
                       <span>Affects me ({ticket.upvotes_count || 0})</span>
                     </button>
                     <Link
                       to={`/tickets/${ticket.id}`}
-                      className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 active:scale-95 transition-all rounded-xl text-xs font-bold !text-white shadow-sm"
+                      className="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 active:scale-95 transition-all rounded-xl text-xs font-black !text-white shadow-lg shadow-blue-500/30 border border-blue-400/30 flex items-center gap-1"
                     >
-                      Inspect →
+                      <span>Inspect</span>
+                      <span>→</span>
                     </Link>
                   </div>
                 </div>

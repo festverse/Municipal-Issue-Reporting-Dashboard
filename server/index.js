@@ -13,7 +13,7 @@
  */
 
 const app = require('./app');
-const { testConnection } = require('./config/db');
+const { testConnection, pool } = require('./config/db');
 
 const PORT = process.env.PORT || 3000;
 
@@ -26,6 +26,14 @@ const startServer = async () => {
   try {
     // Verify the database is reachable before accepting requests
     await testConnection();
+
+    // Perform automatic database migrations for the new engineer assignment workflow columns
+    console.log('[MIGRATION] Checking and applying database schema updates...');
+    await pool.query(`
+      ALTER TABLE tickets ADD COLUMN IF NOT EXISTS assignment_status VARCHAR(50) DEFAULT 'PENDING';
+      ALTER TABLE tickets ADD COLUMN IF NOT EXISTS declined_engineer_ids UUID[] DEFAULT '{}';
+    `);
+    console.log('[MIGRATION] Database schema verified successfully.');
 
     const server = app.listen(PORT, () => {
       console.log(`[SERVER] Running on port ${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
