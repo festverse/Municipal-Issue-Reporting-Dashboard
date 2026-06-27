@@ -331,7 +331,7 @@ export default function AIChatAgent() {
       <div 
         data-lenis-prevent="true"
         className={`absolute bottom-0 right-0 mb-3 w-[380px] sm:w-[440px] h-[540px] bg-white rounded-3xl shadow-2xl border border-slate-200/80 flex flex-col overflow-hidden transition-all duration-700 ease-in-out transform origin-bottom-right ${
-          isOpen ? 'opacity-100 scale-100 translate-y-0 pointer-events-auto' : 'opacity-0 scale-95 translate-y-12 pointer-events-none'
+          isOpen ? 'opacity-100 scale-100 translate-y-0 pointer-events-auto' : 'opacity-0 scale-95 translate-y-12 pointer-events-none invisible'
         }`}
       >
         {/* Top Header Banner */}
@@ -381,7 +381,7 @@ export default function AIChatAgent() {
         {/* Messages Viewport */}
         <div 
           data-lenis-prevent="true" 
-          className="flex-1 p-4 overflow-y-auto overscroll-contain space-y-4 bg-slate-50/50 scrollbar-thin scrollbar-thumb-slate-200 text-sm pointer-events-auto"
+          className="flex-1 p-4 overflow-y-auto overscroll-contain space-y-4 bg-slate-50/50 scrollbar-thin scrollbar-thumb-slate-200 text-sm"
         >
           {messages.map((msg) => {
             const isAi = msg.sender === 'ai';
@@ -415,7 +415,7 @@ export default function AIChatAgent() {
         {/* Suggested Quick Prompts */}
         <div 
           data-lenis-prevent="true"
-          className="px-4 py-2 bg-slate-100/80 border-t border-slate-200/60 overflow-x-auto overscroll-contain flex items-center gap-2 scrollbar-none flex-shrink-0 pointer-events-auto"
+          className="px-4 py-2 bg-slate-100/80 border-t border-slate-200/60 overflow-x-auto overscroll-contain flex items-center gap-2 scrollbar-none flex-shrink-0"
         >
           {quickPrompts.map((qp, i) => (
             <button
@@ -430,7 +430,7 @@ export default function AIChatAgent() {
 
         {/* Listening Status Banner */}
         {isListening && (
-          <div className="px-4 py-2 bg-rose-500/10 border-t border-rose-200 flex items-center justify-between gap-3 flex-shrink-0 animate-pulse pointer-events-auto">
+          <div className="px-4 py-2 bg-rose-500/10 border-t border-rose-200 flex items-center justify-between gap-3 flex-shrink-0 animate-pulse">
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-rose-600 animate-ping" />
               <span className="text-xs font-bold text-rose-700">Listening to your voice... Speak now</span>
@@ -444,7 +444,7 @@ export default function AIChatAgent() {
         {/* Message Input Box with Microphone Button */}
         <form
           onSubmit={(e) => { e.preventDefault(); handleSend(); }}
-          className="p-3 border-t border-slate-200/80 bg-white flex items-center gap-2 flex-shrink-0 pointer-events-auto"
+          className="p-3 border-t border-slate-200/80 bg-white flex items-center gap-2 flex-shrink-0"
         >
           <button
             type="button"
