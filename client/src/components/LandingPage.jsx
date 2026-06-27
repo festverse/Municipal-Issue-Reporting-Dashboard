@@ -246,7 +246,7 @@ export default function LandingPage() {
             {/* 3 Step Content Columns */}
             <div className="grid grid-cols-3 gap-8 relative z-10 w-full">
               {/* Step 1 */}
-              <ScrollReveal direction="up" delay={100} className="pl-12 pt-[535px]">
+              <ScrollReveal direction="up" delay={300} className="pl-12 pt-[535px]">
                 <div className="relative z-10 pr-8">
                   <div className="absolute -top-28 right-12 text-[10rem] font-bold text-slate-200/90 pointer-events-none select-none leading-none font-sans tracking-tighter">1</div>
                   <div className="relative z-10 pt-4">
@@ -272,7 +272,7 @@ export default function LandingPage() {
               </ScrollReveal>
 
               {/* Step 3 */}
-              <ScrollReveal direction="up" delay={300} className="pl-20 pt-[195px]">
+              <ScrollReveal direction="up" delay={100} className="pl-20 pt-[195px]">
                 <div className="relative z-10 pr-4">
                   <div className="absolute -top-28 right-8 text-[10rem] font-bold text-slate-200/90 pointer-events-none select-none leading-none font-sans tracking-tighter">3</div>
                   <div className="relative z-10 pt-4">
@@ -293,7 +293,7 @@ export default function LandingPage() {
               { num: '2', title: 'Track & Collaborate', desc: 'See your report on the live map, attach to similar reports, upvote, and comment — stay informed as the community and officials interact!' },
               { num: '3', title: 'Resolve & Verify', desc: 'Assigned to the right department, updated in real time, and marked resolved after verification. Earn credits for verified fixes and help improve your neighborhood!' },
             ].map((step, idx) => (
-              <ScrollReveal key={idx} direction="up" delay={idx * 100}>
+              <ScrollReveal key={idx} direction="up" delay={(2 - idx) * 100 + 100}>
                 <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm hover:shadow-lg hover:border-blue-200 transition-all duration-300 hover:-translate-y-1 relative overflow-hidden">
                   <span className="absolute top-4 right-6 text-6xl font-black text-slate-100 pointer-events-none font-mono">0{step.num}</span>
                   <div className="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-bold text-lg mb-6 shadow-md">{step.num}</div>
