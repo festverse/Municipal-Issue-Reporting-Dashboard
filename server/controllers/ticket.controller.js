@@ -31,7 +31,6 @@ const createTicket = catchAsync(async (req, res, _next) => {
   const citizen_id = req.user.id;
   const { category_id, zone_id, title, description, latitude, longitude, priority, media_url } = req.body;
 
-  // Use a client so we can wrap both inserts in a transaction
   const client = await pool.connect();
 
   try {
@@ -47,32 +46,51 @@ const createTicket = catchAsync(async (req, res, _next) => {
     else if (priority === 'MEDIUM') slaInterval = '7 days';
     else if (priority === 'LOW') slaInterval = '14 days';
 
-    // Query all engineers in the system for broadcast and round-robin selection
-    const engineersRes = await client.query(`SELECT id, email, full_name FROM users WHERE role IN ('ENGINEER', 'GOV_OFFICIAL')`);
-    const engineers = engineersRes.rows;
+    // Fix #1: Select the LEAST-LOADED engineer (fewest active PENDING assignments)
+    // Uses SELECT ... FOR UPDATE to lock the chosen engineer row against race conditions
+    const leastLoadedRes = await client.query(`
+      SELECT u.id, u.email, u.full_name
+      FROM users u
+      WHERE u.role IN ('ENGINEER', 'GOV_OFFICIAL')
+      ORDER BY (
+        SELECT COUNT(*) FROM tickets t
+        WHERE t.assigned_engineer_id = u.id
+          AND t.assignment_status IN ('PENDING', 'ACCEPTED')
+      ) ASC
+      LIMIT 1
+      FOR UPDATE OF u;
+    `);
 
     let assignedEngineerId = null;
     let assignmentStatus = 'PENDING';
+    let assignedEngineer = null;
 
-    if (engineers.length > 0) {
-      // Pick the first engineer as initial assignee (round-robin / candidate selection)
-      assignedEngineerId = engineers[0].id;
+    if (leastLoadedRes.rowCount > 0) {
+      assignedEngineer = leastLoadedRes.rows[0];
+      assignedEngineerId = assignedEngineer.id;
     } else {
       assignmentStatus = 'UNASSIGNED';
     }
 
+    // Fix #7: Build initial assignment_history entry
+    const initialHistory = assignedEngineerId
+      ? [{ engineer_id: assignedEngineerId, action: 'OFFERED', timestamp: new Date().toISOString() }]
+      : [];
+
     const insertQuery = `
       INSERT INTO tickets (
         citizen_id, category_id, zone_id, title, description,
-        latitude, longitude, priority, media_url, sla_due_at, assigned_engineer_id, assignment_status
+        latitude, longitude, priority, media_url, sla_due_at,
+        assigned_engineer_id, assignment_status, assignment_history
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, NOW() + INTERVAL '${slaInterval}', $10, $11)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, NOW() + INTERVAL '${slaInterval}', $10, $11, $12)
       RETURNING *;
     `;
 
     const values = [
       citizen_id, category_id, zone_id, title, description,
-      latitude, longitude, priority, media_url || null, assignedEngineerId, assignmentStatus
+      latitude, longitude, priority, media_url || null,
+      assignedEngineerId, assignmentStatus, JSON.stringify(initialHistory)
     ];
 
     const result = await client.query(insertQuery, values);
@@ -84,28 +102,29 @@ const createTicket = catchAsync(async (req, res, _next) => {
       newTicket.id,
       citizen_id,
       'CREATE',
-      null,        // no old_status on creation
-      'OPEN',      // default status for new tickets
+      null,
+      'OPEN',
       'Ticket created'
     );
 
     await client.query('COMMIT');
 
-    // ── Execute Async Email Notifications ──
-    if (citizen && citizen.email) {
-      emailService.sendCitizenReportSubmittedEmail(citizen.email);
-    }
-
-    // Broadcast to all engineers
-    for (const eng of engineers) {
-      if (eng.email) {
-        emailService.sendEngineerBroadcastEmail(eng.email, newTicket);
+    // Fix #8: Wrap all email calls in try/catch — never block ticket operations
+    // Fix #5: Only email the assigned engineer, NOT broadcast to all
+    try {
+      if (citizen && citizen.email) {
+        await emailService.sendCitizenReportSubmittedEmail(citizen.email);
       }
+    } catch (emailErr) {
+      console.warn('[EMAIL WARNING] Failed to send citizen confirmation email:', emailErr.message);
     }
 
-    // Send direct assignment offer to the primary selected engineer
-    if (engineers.length > 0 && engineers[0].email) {
-      emailService.sendEngineerAssignmentOfferEmail(engineers[0].email, newTicket);
+    try {
+      if (assignedEngineer && assignedEngineer.email) {
+        await emailService.sendEngineerAssignmentOfferEmail(assignedEngineer.email, newTicket);
+      }
+    } catch (emailErr) {
+      console.warn('[EMAIL WARNING] Failed to send engineer assignment email:', emailErr.message);
     }
 
     res.status(201).json({
@@ -115,7 +134,7 @@ const createTicket = catchAsync(async (req, res, _next) => {
     });
   } catch (err) {
     await client.query('ROLLBACK');
-    throw err; // re-throw so catchAsync forwards to the error handler
+    throw err;
   } finally {
     client.release();
   }
@@ -488,18 +507,42 @@ const acceptAssignment = catchAsync(async (req, res, _next) => {
   try {
     await client.query('BEGIN');
 
-    const updateRes = await client.query(
-      `UPDATE tickets
-       SET assignment_status = 'ACCEPTED', status = 'IN_PROGRESS', assigned_engineer_id = $1, updated_at = NOW()
-       WHERE id = $2
-       RETURNING *;`,
-      [user_id, ticket_id]
+    // Fix #6: Lock the ticket row and verify the current user is the assigned engineer with PENDING status
+    const lockRes = await client.query(
+      `SELECT * FROM tickets WHERE id = $1 FOR UPDATE;`,
+      [ticket_id]
     );
 
-    if (updateRes.rowCount === 0) {
+    if (lockRes.rowCount === 0) {
       await client.query('ROLLBACK');
       throw new AppError('Ticket not found.', 404);
     }
+
+    const ticket = lockRes.rows[0];
+
+    // Fix #6: Concurrency guard — only the currently assigned engineer with PENDING status can accept
+    if (ticket.assigned_engineer_id !== user_id) {
+      await client.query('ROLLBACK');
+      throw new AppError('You are not the currently assigned engineer for this ticket.', 403);
+    }
+
+    if (ticket.assignment_status !== 'PENDING') {
+      await client.query('ROLLBACK');
+      throw new AppError('This assignment has already been accepted, declined, or reassigned.', 400);
+    }
+
+    // Fix #7: Append ACCEPTED event to assignment_history
+    const history = Array.isArray(ticket.assignment_history) ? ticket.assignment_history : [];
+    history.push({ engineer_id: user_id, action: 'ACCEPTED', timestamp: new Date().toISOString() });
+
+    const updateRes = await client.query(
+      `UPDATE tickets
+       SET assignment_status = 'ACCEPTED', status = 'IN_PROGRESS',
+           assignment_history = $1, updated_at = NOW()
+       WHERE id = $2
+       RETURNING *;`,
+      [JSON.stringify(history), ticket_id]
+    );
 
     const updatedTicket = updateRes.rows[0];
 
@@ -515,11 +558,15 @@ const acceptAssignment = catchAsync(async (req, res, _next) => {
 
     await client.query('COMMIT');
 
-    // Send Email #2 to citizen
-    const citRes = await pool.query('SELECT email FROM users WHERE id = $1', [updatedTicket.citizen_id]);
-    const engRes = await pool.query('SELECT email FROM users WHERE id = $1', [user_id]);
-    if (citRes.rowCount > 0 && engRes.rowCount > 0) {
-      emailService.sendCitizenEngineerAssignedEmail(citRes.rows[0].email, engRes.rows[0].email, updatedTicket);
+    // Fix #8: Send Email #2 to citizen — wrapped in try/catch
+    try {
+      const citRes = await pool.query('SELECT email FROM users WHERE id = $1', [updatedTicket.citizen_id]);
+      const engRes = await pool.query('SELECT email FROM users WHERE id = $1', [user_id]);
+      if (citRes.rowCount > 0 && engRes.rowCount > 0) {
+        await emailService.sendCitizenEngineerAssignedEmail(citRes.rows[0].email, engRes.rows[0].email, updatedTicket);
+      }
+    } catch (emailErr) {
+      console.warn('[EMAIL WARNING] Failed to send citizen assignment confirmation:', emailErr.message);
     }
 
     res.status(200).json({
@@ -543,69 +590,99 @@ const declineAssignment = catchAsync(async (req, res, _next) => {
   try {
     await client.query('BEGIN');
 
-    // Add current user to declined_engineer_ids
-    const ticketRes = await client.query(
-      `UPDATE tickets
-       SET declined_engineer_ids = array_append(declined_engineer_ids, $1::uuid), updated_at = NOW()
-       WHERE id = $2
-       RETURNING *;`,
-      [user_id, ticket_id]
+    // Lock and read ticket
+    const lockRes = await client.query(
+      `SELECT * FROM tickets WHERE id = $1 FOR UPDATE;`,
+      [ticket_id]
     );
 
-    if (ticketRes.rowCount === 0) {
+    if (lockRes.rowCount === 0) {
       await client.query('ROLLBACK');
       throw new AppError('Ticket not found.', 404);
     }
 
-    let ticket = ticketRes.rows[0];
+    let ticket = lockRes.rows[0];
 
-    // Find next available engineer who hasn't declined
+    // Fix #7: Append DECLINED event to assignment_history
+    const history = Array.isArray(ticket.assignment_history) ? ticket.assignment_history : [];
+    history.push({ engineer_id: user_id, action: 'DECLINED', timestamp: new Date().toISOString() });
+
+    // Add current user to declined_engineer_ids
+    const ticketRes = await client.query(
+      `UPDATE tickets
+       SET declined_engineer_ids = array_append(declined_engineer_ids, $1::uuid),
+           assignment_history = $2, updated_at = NOW()
+       WHERE id = $3
+       RETURNING *;`,
+      [user_id, JSON.stringify(history), ticket_id]
+    );
+
+    ticket = ticketRes.rows[0];
+
+    // Find next available least-loaded engineer who hasn't declined
     const nextEngRes = await client.query(
-      `SELECT id, email FROM users
-       WHERE role IN ('ENGINEER', 'GOV_OFFICIAL')
-         AND NOT (id = ANY($1::uuid[]))
+      `SELECT u.id, u.email FROM users u
+       WHERE u.role IN ('ENGINEER', 'GOV_OFFICIAL')
+         AND NOT (u.id = ANY($1::uuid[]))
+       ORDER BY (
+         SELECT COUNT(*) FROM tickets t
+         WHERE t.assigned_engineer_id = u.id
+           AND t.assignment_status IN ('PENDING', 'ACCEPTED')
+       ) ASC
        LIMIT 1;`,
       [ticket.declined_engineer_ids]
     );
 
     if (nextEngRes.rowCount > 0) {
       const nextEng = nextEngRes.rows[0];
+
+      // Fix #7: Append OFFERED event for new engineer
+      history.push({ engineer_id: nextEng.id, action: 'OFFERED', timestamp: new Date().toISOString() });
+
       const reassignRes = await client.query(
         `UPDATE tickets
-         SET assigned_engineer_id = $1, assignment_status = 'PENDING', updated_at = NOW()
-         WHERE id = $2
+         SET assigned_engineer_id = $1, assignment_status = 'PENDING',
+             assignment_history = $2, updated_at = NOW()
+         WHERE id = $3
          RETURNING *;`,
-        [nextEng.id, ticket_id]
+        [nextEng.id, JSON.stringify(history), ticket_id]
       );
       ticket = reassignRes.rows[0];
 
-      // Send assignment offer email to the newly selected engineer
-      if (nextEng.email) {
-        emailService.sendEngineerAssignmentOfferEmail(nextEng.email, ticket);
+      await client.query('COMMIT');
+
+      // Fix #8: Wrap email in try/catch
+      try {
+        if (nextEng.email) {
+          await emailService.sendEngineerAssignmentOfferEmail(nextEng.email, ticket);
+        }
+      } catch (emailErr) {
+        console.warn('[EMAIL WARNING] Failed to send reassignment email:', emailErr.message);
       }
     } else {
       // No more engineers available
       const unassignRes = await client.query(
         `UPDATE tickets
-         SET assigned_engineer_id = NULL, assignment_status = 'DECLINED', updated_at = NOW()
-         WHERE id = $1
+         SET assigned_engineer_id = NULL, assignment_status = 'UNASSIGNED',
+             assignment_history = $1, updated_at = NOW()
+         WHERE id = $2
          RETURNING *;`,
-        [ticket_id]
+        [JSON.stringify(history), ticket_id]
       );
       ticket = unassignRes.rows[0];
+
+      await auditService.logActivity(
+        client,
+        ticket_id,
+        user_id,
+        'STATUS_CHANGE',
+        ticket.status,
+        ticket.status,
+        'All engineers declined — ticket unassigned'
+      );
+
+      await client.query('COMMIT');
     }
-
-    await auditService.logActivity(
-      client,
-      ticket_id,
-      user_id,
-      'STATUS_CHANGE',
-      ticket.status,
-      ticket.status,
-      'Engineer declined assignment'
-    );
-
-    await client.query('COMMIT');
 
     res.status(200).json({
       status: 'success',
@@ -628,18 +705,31 @@ const completeIssue = catchAsync(async (req, res, _next) => {
   try {
     await client.query('BEGIN');
 
-    const updateRes = await client.query(
-      `UPDATE tickets
-       SET status = 'RESOLVED', assignment_status = 'COMPLETED', updated_at = NOW()
-       WHERE id = $1
-       RETURNING *;`,
+    // Lock and read ticket
+    const lockRes = await client.query(
+      `SELECT * FROM tickets WHERE id = $1 FOR UPDATE;`,
       [ticket_id]
     );
 
-    if (updateRes.rowCount === 0) {
+    if (lockRes.rowCount === 0) {
       await client.query('ROLLBACK');
       throw new AppError('Ticket not found.', 404);
     }
+
+    const ticket = lockRes.rows[0];
+
+    // Fix #7: Append COMPLETED event to assignment_history
+    const history = Array.isArray(ticket.assignment_history) ? ticket.assignment_history : [];
+    history.push({ engineer_id: user_id, action: 'COMPLETED', timestamp: new Date().toISOString() });
+
+    const updateRes = await client.query(
+      `UPDATE tickets
+       SET status = 'RESOLVED', assignment_status = 'COMPLETED',
+           assignment_history = $1, updated_at = NOW()
+       WHERE id = $2
+       RETURNING *;`,
+      [JSON.stringify(history), ticket_id]
+    );
 
     const updatedTicket = updateRes.rows[0];
 
@@ -655,11 +745,15 @@ const completeIssue = catchAsync(async (req, res, _next) => {
 
     await client.query('COMMIT');
 
-    // Send Email #3 to citizen
-    const citRes = await pool.query('SELECT email FROM users WHERE id = $1', [updatedTicket.citizen_id]);
-    const engRes = await pool.query('SELECT email FROM users WHERE id = $1', [user_id]);
-    if (citRes.rowCount > 0 && engRes.rowCount > 0) {
-      emailService.sendCitizenIssueResolvedEmail(citRes.rows[0].email, engRes.rows[0].email, updatedTicket);
+    // Fix #8: Send Email #3 to citizen — wrapped in try/catch
+    try {
+      const citRes = await pool.query('SELECT email FROM users WHERE id = $1', [updatedTicket.citizen_id]);
+      const engRes = await pool.query('SELECT email FROM users WHERE id = $1', [user_id]);
+      if (citRes.rowCount > 0 && engRes.rowCount > 0) {
+        await emailService.sendCitizenIssueResolvedEmail(citRes.rows[0].email, engRes.rows[0].email, updatedTicket);
+      }
+    } catch (emailErr) {
+      console.warn('[EMAIL WARNING] Failed to send citizen resolution confirmation:', emailErr.message);
     }
 
     res.status(200).json({

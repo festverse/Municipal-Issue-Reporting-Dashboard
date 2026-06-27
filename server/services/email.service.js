@@ -84,7 +84,7 @@ const sendEmail = async ({ to, subject, html, text }) => {
  * Email #1: Citizen Report Submitted & Pending Engineer Selection
  */
 const sendCitizenReportSubmittedEmail = async (citizenEmail) => {
-  const subject = 'Your Municipal Report Has Been Submitted [Action Required within 1 Hour]';
+  const subject = 'Your Municipal Report Has Been Submitted — Engineer Notified';
   const html = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 16px; background-color: #ffffff;">
       <div style="text-align: center; padding-bottom: 20px; border-bottom: 1px solid #e2e8f0;">
@@ -94,15 +94,15 @@ const sendCitizenReportSubmittedEmail = async (citizenEmail) => {
       <div style="padding: 20px 0;">
         <p style="color: #334155; font-size: 16px; line-height: 1.6;">Dear Citizen,</p>
         <p style="color: #334155; font-size: 16px; line-height: 1.6;">
-          <strong>Your report has been successfully submitted</strong> to the municipal tracking network. We have initiated automated AI triage and are currently locating an available specialized engineer for your sector.
+          <strong>Your report has been successfully submitted</strong> to the municipal tracking network. We have initiated automated AI triage and a specialized engineer has been notified about your issue.
         </p>
         <div style="background-color: #eff6ff; border-left: 4px solid #2563eb; padding: 15px; margin: 20px 0; border-radius: 0 12px 12px 0;">
           <p style="color: #1e40af; font-size: 15px; margin: 0; font-weight: bold;">
-            ⏱️ SLA Commitment: We will assign an engineer to take care of this matter within 1 hour.
+            📌 An engineer has been selected and will confirm acceptance shortly. You will receive a follow-up email the moment an engineer officially accepts your assignment.
           </p>
         </div>
         <p style="color: #334155; font-size: 16px; line-height: 1.6;">
-          Within this limited 1-hour window, the assigned engineer will be selected based on availability and departmental specialization. You will receive a follow-up email the exact moment an engineer accepts this assignment.
+          If the initially selected engineer is unavailable, the system will automatically find the next available engineer. Rest assured — your report is actively being processed.
         </p>
       </div>
       <div style="padding-top: 20px; border-top: 1px solid #e2e8f0; text-align: center; color: #94a3b8; font-size: 12px;">

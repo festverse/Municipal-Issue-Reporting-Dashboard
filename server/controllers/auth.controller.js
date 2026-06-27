@@ -171,14 +171,10 @@ const googleLogin = catchAsync(async (req, res, _next) => {
       [full_name || 'Google User', email, picture || null, dummyHash, requestedRole]
     );
     user = insertRes.rows[0];
-  } else if (role && user.role !== requestedRole) {
-    // Update existing user role if explicitly toggled in the UI (excellent for testing workflows)
-    const updateRes = await pool.query(
-      'UPDATE users SET role = $1 WHERE id = $2 RETURNING id, email, full_name, phone, zone, notifications, session_expiry, avatar, role, created_at',
-      [requestedRole, user.id]
-    );
-    user = updateRes.rows[0];
   }
+  // Fix #4: Existing users keep their stored role on re-login.
+  // Role selection only applies during first-time registration above.
+  // This prevents accidental role changes when an engineer clicks "Citizen" by mistake.
 
   // Generate custom JWT token for seamless integration with existing auth middleware
   const token = authService.generateToken(user);
