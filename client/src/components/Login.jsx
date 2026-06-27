@@ -141,8 +141,8 @@ export default function Login() {
       </div>
 
       {/* Right Column — Pristine White Form Container */}
-      <div className="lg:w-1/2 flex items-center justify-center p-8 sm:p-12 lg:p-16 bg-white">
-        <div className="w-full max-w-md animate-fade-in-up">
+      <div className="lg:w-1/2 flex items-center justify-center p-8 sm:p-12 lg:p-16 bg-white relative z-20 pointer-events-auto">
+        <div className="w-full max-w-md animate-fade-in-up relative z-20 pointer-events-auto">
           
           {/* Header */}
           <div className="mb-8">
@@ -151,7 +151,7 @@ export default function Login() {
           </div>
 
           {/* Demo Credentials for Recruiters */}
-          <div className="mb-8 p-5 bg-gradient-to-br from-slate-50 to-blue-50/50 border border-slate-200/80 rounded-2xl shadow-sm">
+          <div className="mb-8 p-5 bg-gradient-to-br from-slate-50 to-blue-50/50 border border-slate-200/80 rounded-2xl shadow-sm relative z-20 pointer-events-auto">
             <h3 className="text-xs font-bold text-slate-600 uppercase tracking-wider mb-3 flex items-center gap-1.5">
               <Rocket className="w-4 h-4 text-blue-600" />
               <span>Recruiter Demo Accounts</span>
@@ -160,7 +160,7 @@ export default function Login() {
               <button 
                 type="button" 
                 onClick={() => { setEmail('engineer@demo.com'); setPassword('engineer123'); }}
-                className="py-2.5 px-3 text-xs font-semibold bg-white border border-slate-200 text-slate-700 rounded-xl hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700 transition-all shadow-sm active:scale-95 flex items-center justify-center gap-1.5"
+                className="py-2.5 px-3 text-xs font-semibold bg-white border border-slate-200 text-slate-700 rounded-xl hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700 transition-all shadow-sm active:scale-95 flex items-center justify-center gap-1.5 cursor-pointer relative z-20 pointer-events-auto"
               >
                 <Wrench className="w-4 h-4 text-slate-600" />
                 <span>Fill Engineer Data</span>
@@ -168,7 +168,7 @@ export default function Login() {
               <button 
                 type="button" 
                 onClick={() => { setEmail('citizen@demo.com'); setPassword('citizen123'); }}
-                className="py-2.5 px-3 text-xs font-semibold bg-white border border-slate-200 text-slate-700 rounded-xl hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700 transition-all shadow-sm active:scale-95 flex items-center justify-center gap-1.5"
+                className="py-2.5 px-3 text-xs font-semibold bg-white border border-slate-200 text-slate-700 rounded-xl hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700 transition-all shadow-sm active:scale-95 flex items-center justify-center gap-1.5 cursor-pointer relative z-20 pointer-events-auto"
               >
                 <User className="w-4 h-4 text-slate-600" />
                 <span>Fill Citizen Data</span>
@@ -185,15 +185,15 @@ export default function Login() {
           )}
 
           {/* Google Login Role Selection */}
-          <div className="mb-4 bg-slate-50 border border-slate-200 rounded-2xl p-4 shadow-sm">
+          <div className="mb-4 bg-slate-50 border border-slate-200 rounded-2xl p-4 shadow-sm relative z-20 pointer-events-auto">
             <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-3 text-center">
               Select Role for Google Sign In
             </label>
-            <div className="grid grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-2 gap-2.5 relative z-20 pointer-events-auto">
               <button
                 type="button"
                 onClick={() => setGoogleRole('CITIZEN')}
-                className={`py-2.5 px-3 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1.5 ${
+                className={`py-2.5 px-3 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer relative z-20 pointer-events-auto ${
                   googleRole === 'CITIZEN'
                     ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25 scale-[1.02]'
                     : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 hover:border-slate-300'
@@ -205,7 +205,7 @@ export default function Login() {
               <button
                 type="button"
                 onClick={() => setGoogleRole('ENGINEER')}
-                className={`py-2.5 px-3 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1.5 ${
+                className={`py-2.5 px-3 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer relative z-20 pointer-events-auto ${
                   googleRole === 'ENGINEER'
                     ? 'bg-violet-600 text-white shadow-lg shadow-violet-500/25 scale-[1.02]'
                     : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50 hover:border-slate-300'
