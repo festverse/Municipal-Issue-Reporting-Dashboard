@@ -38,6 +38,11 @@ A production-grade, full-stack web application that enables citizens to report m
 - 📱 **Advanced Mobile Responsiveness** — Mobile-first adaptive design featuring smooth horizontally scrollable tab navigation bars and dynamic split-view toggles with dedicated back navigation for complex multi-column interfaces.
 - ✨ **Flawless Micro-Interactions** — Refined hover state transitions, active pill buttons, custom styled scrollbars, and vibrant glassmorphism accents.
 
+### 🛡️ Automated Dispatch & Email Infrastructure
+- 🔄 **Dynamic Least-Loaded Assignment** — Highlighting the round-robin ticket routing and `SELECT ... FOR UPDATE` row locking to prevent race conditions.
+- ⏱️ **Automated Triage & SLA Timeout Cron** — Detailing the 5-minute background cron job that automatically times out unresponsive engineers (>30 minutes in PENDING) and handles fallback reassignment.
+- 📧 **Plug-and-Play Email Delivery** — Documenting the out-of-the-box Nodemailer + Ethereal Email live console preview integration and drop-in real SMTP support.
+
 ### Citizen Portal
 - 📍 **Interactive Geolocation Mapping** — Pinpoint exact issue locations on a live CartoDB map with dynamic status and priority filters
 - 📝 **Rich Issue Reporting** — Categorized submissions with priority levels, upvote tracking ("Affects me"), and zone selection
