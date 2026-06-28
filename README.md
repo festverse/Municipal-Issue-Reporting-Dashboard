@@ -35,8 +35,13 @@ A production-grade, full-stack web application that enables citizens to report m
 
 ### Premium UI/UX & Mobile Experience
 - 🌕/🌑 **Ultra-Premium Dark Theme System** — Deep, tailored dark mode (`#0b1120`, `#141e33`) with flawless typography contrast, custom input focus states, and high-specificity gradient preservation.
-- 📱 **Advanced Mobile Responsiveness** — Mobile-first adaptive design featuring smooth horizontally scrollable tab navigation bars and dynamic split-view toggles with dedicated back navigation for complex multi-column interfaces.
-- ✨ **Flawless Micro-Interactions** — Refined hover state transitions, active pill buttons, custom styled scrollbars, and vibrant glassmorphism accents.
+- 📱 **Advanced Mobile Responsiveness** — Mobile-first adaptive design featuring smooth horizontally scrollable tab navigation bars, dynamic split-view toggles with dedicated back navigation, and optimized multi-column authentication layouts (`Login`, `Register`).
+- ✨ **Flawless Micro-Interactions & Smooth Scroll** — Global Lenis smooth scrolling integration with active hitbox management, snappy 200ms AI chat modal transitions, refined hover state transitions, active pill buttons, and vibrant glassmorphism accents.
+
+### 🛡️ Automated Dispatch & Email Infrastructure
+- 🔄 **Dynamic Least-Loaded Assignment** — Automated ticket routing selects the least-loaded engineer (fewest active assignments) using `SELECT ... FOR UPDATE` row locking to prevent race conditions during simultaneous submissions.
+- ⏱️ **Automated Triage & SLA Timeout Cron** — A background cron job runs every 5 minutes to detect tickets stuck in PENDING status for >30 minutes, automatically timing them out, recording declined engineer IDs, and reassigning to the next available engineer.
+- 📧 **Plug-and-Play Email Delivery** — Integrated Nodemailer with Ethereal Email for instant out-of-the-box live email preview URLs in the console, with drop-in support for real SMTP credentials (`SMTP_USER`, `SMTP_PASS`).
 
 ### Citizen Portal
 - 📍 **Interactive Geolocation Mapping** — Pinpoint exact issue locations on a live CartoDB map with dynamic status and priority filters
