@@ -330,7 +330,7 @@ export default function AIChatAgent() {
       {/* AI Chat Window Modal */}
       <div 
         data-lenis-prevent="true"
-        className={`absolute bottom-0 right-0 mb-3 w-[380px] sm:w-[440px] h-[540px] bg-white rounded-3xl shadow-2xl border border-slate-200/80 flex flex-col overflow-hidden transition-all duration-700 ease-in-out transform origin-bottom-right ${
+        className={`absolute bottom-0 right-0 mb-3 w-[380px] sm:w-[440px] h-[540px] bg-white rounded-3xl shadow-2xl border border-slate-200/80 flex flex-col overflow-hidden transition-all duration-200 ease-out transform origin-bottom-right ${
           isOpen ? 'opacity-100 scale-100 translate-y-0 pointer-events-auto' : 'opacity-0 scale-95 translate-y-12 pointer-events-none invisible'
         }`}
       >
@@ -478,7 +478,7 @@ export default function AIChatAgent() {
       {/* Floating Action Button */}
       <button
         onClick={() => setIsOpen(true)}
-        className={`absolute bottom-0 right-0 group flex items-center gap-3 pl-4 pr-5 py-3.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 hover:from-blue-700 hover:via-indigo-700 hover:to-violet-700 text-white rounded-full shadow-2xl hover:shadow-indigo-500/50 transition-all duration-700 ease-in-out transform active:scale-95 border border-white/20 whitespace-nowrap ${
+        className={`absolute bottom-0 right-0 group flex items-center gap-3 pl-4 pr-5 py-3.5 bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 hover:from-blue-700 hover:via-indigo-700 hover:to-violet-700 text-white rounded-full shadow-2xl hover:shadow-indigo-500/50 transition-all duration-200 ease-out transform active:scale-95 border border-white/20 whitespace-nowrap ${
           isOpen ? 'opacity-0 scale-90 pointer-events-none translate-y-4' : 'opacity-100 scale-100 pointer-events-auto hover:-translate-y-1'
         }`}
       >
