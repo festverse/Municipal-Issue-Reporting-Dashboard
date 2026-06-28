@@ -14,11 +14,7 @@ A production-grade, full-stack web application that enables citizens to report m
 ![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black)
 ![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
 ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)
-![Google OAuth](https://img.shields.io/badge/Google_OAuth-4285F4?style=for-the-badge&logo=google&logoColor=white)
 ![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)
-![Nodemailer](https://img.shields.io/badge/Nodemailer-15C213?style=for-the-badge&logo=minutemailer&logoColor=white)
-![AI Advisor](https://img.shields.io/badge/AI_Advisor-6366F1?style=for-the-badge&logo=openai&logoColor=white)
-![Leaflet](https://img.shields.io/badge/Leaflet-199900?style=for-the-badge&logo=leaflet&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 ![Cloudflare](https://img.shields.io/badge/Cloudflare-F38020?style=for-the-badge&logo=Cloudflare&logoColor=white)
 ![Render](https://img.shields.io/badge/Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)
@@ -39,13 +35,8 @@ A production-grade, full-stack web application that enables citizens to report m
 
 ### Premium UI/UX & Mobile Experience
 - 🌕/🌑 **Ultra-Premium Dark Theme System** — Deep, tailored dark mode (`#0b1120`, `#141e33`) with flawless typography contrast, custom input focus states, and high-specificity gradient preservation.
-- 📱 **Advanced Mobile Responsiveness** — Mobile-first adaptive design featuring smooth horizontally scrollable tab navigation bars, dynamic split-view toggles with dedicated back navigation, and optimized multi-column authentication layouts (`Login`, `Register`).
-- ✨ **Flawless Micro-Interactions & Smooth Scroll** — Global Lenis smooth scrolling integration with active hitbox management, snappy 200ms AI chat modal transitions, refined hover state transitions, active pill buttons, and vibrant glassmorphism accents.
-
-### 🛡️ Automated Dispatch & Email Infrastructure
-- 🔄 **Dynamic Least-Loaded Assignment** — Automated ticket routing selects the least-loaded engineer (fewest active assignments) using `SELECT ... FOR UPDATE` row locking to prevent race conditions during simultaneous submissions.
-- ⏱️ **Automated Triage & SLA Timeout Cron** — A background cron job runs every 5 minutes to detect tickets stuck in PENDING status for >30 minutes, automatically timing them out, recording declined engineer IDs, and reassigning to the next available engineer.
-- 📧 **Plug-and-Play Email Delivery** — Integrated Nodemailer with Ethereal Email for instant out-of-the-box live email preview URLs in the console, with drop-in support for real SMTP credentials (`SMTP_USER`, `SMTP_PASS`).
+- 📱 **Advanced Mobile Responsiveness** — Mobile-first adaptive design featuring smooth horizontally scrollable tab navigation bars and dynamic split-view toggles with dedicated back navigation for complex multi-column interfaces.
+- ✨ **Flawless Micro-Interactions** — Refined hover state transitions, active pill buttons, custom styled scrollbars, and vibrant glassmorphism accents.
 
 ### Citizen Portal
 - 📍 **Interactive Geolocation Mapping** — Pinpoint exact issue locations on a live CartoDB map with dynamic status and priority filters
